@@ -1,0 +1,106 @@
+'use client';
+
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { InventoryItemForm, type InventoryItemFormData } from './InventoryItemForm';
+import { inventoryApi, type InventoryItem } from '@/lib/api/inventory';
+import { toast } from "sonner";
+
+interface EditInventoryItemDialogProps {
+  item: InventoryItem | null;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onItemUpdated?: () => void;
+}
+
+export function EditInventoryItemDialog({
+  item,
+  open,
+  onOpenChange,
+  onItemUpdated,
+}: EditInventoryItemDialogProps) {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (data: InventoryItemFormData) => {
+    if (!item) return;
+
+    setIsSubmitting(true);
+    try {
+      await inventoryApi.updateInventoryItem(item.id, data);
+      
+      toast.success('Producto actualizado exitosamente');
+      
+      onOpenChange(false);
+      onItemUpdated?.();
+    } catch (error) {
+      console.error('Error updating inventory item:', error);
+      toast.error('No se pudo actualizar el producto. Por favor intenta de nuevo.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleCancel = () => {
+    if (!isSubmitting) {
+      onOpenChange(false);
+    }
+  };
+
+  // Transform item data to form data format
+  const getInitialData = (): Partial<InventoryItemFormData> | undefined => {
+    if (!item) return undefined;
+
+    // Make sure to parse the date correctly
+    let lastRestockDate: Date | undefined;
+    try {
+      lastRestockDate = item.lastPurchaseDate ? new Date(item.lastPurchaseDate) : undefined;
+    } catch (e) {
+      console.error('Error parsing lastPurchaseDate:', e);
+      lastRestockDate = undefined;
+    }
+
+    return {
+      name: item.name,
+      category: item.category as 'LINENS' | 'AMENITIES' | 'CLEANING_SUPPLIES' | 'FOOD_BEVERAGE' | 'MAINTENANCE' | 'OFFICE_SUPPLIES' | 'FURNITURE' | 'ELECTRONICS',
+      currentStock: item.currentStock,
+      minimumStock: item.minimumStock,
+      maximumStock: item.maximumStock,
+      unit: item.unit,
+      unitCost: item.unitCost,
+      supplier: item.supplier,
+      description: '', // Not available in current InventoryItem type
+      location: item.location,
+      supplierId: undefined, // Not available in current InventoryItem type
+      lastRestockDate: lastRestockDate ? lastRestockDate.toISOString() : undefined,
+    };
+  };
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Editar Producto</DialogTitle>
+          <DialogDescription>
+            Modifica la información del producto. Los campos marcados son obligatorios.
+          </DialogDescription>
+        </DialogHeader>
+        
+        {item && (
+          <InventoryItemForm
+            initialData={getInitialData()}
+            onSubmit={handleSubmit}
+            onCancel={handleCancel}
+            isSubmitting={isSubmitting}
+            submitLabel="Guardar Cambios"
+          />
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}

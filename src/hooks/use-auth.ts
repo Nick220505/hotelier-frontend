@@ -209,34 +209,34 @@ export function useAuth() {
     setAuthState((prev) => ({ ...prev, isLoading: true }));
 
     try {
-      // Call logout API
+      // Call logout API first while we still have the token
       await authApi.logout();
-
-      // Clear auth data
-      authCookies.clearAll();
-      localStorage.removeItem("theme");
-      sessionStorage.clear();
-
-      setAuthState({
-        user: null,
-        accessToken: null,
-        refreshToken: null,
-        isAuthenticated: false,
-        isLoading: false,
-      });
-
-      toast("Sesión cerrada", {
-        description: "Has cerrado sesión correctamente.",
-      });
-
-      // Redirect to login after logout
-      router.push("/login");
-    } catch {
-      setAuthState((prev) => ({ ...prev, isLoading: false }));
-      toast.error("Error", {
-        description: "Hubo un problema al cerrar sesión.",
-      });
+    } catch (error) {
+      // Ignore logout API errors - we'll clear state anyway
+      console.error("Logout API error (ignored):", error);
     }
+
+    // Clear local storage and cookies FIRST
+    authCookies.clearAll();
+    localStorage.removeItem("theme");
+    sessionStorage.clear();
+
+    // Then update auth state
+    setAuthState({
+      user: null,
+      accessToken: null,
+      refreshToken: null,
+      isAuthenticated: false,
+      isLoading: false,
+    });
+
+    // Show toast
+    toast("Sesión cerrada", {
+      description: "Has cerrado sesión correctamente.",
+    });
+
+    // Redirect to login - RouteGuard will not redirect back since no token exists
+    router.replace("/login");
   };
 
   const updateUser = (userData: Partial<AuthUser>) => {

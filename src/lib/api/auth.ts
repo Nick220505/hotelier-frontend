@@ -1,4 +1,5 @@
 import { apiRequest } from "./base";
+import { authCookies } from "../auth-cookies";
 
 // Auth types
 export interface LoginRequest {
@@ -78,7 +79,13 @@ export const authApi = {
   // Logout user
   logout: async (): Promise<void> => {
     try {
-      const token = localStorage.getItem("access_token");
+      // Get token from authCookies before making the API call
+      const token = authCookies.getAccessToken();
+      if (!token) {
+        // No token, nothing to logout
+        return;
+      }
+      
       await apiRequest("/auth/logout", {
         method: "POST",
         headers: {
@@ -87,6 +94,7 @@ export const authApi = {
       });
     } catch (error) {
       console.error("Logout error:", error);
+      throw error;
     }
   },
 

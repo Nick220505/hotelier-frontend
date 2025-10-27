@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
+import { authCookies } from "@/lib/auth-cookies";
 
 interface RouteGuardProps {
   children: React.ReactNode;
@@ -40,6 +41,13 @@ export function RouteGuard({ children }: RouteGuardProps) {
   const checkRoleBasedRedirection = useCallback(() => {
     if (!isAuthenticated || !user || isLoading) return;
 
+    // Check if there's actually a valid token - prevent redirect during logout
+    const hasValidToken = authCookies.getAccessToken();
+    if (!hasValidToken) {
+      // No token means we're in the process of logging out, don't redirect
+      return;
+    }
+
     // If user is a client and tries to access dashboard, redirect to mis-reservas
     if (hasRole("cliente") && pathname === "/") {
       router.replace("/mis-reservas");
@@ -52,7 +60,7 @@ export function RouteGuard({ children }: RouteGuardProps) {
       return;
     }
 
-    // If authenticated user tries to access auth pages, redirect to dashboard
+    // If authenticated user (non-client) tries to access auth pages, redirect to dashboard
     if (isAuthPage && !hasRole("cliente")) {
       router.replace("/");
       return;
@@ -74,11 +82,13 @@ export function RouteGuard({ children }: RouteGuardProps) {
       return;
     }
 
+    // Reset check flag when on auth pages
+    if (isAuthPage) {
+      hasCheckedRef.current = false;
+    }
+
     // Not authenticated - check if we should try to restore auth
-    const hasToken =
-      typeof window !== "undefined"
-        ? localStorage.getItem("access_token")
-        : null;
+    const hasToken = authCookies.getAccessToken();
 
     // If there's a token but we're not authenticated, check auth status once
     if (hasToken && !hasCheckedRef.current) {

@@ -1,4 +1,3 @@
-import React from "react";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { Inter } from "next/font/google";
@@ -40,8 +39,12 @@ export const metadata: Metadata = {
     title: "Hotelier",
     description: "Sistema integral de gestión hotelera",
   },
-  viewport: "width=device-width, initial-scale=1",
   robots: "index, follow",
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

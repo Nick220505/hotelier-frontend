@@ -39,17 +39,17 @@ export function RoomStatusBoard({ initialRooms }: RoomStatusBoardProps) {
   const getStatusColor = (status: RoomWithStatus["status"]) => {
     switch (status) {
       case "available":
-        return "bg-green-500";
+        return "bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600";
       case "occupied":
-        return "bg-red-500";
+        return "bg-red-600 hover:bg-red-700 dark:bg-red-500 dark:hover:bg-red-600";
       case "cleaning":
-        return "bg-yellow-500";
+        return "bg-yellow-600 hover:bg-yellow-700 dark:bg-yellow-500 dark:hover:bg-yellow-600";
       case "maintenance":
-        return "bg-orange-500";
+        return "bg-orange-600 hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600";
       case "out_of_order":
-        return "bg-gray-500";
+        return "bg-gray-600 hover:bg-gray-700 dark:bg-gray-500 dark:hover:bg-gray-600";
       default:
-        return "bg-gray-400";
+        return "bg-gray-400 hover:bg-gray-500 dark:bg-gray-400 dark:hover:bg-gray-500";
     }
   };
 
@@ -131,8 +131,8 @@ export function RoomStatusBoard({ initialRooms }: RoomStatusBoardProps) {
             </CardHeader>
             <CardContent className="space-y-3">
               {room.status === "occupied" && room.currentReservation && (
-                <div className="bg-red-50 p-3 rounded-lg">
-                  <div className="font-medium text-sm">Huésped actual:</div>
+                <div className="bg-destructive/10 border border-destructive/20 p-3 rounded-lg">
+                  <div className="font-medium text-sm text-destructive">Huésped actual:</div>
                   <div className="text-sm">{room.guestName}</div>
                   <div className="text-xs text-muted-foreground">
                     Check-out: {room.checkOutDate ? new Date(room.checkOutDate).toLocaleDateString() : "N/A"}
@@ -141,8 +141,8 @@ export function RoomStatusBoard({ initialRooms }: RoomStatusBoardProps) {
               )}
 
               {room.nextReservation && room.status !== "occupied" && (
-                <div className="bg-blue-50 p-3 rounded-lg">
-                  <div className="font-medium text-sm">Próxima reserva:</div>
+                <div className="bg-primary/10 border border-primary/20 p-3 rounded-lg">
+                  <div className="font-medium text-sm text-primary">Próxima reserva:</div>
                   <div className="text-sm">{room.nextReservation.guestName}</div>
                   <div className="text-xs text-muted-foreground">
                     Check-in: {new Date(room.nextReservation.checkInDate).toLocaleDateString()}

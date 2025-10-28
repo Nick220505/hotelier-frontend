@@ -161,7 +161,7 @@ export default function RoomStatusBoardPage() {
           <h1 className="text-3xl font-bold">Tablero de Habitaciones</h1>
           <p className="text-muted-foreground">Cargando estado de habitaciones...</p>
         </div>
-        <div className="animate-pulse bg-gray-200 h-96 rounded-lg"></div>
+        <div className="animate-pulse bg-muted h-96 rounded-lg"></div>
       </div>
     );
   }
@@ -180,10 +180,10 @@ export default function RoomStatusBoardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Disponibles</CardTitle>
-            <Bed className="h-4 w-4 text-green-600" />
+            <Bed className="h-4 w-4 text-green-600 dark:text-green-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{statusCounts.available}</div>
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{statusCounts.available}</div>
             <p className="text-xs text-muted-foreground">Listas para huéspedes</p>
           </CardContent>
         </Card>
@@ -191,10 +191,10 @@ export default function RoomStatusBoardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Ocupadas</CardTitle>
-            <Users className="h-4 w-4 text-red-600" />
+            <Users className="h-4 w-4 text-red-600 dark:text-red-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{statusCounts.occupied}</div>
+            <div className="text-2xl font-bold text-red-600 dark:text-red-400">{statusCounts.occupied}</div>
             <p className="text-xs text-muted-foreground">Con huéspedes</p>
           </CardContent>
         </Card>
@@ -202,10 +202,10 @@ export default function RoomStatusBoardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Limpieza</CardTitle>
-            <Sparkles className="h-4 w-4 text-yellow-600" />
+            <Sparkles className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{statusCounts.cleaning}</div>
+            <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{statusCounts.cleaning}</div>
             <p className="text-xs text-muted-foreground">En proceso</p>
           </CardContent>
         </Card>
@@ -213,10 +213,10 @@ export default function RoomStatusBoardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Mantenimiento</CardTitle>
-            <Wrench className="h-4 w-4 text-orange-600" />
+            <Wrench className="h-4 w-4 text-orange-600 dark:text-orange-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">{statusCounts.maintenance}</div>
+            <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">{statusCounts.maintenance}</div>
             <p className="text-xs text-muted-foreground">Requiere atención</p>
           </CardContent>
         </Card>
@@ -224,10 +224,10 @@ export default function RoomStatusBoardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Fuera de Servicio</CardTitle>
-            <AlertCircle className="h-4 w-4 text-gray-600" />
+            <AlertCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-600">{statusCounts.out_of_order}</div>
+            <div className="text-2xl font-bold text-gray-600 dark:text-gray-400">{statusCounts.out_of_order}</div>
             <p className="text-xs text-muted-foreground">No disponibles</p>
           </CardContent>
         </Card>

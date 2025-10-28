@@ -15,25 +15,25 @@ export function QuickActions() {
     {
       icon: CalendarDays,
       label: "Nueva Reserva",
-      color: "text-blue-600",
+      color: "text-blue-600 dark:text-blue-400",
       href: "/reservas",
     },
     {
       icon: Users,
       label: "Check-in Rápido",
-      color: "text-green-600",
+      color: "text-green-600 dark:text-green-400",
       href: "/reservas",
     },
     {
       icon: Car,
       label: "Parqueadero",
-      color: "text-orange-600",
+      color: "text-orange-600 dark:text-orange-400",
       href: "/parqueadero",
     },
     {
       icon: FileText,
       label: "Generar Reporte",
-      color: "text-purple-600",
+      color: "text-purple-600 dark:text-purple-400",
       href: "/reportes",
     },
   ];

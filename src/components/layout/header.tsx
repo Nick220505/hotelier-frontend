@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
+  Search,
   Settings,
   User,
   LogOut,
@@ -70,6 +71,15 @@ export function Header() {
         </div>
 
         <div className="flex items-center space-x-0.5 sm:space-x-1 md:space-x-2 shrink-0">
+          {/* Search - hidden on mobile, shown on larger screens */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative h-8 w-8 hidden sm:inline-flex"
+          >
+            <Search className="h-4 w-4" />
+          </Button>
+
           {/* Notifications */}
           <NotificationsMenu />
 
@@ -130,6 +140,12 @@ export function Header() {
                 </div>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
+
+              {/* Search option for mobile */}
+              <DropdownMenuItem className="sm:hidden">
+                <Search className="mr-2 h-4 w-4" />
+                <span>Buscar</span>
+              </DropdownMenuItem>
 
               {/* Theme options for mobile/tablet */}
               <div className="lg:hidden">

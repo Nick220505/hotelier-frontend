@@ -68,7 +68,7 @@ export default function Dashboard() {
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="animate-pulse bg-gray-200 h-32 rounded-lg"></div>
+            <div key={i} className="animate-pulse bg-muted h-32 rounded-lg"></div>
           ))}
         </div>
       </div>
@@ -123,7 +123,7 @@ export default function Dashboard() {
       value: reservations.length.toString(),
       description: "Reservas registradas",
       iconName: "calendar",
-      color: "text-blue-600",
+      color: "text-blue-600 dark:text-blue-400",
       roles: ["administrador"],
     },
     {
@@ -131,7 +131,7 @@ export default function Dashboard() {
       value: availableRooms.toString(),
       description: "Total disponibles",
       iconName: "bed",
-      color: "text-green-600",
+      color: "text-green-600 dark:text-green-400",
       roles: ["administrador"],
     },
     {
@@ -139,7 +139,7 @@ export default function Dashboard() {
       value: `${rooms.length > 0 ? Math.round((activeReservations.length / rooms.length) * 100) : 0}%`,
       description: "Tasa de ocupación",
       iconName: "users",
-      color: "text-purple-600",
+      color: "text-purple-600 dark:text-purple-400",
       roles: ["administrador"],
     },
     {
@@ -147,7 +147,7 @@ export default function Dashboard() {
       value: formattedMonthlyRevenue,
       description: "Ingresos generados",
       iconName: "dollar-sign",
-      color: "text-green-600",
+      color: "text-green-600 dark:text-green-400",
       roles: ["administrador"],
     },
   ];

@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Package, 
-  AlertTriangle, 
-  TrendingDown, 
-  CheckCircle, 
-  Edit2, 
-  Trash2, 
+import {
+  Package,
+  AlertTriangle,
+  TrendingDown,
+  CheckCircle,
+  Edit2,
+  Trash2,
   MoreHorizontal,
   RefreshCw
 } from "lucide-react";
@@ -171,7 +171,7 @@ export default function InventarioPage() {
               </div>
             ) : (
               items.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent hover:shadow-sm transition-colors">
                   <div className="flex items-center space-x-4 flex-1">
                     <Package className="h-5 w-5 text-muted-foreground" />
                     <div className="flex-1">

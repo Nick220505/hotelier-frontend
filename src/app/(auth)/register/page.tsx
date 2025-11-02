@@ -9,7 +9,6 @@ import { HotelierLogo } from "@/components/hotelier-logo";
 import { RegisterForm } from "./components/register-form";
 
 export default function RegisterPage() {
-
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1 text-center">

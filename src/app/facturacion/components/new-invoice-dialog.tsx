@@ -43,7 +43,7 @@ const createInvoiceSchema = z.object({
   reservationId: z
     .string({ message: "Debe seleccionar una reservación" })
     .min(1, "La reservación es obligatoria"),
-  
+
   issueDate: z
     .string({ message: "La fecha de emisión es obligatoria" })
     .min(1, "La fecha de emisión es obligatoria")
@@ -54,7 +54,14 @@ const createInvoiceSchema = z.object({
     }, "Fecha inválida"),
 
   paymentMethod: z
-    .enum(["CASH", "CREDIT_CARD", "DEBIT_CARD", "BANK_TRANSFER", "CHECK", "GIFT_CARD"])
+    .enum([
+      "CASH",
+      "CREDIT_CARD",
+      "DEBIT_CARD",
+      "BANK_TRANSFER",
+      "CHECK",
+      "GIFT_CARD",
+    ])
     .describe("El método de pago es obligatorio"),
 });
 
@@ -87,9 +94,9 @@ export function NewInvoiceDialog({
 
   const handleReservationSelect = (reservationId: string) => {
     const billingData = reservationsBillingData.find(
-      (bd) => bd.reservation.id.toString() === reservationId
+      (bd) => bd.reservation.id.toString() === reservationId,
     );
-    
+
     if (billingData) {
       setSelectedBillingData(billingData);
       form.setValue("reservationId", reservationId);
@@ -138,7 +145,7 @@ export function NewInvoiceDialog({
     const subtotal = concepts.reduce(
       (sum, concept) =>
         sum + (Number(concept.quantity) || 0) * (Number(concept.price) || 0),
-      0
+      0,
     );
 
     try {
@@ -148,11 +155,11 @@ export function NewInvoiceDialog({
       dueDate.setDate(dueDate.getDate() + 30); // Due in 30 days
 
       // Create invoice items from concepts
-      const items = concepts.map(concept => ({
+      const items = concepts.map((concept) => ({
         description: concept.description,
         quantity: concept.quantity,
         price: concept.price,
-        total: concept.quantity * concept.price
+        total: concept.quantity * concept.price,
       }));
 
       // Create invoice with proper backend structure
@@ -166,18 +173,18 @@ export function NewInvoiceDialog({
         total: subtotal * (1 + taxRate),
         reservationId: parseInt(data.reservationId),
         paymentMethod: data.paymentMethod,
-        invoiceItems: items.map(item => ({
+        invoiceItems: items.map((item) => ({
           description: item.description,
           quantity: item.quantity,
           price: item.price,
-          total: item.quantity * item.price
-        }))
+          total: item.quantity * item.price,
+        })),
       };
 
       // Send to backend
       const createdInvoice = await billingApi.createInvoice(invoiceData);
       onInvoiceAdd(createdInvoice);
-      
+
       // Show success toast
       toast("Factura creada", {
         description: `Factura ${createdInvoice.number} para ${selectedBillingData.reservation.guestName} creada exitosamente`,
@@ -186,9 +193,10 @@ export function NewInvoiceDialog({
       // Reset form and close dialog
       handleClose();
     } catch (error) {
-      console.error('Error creating invoice:', error);
+      console.error("Error creating invoice:", error);
       toast.error("Error", {
-        description: "No se pudo crear la factura. Por favor intente nuevamente."
+        description:
+          "No se pudo crear la factura. Por favor intente nuevamente.",
       });
     }
   };
@@ -237,7 +245,9 @@ export function NewInvoiceDialog({
                       }}
                       reservations={reservationsBillingData}
                       loading={loadingReservations}
-                      roomNumber={selectedBillingData?.reservation.room?.number || ""}
+                      roomNumber={
+                        selectedBillingData?.reservation.room?.number || ""
+                      }
                     />
                   </FormControl>
                   <FormMessage />
@@ -267,7 +277,10 @@ export function NewInvoiceDialog({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Método de Pago</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Seleccione método de pago" />
@@ -275,11 +288,19 @@ export function NewInvoiceDialog({
                     </FormControl>
                     <SelectContent>
                       <SelectItem value="CASH">Efectivo</SelectItem>
-                      <SelectItem value="CREDIT_CARD">Tarjeta de Crédito</SelectItem>
-                      <SelectItem value="DEBIT_CARD">Tarjeta de Débito</SelectItem>
-                      <SelectItem value="BANK_TRANSFER">Transferencia Bancaria</SelectItem>
+                      <SelectItem value="CREDIT_CARD">
+                        Tarjeta de Crédito
+                      </SelectItem>
+                      <SelectItem value="DEBIT_CARD">
+                        Tarjeta de Débito
+                      </SelectItem>
+                      <SelectItem value="BANK_TRANSFER">
+                        Transferencia Bancaria
+                      </SelectItem>
                       <SelectItem value="CHECK">Cheque</SelectItem>
-                      <SelectItem value="GIFT_CARD">Tarjeta de Regalo</SelectItem>
+                      <SelectItem value="GIFT_CARD">
+                        Tarjeta de Regalo
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -297,9 +318,11 @@ export function NewInvoiceDialog({
               <Button type="button" variant="outline" onClick={handleCancel}>
                 Cancelar
               </Button>
-              <Button 
+              <Button
                 type="submit"
-                disabled={!form.formState.isValid || form.formState.isSubmitting}
+                disabled={
+                  !form.formState.isValid || form.formState.isSubmitting
+                }
               >
                 Crear Factura
               </Button>

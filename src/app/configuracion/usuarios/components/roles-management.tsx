@@ -121,7 +121,9 @@ export function RolesManagement() {
       setSelectedRole(null);
       toast("Éxito", { description: "Permisos asignados correctamente" });
     } catch {
-      toast.error("Error", { description: "No se pudieron asignar los permisos" });
+      toast.error("Error", {
+        description: "No se pudieron asignar los permisos",
+      });
     }
   };
 
@@ -256,4 +258,3 @@ export function RolesManagement() {
     </div>
   );
 }
-

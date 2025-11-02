@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/auth-context";
@@ -38,7 +38,7 @@ export default function PerfilPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    
+
     if (!user) {
       setError("Authentication required");
       setLoading(false);

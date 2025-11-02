@@ -43,7 +43,6 @@ export function DeleteEventDialog({
   event,
   onEventDelete,
 }: DeleteEventDialogProps) {
-
   const handleDelete = async () => {
     if (!event) return;
 
@@ -65,9 +64,9 @@ export function DeleteEventDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>¿Eliminar evento?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción no se puede deshacer. El evento &quot;{event.title}&quot; 
-            programado para el {event.date} con {event.client} será eliminado 
-            permanentemente del sistema.
+            Esta acción no se puede deshacer. El evento &quot;{event.title}
+            &quot; programado para el {event.date} con {event.client} será
+            eliminado permanentemente del sistema.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

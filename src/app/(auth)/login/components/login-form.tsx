@@ -54,7 +54,9 @@ export function LoginForm() {
           className={form.formState.errors.email ? "border-red-500" : ""}
         />
         {form.formState.errors.email && (
-          <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.email.message}
+          </p>
         )}
       </div>
 
@@ -85,7 +87,9 @@ export function LoginForm() {
           </Button>
         </div>
         {form.formState.errors.password && (
-          <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.password.message}
+          </p>
         )}
       </div>
 
@@ -93,7 +97,9 @@ export function LoginForm() {
         <Checkbox
           id="remember"
           checked={form.watch("rememberMe")}
-          onCheckedChange={(checked) => form.setValue("rememberMe", checked as boolean)}
+          onCheckedChange={(checked) =>
+            form.setValue("rememberMe", checked as boolean)
+          }
           disabled={isLoading}
         />
         <Label htmlFor="remember" className="text-sm">

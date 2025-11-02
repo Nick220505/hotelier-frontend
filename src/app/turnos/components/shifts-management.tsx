@@ -20,22 +20,30 @@ interface ShiftsManagementProps {
   };
 }
 
-export function ShiftsManagement({ initialShifts, employees }: ShiftsManagementProps) {
+export function ShiftsManagement({
+  initialShifts,
+  employees,
+}: ShiftsManagementProps) {
   const [shifts, setShifts] = useState<Shift[]>(initialShifts);
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("all");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
 
   const handleShiftCreated = (newShift: Shift) => {
-    setShifts(prev => [newShift, ...prev]);
+    setShifts((prev) => [newShift, ...prev]);
   };
 
-  const handleUpdateShiftStatus = async (shiftId: number, status: Shift['status']) => {
+  const handleUpdateShiftStatus = async (
+    shiftId: number,
+    status: Shift["status"],
+  ) => {
     try {
       const updatedShift = await shiftsApi.update(shiftId, { status });
-      setShifts(prev => prev.map(shift => 
-        shift.id === shiftId ? updatedShift : shift
-      ));
+      setShifts((prev) =>
+        prev.map((shift) => (shift.id === shiftId ? updatedShift : shift)),
+      );
       toast.success("Estado del turno actualizado");
     } catch (error) {
       console.error("Error updating shift status:", error);
@@ -48,22 +56,23 @@ export function ShiftsManagement({ initialShifts, employees }: ShiftsManagementP
 
     try {
       await shiftsApi.delete(shiftId);
-      setShifts(prev => prev.filter(shift => shift.id !== shiftId));
+      setShifts((prev) => prev.filter((shift) => shift.id !== shiftId));
       toast.success("Turno eliminado exitosamente");
     } catch (error) {
-      console.error("Error deleting shift:", error);    
+      console.error("Error deleting shift:", error);
       toast.error("Error al eliminar el turno");
     }
   };
 
-  const filteredShifts = shifts.filter(shift => {
-    const matchesSearch = 
+  const filteredShifts = shifts.filter((shift) => {
+    const matchesSearch =
       shift.employee?.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       shift.position.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesDepartment = departmentFilter === "all" || shift.position === departmentFilter;
+
+    const matchesDepartment =
+      departmentFilter === "all" || shift.position === departmentFilter;
     const matchesDate = shift.date === selectedDate;
-    
+
     return matchesSearch && matchesDepartment && matchesDate;
   });
 
@@ -79,8 +88,8 @@ export function ShiftsManagement({ initialShifts, employees }: ShiftsManagementP
           departmentFilter={departmentFilter}
           setDepartmentFilter={setDepartmentFilter}
         />
-        
-        <CreateShiftDialog 
+
+        <CreateShiftDialog
           employees={employees}
           onShiftCreated={handleShiftCreated}
         />

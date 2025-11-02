@@ -10,7 +10,12 @@ import { type Reservation } from "@/lib/api/reservations";
 
 interface RoomWithStatus extends Room {
   currentReservation?: Reservation;
-  status: "available" | "occupied" | "cleaning" | "maintenance" | "out_of_order";
+  status:
+    | "available"
+    | "occupied"
+    | "cleaning"
+    | "maintenance"
+    | "out_of_order";
   guestName?: string;
   checkInDate?: string;
   checkOutDate?: string;
@@ -121,31 +126,49 @@ export function RoomStatusBoard({ initialRooms }: RoomStatusBoardProps) {
           <Card key={room.id} className="relative">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
-                <CardTitle className="text-lg">Habitación {room.number}</CardTitle>
-                <Badge className={`${getStatusColor(room.status)} text-white flex items-center gap-1`}>
+                <CardTitle className="text-lg">
+                  Habitación {room.number}
+                </CardTitle>
+                <Badge
+                  className={`${getStatusColor(room.status)} text-white flex items-center gap-1`}
+                >
                   {getStatusIcon(room.status)}
                   {getStatusLabel(room.status)}
                 </Badge>
               </div>
-              <p className="text-sm text-muted-foreground capitalize">{room.type.toLowerCase()}</p>
+              <p className="text-sm text-muted-foreground capitalize">
+                {room.type.toLowerCase()}
+              </p>
             </CardHeader>
             <CardContent className="space-y-3">
               {room.status === "occupied" && room.currentReservation && (
                 <div className="bg-destructive/10 border border-destructive/20 p-3 rounded-lg">
-                  <div className="font-medium text-sm text-destructive">Huésped actual:</div>
+                  <div className="font-medium text-sm text-destructive">
+                    Huésped actual:
+                  </div>
                   <div className="text-sm">{room.guestName}</div>
                   <div className="text-xs text-muted-foreground">
-                    Check-out: {room.checkOutDate ? new Date(room.checkOutDate).toLocaleDateString() : "N/A"}
+                    Check-out:{" "}
+                    {room.checkOutDate
+                      ? new Date(room.checkOutDate).toLocaleDateString()
+                      : "N/A"}
                   </div>
                 </div>
               )}
 
               {room.nextReservation && room.status !== "occupied" && (
                 <div className="bg-primary/10 border border-primary/20 p-3 rounded-lg">
-                  <div className="font-medium text-sm text-primary">Próxima reserva:</div>
-                  <div className="text-sm">{room.nextReservation.guestName}</div>
+                  <div className="font-medium text-sm text-primary">
+                    Próxima reserva:
+                  </div>
+                  <div className="text-sm">
+                    {room.nextReservation.guestName}
+                  </div>
                   <div className="text-xs text-muted-foreground">
-                    Check-in: {new Date(room.nextReservation.checkInDate).toLocaleDateString()}
+                    Check-in:{" "}
+                    {new Date(
+                      room.nextReservation.checkInDate,
+                    ).toLocaleDateString()}
                   </div>
                 </div>
               )}
@@ -160,7 +183,9 @@ export function RoomStatusBoard({ initialRooms }: RoomStatusBoardProps) {
 
       {filteredRooms.length === 0 && (
         <div className="text-center py-8">
-          <p className="text-muted-foreground">No hay habitaciones que coincidan con el filtro seleccionado.</p>
+          <p className="text-muted-foreground">
+            No hay habitaciones que coincidan con el filtro seleccionado.
+          </p>
         </div>
       )}
     </>

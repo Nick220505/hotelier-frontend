@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/auth-context";
@@ -11,7 +11,12 @@ import { RoomStatusBoard } from "./components/room-status-board";
 
 interface RoomWithStatus extends Room {
   currentReservation?: Reservation;
-  status: "available" | "occupied" | "cleaning" | "maintenance" | "out_of_order";
+  status:
+    | "available"
+    | "occupied"
+    | "cleaning"
+    | "maintenance"
+    | "out_of_order";
   guestName?: string;
   checkInDate?: string;
   checkOutDate?: string;
@@ -37,7 +42,7 @@ export default function RoomStatusBoardPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login');
+      router.push("/login");
       return;
     }
   }, [user, authLoading, router]);
@@ -55,85 +60,103 @@ export default function RoomStatusBoardPage() {
           reservationsApi.getAll(),
         ]);
 
-        const processedRoomsWithStatus = roomsData.map((room): RoomWithStatus => {
-          const today = new Date();
-          today.setHours(0, 0, 0, 0); // Set to start of day for comparison
+        const processedRoomsWithStatus = roomsData.map(
+          (room): RoomWithStatus => {
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); // Set to start of day for comparison
 
-          // Find current reservation (checked in)
-          const checkedInReservation = reservationsData.find(
-            (r) => r.roomId === room.id && r.status === "CHECKED_IN"
-          );
+            // Find current reservation (checked in)
+            const checkedInReservation = reservationsData.find(
+              (r) => r.roomId === room.id && r.status === "CHECKED_IN",
+            );
 
-          // Find confirmed reservation for today or ongoing
-          const confirmedReservationToday = reservationsData.find(
-            (r) => {
-              if (r.roomId !== room.id || r.status !== "CONFIRMED") return false;
-              
+            // Find confirmed reservation for today or ongoing
+            const confirmedReservationToday = reservationsData.find((r) => {
+              if (r.roomId !== room.id || r.status !== "CONFIRMED")
+                return false;
+
               const checkIn = new Date(r.checkInDate);
               const checkOut = new Date(r.checkOutDate);
               checkIn.setHours(0, 0, 0, 0);
               checkOut.setHours(0, 0, 0, 0);
-              
+
               // Room is occupied if today is between check-in and check-out dates (inclusive)
               return today >= checkIn && today < checkOut;
+            });
+
+            // Current reservation is either checked in or confirmed for today
+            const currentReservation =
+              checkedInReservation || confirmedReservationToday;
+
+            // Find next reservation (confirmed for future dates)
+            const nextReservation = reservationsData
+              .filter(
+                (r) =>
+                  r.roomId === room.id &&
+                  r.status === "CONFIRMED" &&
+                  new Date(r.checkInDate) > today,
+              )
+              .sort(
+                (a, b) =>
+                  new Date(a.checkInDate).getTime() -
+                  new Date(b.checkInDate).getTime(),
+              )[0];
+
+            let status: RoomWithStatus["status"] = "available";
+
+            // First check for reservations (this takes priority over isAvailable)
+            if (currentReservation) {
+              status = "occupied";
+            } else if (!room.isAvailable) {
+              // Only mark as out of order if there's no current reservation
+              status = "out_of_order";
+            } else if (room.type.includes("CLEAN")) {
+              status = "cleaning";
+            } else if (room.type.includes("MAINTENANCE")) {
+              status = "maintenance";
             }
-          );
 
-          // Current reservation is either checked in or confirmed for today
-          const currentReservation = checkedInReservation || confirmedReservationToday;
-
-          // Find next reservation (confirmed for future dates)
-          const nextReservation = reservationsData
-            .filter(
-              (r) =>
-                r.roomId === room.id &&
-                r.status === "CONFIRMED" &&
-                new Date(r.checkInDate) > today
-            )
-            .sort((a, b) => new Date(a.checkInDate).getTime() - new Date(b.checkInDate).getTime())[0];
-
-          let status: RoomWithStatus["status"] = "available";
-          
-          // First check for reservations (this takes priority over isAvailable)
-          if (currentReservation) {
-            status = "occupied";
-          } else if (!room.isAvailable) {
-            // Only mark as out of order if there's no current reservation
-            status = "out_of_order";
-          } else if (room.type.includes("CLEAN")) {
-            status = "cleaning";
-          } else if (room.type.includes("MAINTENANCE")) {
-            status = "maintenance";
-          }
-
-          return {
-            ...room,
-            currentReservation,
-            status,
-            guestName: currentReservation?.guestName,
-            checkInDate: currentReservation?.checkInDate,
-            checkOutDate: currentReservation?.checkOutDate,
-            nextReservation: nextReservation
-              ? {
-                  guestName: nextReservation.guestName || "Sin nombre",
-                  checkInDate: nextReservation.checkInDate,
-                }
-              : undefined,
-          };
-        });
+            return {
+              ...room,
+              currentReservation,
+              status,
+              guestName: currentReservation?.guestName,
+              checkInDate: currentReservation?.checkInDate,
+              checkOutDate: currentReservation?.checkOutDate,
+              nextReservation: nextReservation
+                ? {
+                    guestName: nextReservation.guestName || "Sin nombre",
+                    checkInDate: nextReservation.checkInDate,
+                  }
+                : undefined,
+            };
+          },
+        );
 
         const calculatedStatusCounts = {
           total: processedRoomsWithStatus.length,
-          available: processedRoomsWithStatus.filter((r) => r.status === "available").length,
-          occupied: processedRoomsWithStatus.filter((r) => r.status === "occupied").length,
-          cleaning: processedRoomsWithStatus.filter((r) => r.status === "cleaning").length,
-          maintenance: processedRoomsWithStatus.filter((r) => r.status === "maintenance").length,
-          out_of_order: processedRoomsWithStatus.filter((r) => r.status === "out_of_order").length,
+          available: processedRoomsWithStatus.filter(
+            (r) => r.status === "available",
+          ).length,
+          occupied: processedRoomsWithStatus.filter(
+            (r) => r.status === "occupied",
+          ).length,
+          cleaning: processedRoomsWithStatus.filter(
+            (r) => r.status === "cleaning",
+          ).length,
+          maintenance: processedRoomsWithStatus.filter(
+            (r) => r.status === "maintenance",
+          ).length,
+          out_of_order: processedRoomsWithStatus.filter(
+            (r) => r.status === "out_of_order",
+          ).length,
         };
 
         // Establecer una habitación en estado de limpieza
         if (processedRoomsWithStatus.length > 0) {
-          const firstAvailableRoom = processedRoomsWithStatus.find(room => room.status === "available");
+          const firstAvailableRoom = processedRoomsWithStatus.find(
+            (room) => room.status === "available",
+          );
           if (firstAvailableRoom) {
             firstAvailableRoom.status = "cleaning";
             // Recalcular los contadores
@@ -141,7 +164,7 @@ export default function RoomStatusBoardPage() {
             calculatedStatusCounts.cleaning++;
           }
         }
-        
+
         setRoomsWithStatus(processedRoomsWithStatus);
         setStatusCounts(calculatedStatusCounts);
       } catch (error) {
@@ -159,7 +182,9 @@ export default function RoomStatusBoardPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Tablero de Habitaciones</h1>
-          <p className="text-muted-foreground">Cargando estado de habitaciones...</p>
+          <p className="text-muted-foreground">
+            Cargando estado de habitaciones...
+          </p>
         </div>
         <div className="animate-pulse bg-muted h-96 rounded-lg"></div>
       </div>
@@ -183,8 +208,12 @@ export default function RoomStatusBoardPage() {
             <Bed className="h-4 w-4 text-green-600 dark:text-green-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600 dark:text-green-400">{statusCounts.available}</div>
-            <p className="text-xs text-muted-foreground">Listas para huéspedes</p>
+            <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+              {statusCounts.available}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Listas para huéspedes
+            </p>
           </CardContent>
         </Card>
 
@@ -194,7 +223,9 @@ export default function RoomStatusBoardPage() {
             <Users className="h-4 w-4 text-red-600 dark:text-red-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600 dark:text-red-400">{statusCounts.occupied}</div>
+            <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+              {statusCounts.occupied}
+            </div>
             <p className="text-xs text-muted-foreground">Con huéspedes</p>
           </CardContent>
         </Card>
@@ -205,7 +236,9 @@ export default function RoomStatusBoardPage() {
             <Sparkles className="h-4 w-4 text-yellow-600 dark:text-yellow-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{statusCounts.cleaning}</div>
+            <div className="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+              {statusCounts.cleaning}
+            </div>
             <p className="text-xs text-muted-foreground">En proceso</p>
           </CardContent>
         </Card>
@@ -216,24 +249,33 @@ export default function RoomStatusBoardPage() {
             <Wrench className="h-4 w-4 text-orange-600 dark:text-orange-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">{statusCounts.maintenance}</div>
+            <div className="text-2xl font-bold text-orange-600 dark:text-orange-400">
+              {statusCounts.maintenance}
+            </div>
             <p className="text-xs text-muted-foreground">Requiere atención</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Fuera de Servicio</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Fuera de Servicio
+            </CardTitle>
             <AlertCircle className="h-4 w-4 text-gray-600 dark:text-gray-400" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-gray-600 dark:text-gray-400">{statusCounts.out_of_order}</div>
+            <div className="text-2xl font-bold text-gray-600 dark:text-gray-400">
+              {statusCounts.out_of_order}
+            </div>
             <p className="text-xs text-muted-foreground">No disponibles</p>
           </CardContent>
         </Card>
       </div>
 
-      <RoomStatusBoard initialRooms={roomsWithStatus} statusCounts={statusCounts} />
+      <RoomStatusBoard
+        initialRooms={roomsWithStatus}
+        statusCounts={statusCounts}
+      />
     </div>
   );
 }

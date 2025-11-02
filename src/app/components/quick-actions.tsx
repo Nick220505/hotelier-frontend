@@ -49,12 +49,14 @@ export function QuickActions() {
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           {actions.map((action, index) => (
-            <Link 
-              key={index} 
-              href={action.href} 
+            <Link
+              key={index}
+              href={action.href}
               className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-accent hover:border-primary transition-colors"
             >
-              <action.icon className={`h-5 w-5 ${action.color} flex-shrink-0`} />
+              <action.icon
+                className={`h-5 w-5 ${action.color} flex-shrink-0`}
+              />
               <span className="text-sm font-medium">{action.label}</span>
             </Link>
           ))}

@@ -85,7 +85,7 @@ export const authApi = {
         // No token, nothing to logout
         return;
       }
-      
+
       await apiRequest("/auth/logout", {
         method: "POST",
         headers: {

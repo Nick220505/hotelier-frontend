@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { RoleGuard } from "@/components/auth/role-guard";
@@ -22,12 +22,12 @@ export default function UsersManagementPage() {
       try {
         const [usersData, rolesData] = await Promise.all([
           authApi.getAllUsers().catch(() => []),
-          rolesApi.getAll().catch(() => [])
+          rolesApi.getAll().catch(() => []),
         ]);
         setUsers(usersData);
         setRoles(rolesData);
       } catch (error) {
-        console.error('Error fetching users and roles data:', error);
+        console.error("Error fetching users and roles data:", error);
       } finally {
         setLoading(false);
       }
@@ -40,7 +40,9 @@ export default function UsersManagementPage() {
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Gestión de Usuarios, Roles y Permisos</h1>
+          <h1 className="text-3xl font-bold">
+            Gestión de Usuarios, Roles y Permisos
+          </h1>
           <p className="text-muted-foreground">Cargando configuración...</p>
         </div>
         <div className="animate-pulse bg-gray-200 h-96 rounded-lg"></div>
@@ -53,7 +55,9 @@ export default function UsersManagementPage() {
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-3xl font-bold">Gestión de Usuarios, Roles y Permisos</h1>
+            <h1 className="text-3xl font-bold">
+              Gestión de Usuarios, Roles y Permisos
+            </h1>
             <p className="text-muted-foreground">
               Administra usuarios, roles del sistema y permisos
             </p>
@@ -70,20 +74,23 @@ export default function UsersManagementPage() {
               <Shield className="h-4 w-4" />
               Roles
             </TabsTrigger>
-            <TabsTrigger value="permissions" className="flex items-center gap-2">
+            <TabsTrigger
+              value="permissions"
+              className="flex items-center gap-2"
+            >
               <Lock className="h-4 w-4" />
               Permisos
             </TabsTrigger>
           </TabsList>
-          
+
           <TabsContent value="users">
             <UsersManagement initialUsers={users} initialRoles={roles} />
           </TabsContent>
-          
+
           <TabsContent value="roles">
             <RolesManagement />
           </TabsContent>
-          
+
           <TabsContent value="permissions">
             <PermissionsManagement />
           </TabsContent>
@@ -92,4 +99,3 @@ export default function UsersManagementPage() {
     </RoleGuard>
   );
 }
-

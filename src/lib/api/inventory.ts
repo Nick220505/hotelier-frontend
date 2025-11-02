@@ -97,8 +97,8 @@ function transformInventoryItem(
   backendItem: BackendInventoryItem,
 ): InventoryItem {
   // Ensure date is in YYYY-MM-DD format
-  const formattedDate = backendItem.lastPurchaseDate 
-    ? new Date(backendItem.lastPurchaseDate).toISOString().split('T')[0]
+  const formattedDate = backendItem.lastPurchaseDate
+    ? new Date(backendItem.lastPurchaseDate).toISOString().split("T")[0]
     : null;
 
   return {
@@ -365,13 +365,13 @@ export const inventoryApi = {
       // Calculate stats
       const totalValue = items.reduce(
         (acc, item) => acc + item.currentStock * item.unitCost,
-        0
+        0,
       );
       const lowStockCount = items.filter(
-        (item) => item.currentStock <= item.minimumStock
+        (item) => item.currentStock <= item.minimumStock,
       ).length;
       const outOfStockCount = items.filter(
-        (item) => item.currentStock === 0
+        (item) => item.currentStock === 0,
       ).length;
 
       // Group by category
@@ -385,8 +385,7 @@ export const inventoryApi = {
           categoryStats[item.category] = { count: 0, value: 0, lowStock: 0 };
         }
         categoryStats[item.category].count++;
-        categoryStats[item.category].value +=
-          item.currentStock * item.unitCost;
+        categoryStats[item.category].value += item.currentStock * item.unitCost;
         if (item.currentStock <= item.minimumStock) {
           categoryStats[item.category].lowStock++;
         }

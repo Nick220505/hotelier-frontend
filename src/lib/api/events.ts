@@ -41,7 +41,9 @@ export const eventsApi = {
     }),
   update: (
     id: number,
-    data: Partial<Omit<EventBooking, "id" | "createdAt" | "updatedAt" | "venue">>,
+    data: Partial<
+      Omit<EventBooking, "id" | "createdAt" | "updatedAt" | "venue">
+    >,
   ): Promise<EventBooking> =>
     apiRequest(`/events/${id}`, {
       method: "PATCH",

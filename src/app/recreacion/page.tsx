@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { recreationalApi, type RecreationalFacility, type RecreationalBooking } from "@/lib/api/recreational";
+import {
+  recreationalApi,
+  type RecreationalFacility,
+  type RecreationalBooking,
+} from "@/lib/api/recreational";
 import { FacilitiesManagement } from "./components/facilities-management";
 import { BookingsManagement } from "./components/bookings-management";
 import { RecreationalStats } from "./components/recreational-stats";
@@ -47,25 +51,30 @@ export default function RecreacionPage() {
   }, []);
 
   // Filter facilities based on search
-  const filteredFacilities = facilities.filter(facility =>
-    facility.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    facility.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    facility.location.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredFacilities = facilities.filter(
+    (facility) =>
+      facility.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      facility.type.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      facility.location.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
   // Quick stats
-  const availableFacilities = facilities.filter(f => f.status === "AVAILABLE").length;
-  const totalBookingsToday = bookings.filter(b => {
-    const today = new Date().toISOString().split('T')[0];
+  const availableFacilities = facilities.filter(
+    (f) => f.status === "AVAILABLE",
+  ).length;
+  const totalBookingsToday = bookings.filter((b) => {
+    const today = new Date().toISOString().split("T")[0];
     return b.bookingDate === today;
   }).length;
-  const pendingBookings = bookings.filter(b => b.status === "PENDING").length;
+  const pendingBookings = bookings.filter((b) => b.status === "PENDING").length;
 
   if (loading) {
     return (
       <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
         <div className="flex items-center justify-between space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">Instalaciones Recreativas</h2>
+          <h2 className="text-3xl font-bold tracking-tight">
+            Instalaciones Recreativas
+          </h2>
         </div>
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           {[...Array(4)].map((_, i) => (
@@ -89,16 +98,18 @@ export default function RecreacionPage() {
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       {/* Header */}
       <div className="flex items-center justify-between space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">Instalaciones Recreativas</h2>
+        <h2 className="text-3xl font-bold tracking-tight">
+          Instalaciones Recreativas
+        </h2>
         <div className="flex items-center space-x-2">
           {/* Solo mostrar el botón si el usuario tiene rol cliente */}
-          {hasRole('cliente') && (
+          {hasRole("cliente") && (
             <Button onClick={() => setShowQuickBooking(true)}>
               <Calendar className="mr-2 h-4 w-4" />
               Reserva Rápida
             </Button>
           )}
-          {!hasRole('cliente') && (
+          {!hasRole("cliente") && (
             <Button onClick={() => setShowFacilityDialog(true)}>
               <Plus className="mr-2 h-4 w-4" />
               Nueva Instalación
@@ -111,7 +122,9 @@ export default function RecreacionPage() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Instalaciones Disponibles</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Instalaciones Disponibles
+            </CardTitle>
             <Dumbbell className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -137,7 +150,9 @@ export default function RecreacionPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Reservas Pendientes</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Reservas Pendientes
+            </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -150,14 +165,14 @@ export default function RecreacionPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ocupación Promedio</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Ocupación Promedio
+            </CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">73%</div>
-            <p className="text-xs text-muted-foreground">
-              últimos 30 días
-            </p>
+            <p className="text-xs text-muted-foreground">últimos 30 días</p>
           </CardContent>
         </Card>
       </div>
@@ -176,7 +191,11 @@ export default function RecreacionPage() {
       </div>
 
       {/* Main Content Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-4"
+      >
         <TabsList>
           <TabsTrigger value="overview">Resumen</TabsTrigger>
           <TabsTrigger value="facilities">Instalaciones</TabsTrigger>
@@ -188,38 +207,53 @@ export default function RecreacionPage() {
           {/* Overview: Quick facility grid */}
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {filteredFacilities.map((facility) => (
-              <Card key={facility.id} className="hover:shadow-md transition-shadow">
+              <Card
+                key={facility.id}
+                className="hover:shadow-md transition-shadow"
+              >
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-lg">{facility.name}</CardTitle>
-                    <Badge 
-                      variant={facility.status === "AVAILABLE" ? "default" : "secondary"}
+                    <Badge
+                      variant={
+                        facility.status === "AVAILABLE"
+                          ? "default"
+                          : "secondary"
+                      }
                       className={
-                        facility.status === "AVAILABLE" ? "bg-green-500" :
-                        facility.status === "OCCUPIED" ? "bg-blue-500" :
-                        facility.status === "MAINTENANCE" ? "bg-yellow-500" :
-                        "bg-red-500"
+                        facility.status === "AVAILABLE"
+                          ? "bg-green-500"
+                          : facility.status === "OCCUPIED"
+                            ? "bg-blue-500"
+                            : facility.status === "MAINTENANCE"
+                              ? "bg-yellow-500"
+                              : "bg-red-500"
                       }
                     >
                       {facility.status === "AVAILABLE" && "Disponible"}
                       {facility.status === "OCCUPIED" && "Ocupada"}
                       {facility.status === "MAINTENANCE" && "Mantenimiento"}
-                      {facility.status === "OUT_OF_ORDER" && "Fuera de Servicio"}
+                      {facility.status === "OUT_OF_ORDER" &&
+                        "Fuera de Servicio"}
                       {facility.status === "RESERVED" && "Reservada"}
                       {facility.status === "CLEANING" && "Limpieza"}
                     </Badge>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-sm text-muted-foreground mb-2">{facility.location}</p>
+                  <p className="text-sm text-muted-foreground mb-2">
+                    {facility.location}
+                  </p>
                   <p className="text-sm mb-2">{facility.description}</p>
                   <div className="flex items-center justify-between text-sm">
                     <span>Capacidad: {facility.capacity}</span>
                     <span className="font-semibold">Gratuito</span>
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground mt-1">
-                    <span>{facility.openingTime} - {facility.closingTime}</span>
-                    <span>{facility.type.replace(/_/g, ' ')}</span>
+                    <span>
+                      {facility.openingTime} - {facility.closingTime}
+                    </span>
+                    <span>{facility.type.replace(/_/g, " ")}</span>
                   </div>
                 </CardContent>
               </Card>
@@ -228,14 +262,14 @@ export default function RecreacionPage() {
         </TabsContent>
 
         <TabsContent value="facilities">
-          <FacilitiesManagement 
+          <FacilitiesManagement
             facilities={facilities}
             onFacilitiesChange={setFacilities}
           />
         </TabsContent>
 
         <TabsContent value="bookings">
-          <BookingsManagement 
+          <BookingsManagement
             bookings={bookings}
             facilities={facilities}
             onBookingsChange={setBookings}
@@ -251,9 +285,9 @@ export default function RecreacionPage() {
       <QuickBookingDialog
         open={showQuickBooking}
         onOpenChange={setShowQuickBooking}
-        facilities={facilities.filter(f => f.status === "AVAILABLE")}
+        facilities={facilities.filter((f) => f.status === "AVAILABLE")}
         onBookingCreated={(booking: RecreationalBooking) => {
-          setBookings(prev => [...prev, booking]);
+          setBookings((prev) => [...prev, booking]);
           setShowQuickBooking(false);
         }}
       />
@@ -262,7 +296,7 @@ export default function RecreacionPage() {
         open={showFacilityDialog}
         onOpenChange={setShowFacilityDialog}
         onFacilityCreated={(facility: RecreationalFacility) => {
-          setFacilities(prev => [...prev, facility]);
+          setFacilities((prev) => [...prev, facility]);
           setShowFacilityDialog(false);
         }}
       />

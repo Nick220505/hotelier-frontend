@@ -115,5 +115,5 @@ export const authCookies = {
       localStorage.removeItem("user_roles");
       localStorage.removeItem("user_permissions");
     }
-  }
+  },
 };

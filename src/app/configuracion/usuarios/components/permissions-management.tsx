@@ -25,7 +25,8 @@ export function PermissionsManagement() {
   const loadPermissions = async () => {
     try {
       setLoading(true);
-      const permissionsByResourceData = await systemPermissionsApi.getByResource();
+      const permissionsByResourceData =
+        await systemPermissionsApi.getByResource();
       setPermissionsByResource(permissionsByResourceData);
     } catch {
       toast.error("Error", {
@@ -91,4 +92,3 @@ export function PermissionsManagement() {
     </div>
   );
 }
-

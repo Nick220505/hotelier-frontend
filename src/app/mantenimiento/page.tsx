@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import MaintenanceDashboard from "./components/maintenance-dashboard";
@@ -11,20 +11,22 @@ import { housekeepingApi, MaintenanceReport } from "@/lib/api/housekeeping";
 export default function MantenimientoPage() {
   const [loading, setLoading] = useState(true);
   const [requests, setRequests] = useState<GeneralMaintenanceRequest[]>([]);
-  const [housekeepingReports, setHousekeepingReports] = useState<MaintenanceReport[]>([]);
+  const [housekeepingReports, setHousekeepingReports] = useState<
+    MaintenanceReport[]
+  >([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch both general maintenance requests and housekeeping incident reports
         const [generalRequests, incidentReports] = await Promise.all([
           maintenanceApi.getAll(),
-          housekeepingApi.getMaintenanceReports()
+          housekeepingApi.getMaintenanceReports(),
         ]);
-        
+
         setRequests(generalRequests);
         setHousekeepingReports(incidentReports);
         setError(null);
@@ -64,13 +66,13 @@ export default function MantenimientoPage() {
   //   const fetchData = async () => {
   //     try {
   //       setLoading(true);
-  //       
+  //
   //       // Fetch both general maintenance requests and housekeeping incident reports
   //       const [generalRequests, incidentReports] = await Promise.all([
   //         maintenanceApi.getAll(),
   //         housekeepingApi.getMaintenanceReports()
   //       ]);
-  //       
+  //
   //       setRequests(generalRequests);
   //       setHousekeepingReports(incidentReports);
   //       setError(null);
@@ -86,7 +88,7 @@ export default function MantenimientoPage() {
   // };
 
   return (
-    <MaintenanceDashboard 
+    <MaintenanceDashboard
       initialRequests={requests}
       housekeepingReports={housekeepingReports}
     />

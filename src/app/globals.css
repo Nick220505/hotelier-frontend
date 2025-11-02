@@ -263,7 +263,7 @@
 /* CSS Variables for Light and Dark Themes */
 :root {
   --radius: 0.5rem;
-  
+
   /* Light theme colors - Hotel Professional Blue */
   --background: 210 20% 98%; /* Soft off-white */
   --foreground: 222 47% 11%; /* Deep navy for text */
@@ -271,21 +271,21 @@
   --card-foreground: 222 47% 11%;
   --popover: 0 0% 100%;
   --popover-foreground: 222 47% 11%;
-  
+
   /* Primary - Hospitality Blue */
   --primary: 212 86% 45%; /* Professional hotel blue */
   --primary-foreground: 210 20% 98%;
-  
+
   /* Secondary - Warm Neutral */
   --secondary: 210 20% 96%; /* Soft gray-blue */
   --secondary-foreground: 222 47% 11%;
-  
+
   /* Surface colors */
   --muted: 210 20% 96%;
   --muted-foreground: 215 25% 46%;
   --accent: 210 25% 94%;
   --accent-foreground: 222 47% 11%;
-  
+
   /* Semantic colors */
   --destructive: 0 84% 60%; /* Red for errors */
   --destructive-foreground: 210 20% 98%;
@@ -295,31 +295,31 @@
   --warning-foreground: 0 0% 100%;
   --info: 188 94% 42%; /* Cyan for info */
   --info-foreground: 0 0% 100%;
-  
+
   /* Borders and inputs */
   --border: 214 32% 91%;
   --input: 214 32% 91%;
   --ring: 212 86% 45%;
-  
+
   /* Hotel Status Colors - Light Theme */
   --room-available: 142 71% 45%; /* Green */
   --room-occupied: 212 86% 45%; /* Blue */
   --room-maintenance: 38 92% 50%; /* Amber */
   --room-cleaning: 188 94% 42%; /* Cyan */
   --room-out-of-order: 0 84% 60%; /* Red */
-  
+
   --booking-confirmed: 142 71% 45%;
   --booking-pending: 38 92% 50%;
   --booking-cancelled: 0 84% 60%;
   --booking-no-show: 215 25% 46%;
   --booking-checked-in: 212 86% 45%;
   --booking-checked-out: 214 32% 76%;
-  
+
   --payment-paid: 142 71% 45%;
   --payment-pending: 38 92% 50%;
   --payment-overdue: 0 84% 60%;
   --payment-partial: 212 86% 45%;
-  
+
   /* Sidebar */
   --sidebar-background: 210 20% 98%;
   --sidebar-foreground: 222 47% 11%;
@@ -329,7 +329,7 @@
   --sidebar-primary-foreground: 210 20% 98%;
   --sidebar-accent: 210 25% 94%;
   --sidebar-accent-foreground: 222 47% 11%;
-  
+
   /* Chart colors - Professional palette */
   --chart-1: 212 86% 45%; /* Hotel blue */
   --chart-2: 142 71% 45%; /* Success green */
@@ -346,21 +346,21 @@
   --card-foreground: 210 20% 98%;
   --popover: 222 40% 15%;
   --popover-foreground: 210 20% 98%;
-  
+
   /* Primary - Lighter blue for dark theme */
   --primary: 212 86% 65%;
   --primary-foreground: 222 47% 11%;
-  
+
   /* Secondary */
   --secondary: 222 40% 18%;
   --secondary-foreground: 210 20% 98%;
-  
+
   /* Surface colors */
   --muted: 222 40% 18%;
   --muted-foreground: 215 25% 65%;
   --accent: 222 40% 20%;
   --accent-foreground: 210 20% 98%;
-  
+
   /* Semantic colors - adjusted for dark theme */
   --destructive: 0 84% 65%;
   --destructive-foreground: 210 20% 98%;
@@ -370,31 +370,31 @@
   --warning-foreground: 222 47% 11%;
   --info: 188 94% 52%;
   --info-foreground: 222 47% 11%;
-  
+
   /* Borders and inputs */
   --border: 222 40% 25%;
   --input: 222 40% 25%;
   --ring: 212 86% 65%;
-  
+
   /* Hotel Status Colors - Dark Theme */
   --room-available: 142 71% 55%;
   --room-occupied: 212 86% 65%;
   --room-maintenance: 38 92% 60%;
   --room-cleaning: 188 94% 52%;
   --room-out-of-order: 0 84% 65%;
-  
+
   --booking-confirmed: 142 71% 55%;
   --booking-pending: 38 92% 60%;
   --booking-cancelled: 0 84% 65%;
   --booking-no-show: 215 25% 55%;
   --booking-checked-in: 212 86% 65%;
   --booking-checked-out: 215 25% 55%;
-  
+
   --payment-paid: 142 71% 55%;
   --payment-pending: 38 92% 60%;
   --payment-overdue: 0 84% 65%;
   --payment-partial: 212 86% 65%;
-  
+
   /* Sidebar - Dark */
   --sidebar-background: 222 40% 15%;
   --sidebar-foreground: 210 20% 98%;
@@ -404,7 +404,7 @@
   --sidebar-primary-foreground: 222 47% 11%;
   --sidebar-accent: 222 40% 20%;
   --sidebar-accent-foreground: 210 20% 98%;
-  
+
   /* Chart colors - Dark theme */
   --chart-1: 212 86% 65%;
   --chart-2: 142 71% 55%;
@@ -487,9 +487,11 @@
   .card-hover {
     transition: all 0.2s ease-in-out;
   }
-  
+
   .card-hover:hover {
-    box-shadow: 0 10px 25px -3px hsl(var(--primary) / 0.1), 0 4px 6px -2px hsl(var(--primary) / 0.05);
+    box-shadow:
+      0 10px 25px -3px hsl(var(--primary) / 0.1),
+      0 4px 6px -2px hsl(var(--primary) / 0.05);
     transform: translateY(-2px);
   }
 

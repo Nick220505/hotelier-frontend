@@ -1,6 +1,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Search, Calendar } from "lucide-react";
 
 interface AttendanceFiltersProps {
@@ -42,7 +48,7 @@ export function AttendanceFilters({
               />
             </div>
           </div>
-          
+
           <Select value={departmentFilter} onValueChange={onDepartmentChange}>
             <SelectTrigger className="w-full sm:w-[200px]">
               <SelectValue placeholder="Departamento" />

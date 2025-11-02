@@ -12,7 +12,11 @@ interface OrderCardProps {
   onStatusUpdate: (orderId: string, status: RoomServiceOrder["status"]) => void;
 }
 
-export function OrderCard({ order, onViewDetails, onStatusUpdate }: OrderCardProps) {
+export function OrderCard({
+  order,
+  onViewDetails,
+  onStatusUpdate,
+}: OrderCardProps) {
   const getStatusColor = (status: RoomServiceOrder["status"]) => {
     switch (status) {
       case "pending":
@@ -122,7 +126,8 @@ export function OrderCard({ order, onViewDetails, onStatusUpdate }: OrderCardPro
             <strong>Total:</strong> ${order.total.toLocaleString()}
           </p>
           <p className="text-sm">
-            <strong>Hora de pedido:</strong> {new Date(order.orderTime).toLocaleString()}
+            <strong>Hora de pedido:</strong>{" "}
+            {new Date(order.orderTime).toLocaleString()}
           </p>
         </div>
       </CardContent>

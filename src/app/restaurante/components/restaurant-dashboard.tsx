@@ -5,7 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { RoomServiceOrder, MenuItem, BeverageInventoryItem, restaurantApi } from "@/lib/api/restaurant";
+import {
+  RoomServiceOrder,
+  MenuItem,
+  BeverageInventoryItem,
+  restaurantApi,
+} from "@/lib/api/restaurant";
 import { useAuthenticatedUser } from "@/hooks/use-authenticated-user";
 
 interface RestaurantSale {
@@ -77,17 +82,25 @@ export default function RestaurantDashboard({
     } catch (error) {
       console.error("Error deleting menu item:", error);
       let errorMessage = "No se pudo eliminar el item del menú";
-      
+
       if (error instanceof Error) {
-        if (error.message.includes("Access denied") || error.message.includes("403")) {
-          errorMessage = "No tienes permisos para eliminar items del menú. Contacta al administrador.";
-        } else if (error.message.includes("Authentication required") || error.message.includes("401")) {
-          errorMessage = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.";
+        if (
+          error.message.includes("Access denied") ||
+          error.message.includes("403")
+        ) {
+          errorMessage =
+            "No tienes permisos para eliminar items del menú. Contacta al administrador.";
+        } else if (
+          error.message.includes("Authentication required") ||
+          error.message.includes("401")
+        ) {
+          errorMessage =
+            "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.";
         } else if (error.message) {
           errorMessage = error.message;
         }
       }
-      
+
       toast("Error", {
         description: errorMessage,
       });
@@ -95,13 +108,13 @@ export default function RestaurantDashboard({
   };
 
   const handleProcessOrder = async (orderId: string) => {
-    setLoadingOrders(prev => new Set(prev).add(orderId));
+    setLoadingOrders((prev) => new Set(prev).add(orderId));
     try {
       // Update backend first
       await restaurantApi.updateRoomServiceOrder(orderId, {
         status: "PREPARING",
       });
-      
+
       // Update local state on success
       setRoomServiceOrders(
         roomServiceOrders.map((order) =>
@@ -110,7 +123,7 @@ export default function RestaurantDashboard({
             : order,
         ),
       );
-      
+
       toast("Estado actualizado", {
         description: "El pedido está siendo preparado",
       });
@@ -120,7 +133,7 @@ export default function RestaurantDashboard({
         description: "No se pudo actualizar el estado del pedido",
       });
     } finally {
-      setLoadingOrders(prev => {
+      setLoadingOrders((prev) => {
         const newSet = new Set(prev);
         newSet.delete(orderId);
         return newSet;
@@ -129,20 +142,20 @@ export default function RestaurantDashboard({
   };
 
   const handleCompleteOrder = async (orderId: string) => {
-    setLoadingOrders(prev => new Set(prev).add(orderId));
+    setLoadingOrders((prev) => new Set(prev).add(orderId));
     try {
       // Update backend first
       await restaurantApi.updateRoomServiceOrder(orderId, {
         status: "READY",
       });
-      
+
       // Update local state on success
       setRoomServiceOrders(
         roomServiceOrders.map((order) =>
           order.id === orderId ? { ...order, status: "ready" as const } : order,
         ),
       );
-      
+
       toast("Estado actualizado", {
         description: "El pedido está listo para entregar",
       });
@@ -152,7 +165,7 @@ export default function RestaurantDashboard({
         description: "No se pudo actualizar el estado del pedido",
       });
     } finally {
-      setLoadingOrders(prev => {
+      setLoadingOrders((prev) => {
         const newSet = new Set(prev);
         newSet.delete(orderId);
         return newSet;
@@ -161,13 +174,13 @@ export default function RestaurantDashboard({
   };
 
   const handleDeliverOrder = async (orderId: string) => {
-    setLoadingOrders(prev => new Set(prev).add(orderId));
+    setLoadingOrders((prev) => new Set(prev).add(orderId));
     try {
       // Update backend first
       await restaurantApi.updateRoomServiceOrder(orderId, {
         status: "DELIVERED",
       });
-      
+
       // Update local state on success
       setRoomServiceOrders(
         roomServiceOrders.map((order) =>
@@ -180,7 +193,7 @@ export default function RestaurantDashboard({
             : order,
         ),
       );
-      
+
       toast("Estado actualizado", {
         description: "El pedido ha sido entregado exitosamente",
       });
@@ -190,7 +203,7 @@ export default function RestaurantDashboard({
         description: "No se pudo actualizar el estado del pedido",
       });
     } finally {
-      setLoadingOrders(prev => {
+      setLoadingOrders((prev) => {
         const newSet = new Set(prev);
         newSet.delete(orderId);
         return newSet;
@@ -205,11 +218,12 @@ export default function RestaurantDashboard({
           ? {
               ...item,
               stock: newStock,
-              status: newStock > item.minimumStock 
-                ? ("available" as const)
-                : newStock === 0 
-                ? ("agotado" as const)
-                : ("low_stock" as const),
+              status:
+                newStock > item.minimumStock
+                  ? ("available" as const)
+                  : newStock === 0
+                    ? ("agotado" as const)
+                    : ("low_stock" as const),
             }
           : item,
       ),
@@ -243,7 +257,7 @@ export default function RestaurantDashboard({
             Gestión de orders, menú e inventario
           </p>
         </div>
-        {hasRole('cliente') && (
+        {hasRole("cliente") && (
           <Button onClick={() => setDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" />
             Nuevo Pedido Room Service
@@ -281,8 +295,12 @@ export default function RestaurantDashboard({
         <TabsList>
           <TabsTrigger value="orders">Room Service</TabsTrigger>
           <TabsTrigger value="menu">Menú</TabsTrigger>
-          {!hasRole('cliente') && <TabsTrigger value="inventario">Inventario</TabsTrigger>}
-          {!hasRole('cliente') && <TabsTrigger value="ventas">Ventas</TabsTrigger>}
+          {!hasRole("cliente") && (
+            <TabsTrigger value="inventario">Inventario</TabsTrigger>
+          )}
+          {!hasRole("cliente") && (
+            <TabsTrigger value="ventas">Ventas</TabsTrigger>
+          )}
         </TabsList>
 
         <TabsContent value="orders" className="space-y-4">
@@ -303,7 +321,7 @@ export default function RestaurantDashboard({
           />
         </TabsContent>
 
-        {!hasRole('cliente') && (
+        {!hasRole("cliente") && (
           <TabsContent value="inventario" className="space-y-4">
             <InventoryTable
               items={beverageInventory}
@@ -313,7 +331,7 @@ export default function RestaurantDashboard({
           </TabsContent>
         )}
 
-        {!hasRole('cliente') && (
+        {!hasRole("cliente") && (
           <TabsContent value="ventas" className="space-y-4">
             <SalesTable sales={restaurantSales} />
           </TabsContent>

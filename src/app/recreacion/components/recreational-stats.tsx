@@ -2,7 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { BarChart3, TrendingUp, Clock, Calendar } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Select,
   SelectContent,
@@ -21,26 +27,29 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { recreationalApi, type BookingStatistics } from "@/lib/api/recreational";
+import {
+  recreationalApi,
+  type BookingStatistics,
+} from "@/lib/api/recreational";
 import { toast } from "sonner";
 
 export function RecreationalStats() {
   const [stats, setStats] = useState<BookingStatistics | null>(null);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<string>("30"); // Last 30 days
-  
+
   const loadStatistics = useCallback(async () => {
     try {
       setLoading(true);
-      const endDate = new Date().toISOString().split('T')[0];
+      const endDate = new Date().toISOString().split("T")[0];
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - parseInt(period));
-      
+
       const data = await recreationalApi.getStatistics(
-        startDate.toISOString().split('T')[0],
-        endDate
+        startDate.toISOString().split("T")[0],
+        endDate,
       );
-      
+
       setStats(data);
     } catch (error) {
       console.error("Error loading statistics:", error);
@@ -78,7 +87,7 @@ export function RecreationalStats() {
   const getStatusLabel = (status: string) => {
     const labels: Record<string, string> = {
       COMPLETED: "Completadas",
-      CONFIRMED: "Confirmadas", 
+      CONFIRMED: "Confirmadas",
       PENDING: "Pendientes",
       CANCELLED: "Canceladas",
       CHECKED_IN: "En Curso",
@@ -125,7 +134,8 @@ export function RecreationalStats() {
             <BarChart3 className="h-12 w-12 text-muted-foreground mb-4" />
             <CardTitle className="text-xl mb-2">Sin Datos</CardTitle>
             <CardDescription className="text-center">
-              No hay suficientes datos para mostrar estadísticas en este período.
+              No hay suficientes datos para mostrar estadísticas en este
+              período.
             </CardDescription>
           </CardContent>
         </Card>
@@ -159,29 +169,29 @@ export function RecreationalStats() {
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Reservas</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total Reservas
+            </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.totalBookings}</div>
-            <p className="text-xs text-muted-foreground">
-              {period} días
-            </p>
+            <p className="text-xs text-muted-foreground">{period} días</p>
           </CardContent>
         </Card>
 
-
-
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Instalación Popular</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Instalación Popular
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-lg font-bold">{stats.mostPopularFacilityType.replace(/_/g, ' ')}</div>
-            <p className="text-xs text-muted-foreground">
-              Más reservado
-            </p>
+            <div className="text-lg font-bold">
+              {stats.mostPopularFacilityType.replace(/_/g, " ")}
+            </div>
+            <p className="text-xs text-muted-foreground">Más reservado</p>
           </CardContent>
         </Card>
 
@@ -192,9 +202,7 @@ export function RecreationalStats() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{stats.peakHour}:00</div>
-            <p className="text-xs text-muted-foreground">
-              Mayor actividad
-            </p>
+            <p className="text-xs text-muted-foreground">Mayor actividad</p>
           </CardContent>
         </Card>
       </div>
@@ -220,18 +228,25 @@ export function RecreationalStats() {
                   <div key={facility.facilityName} className="space-y-2">
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-medium">{facility.facilityName}</div>
+                        <div className="font-medium">
+                          {facility.facilityName}
+                        </div>
                         <div className="text-sm text-muted-foreground">
-                          {facility.totalBookings} reservas • {facility.totalHoursBooked}h total
+                          {facility.totalBookings} reservas •{" "}
+                          {facility.totalHoursBooked}h total
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="text-sm text-muted-foreground">
-                          {formatPercentage(facility.utilizationRate)} utilización
+                          {formatPercentage(facility.utilizationRate)}{" "}
+                          utilización
                         </div>
                       </div>
                     </div>
-                    <Progress value={facility.utilizationRate} className="h-2" />
+                    <Progress
+                      value={facility.utilizationRate}
+                      className="h-2"
+                    />
                   </div>
                 ))}
               </div>
@@ -250,20 +265,31 @@ export function RecreationalStats() {
               </CardHeader>
               <CardContent>
                 <div className="space-y-3">
-                  {Object.entries(stats.statusBreakdown).map(([status, count]) => (
-                    <div key={status} className="flex items-center justify-between">
-                      <div className="flex items-center space-x-2">
-                        <div className={`w-3 h-3 rounded-full ${getStatusColor(status)}`} />
-                        <span className="text-sm font-medium">{getStatusLabel(status)}</span>
+                  {Object.entries(stats.statusBreakdown).map(
+                    ([status, count]) => (
+                      <div
+                        key={status}
+                        className="flex items-center justify-between"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <div
+                            className={`w-3 h-3 rounded-full ${getStatusColor(status)}`}
+                          />
+                          <span className="text-sm font-medium">
+                            {getStatusLabel(status)}
+                          </span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <span className="text-sm font-bold">{count}</span>
+                          <Badge variant="outline" className="text-xs">
+                            {formatPercentage(
+                              (count / stats.totalBookings) * 100,
+                            )}
+                          </Badge>
+                        </div>
                       </div>
-                      <div className="flex items-center space-x-2">
-                        <span className="text-sm font-bold">{count}</span>
-                        <Badge variant="outline" className="text-xs">
-                          {formatPercentage((count / stats.totalBookings) * 100)}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
+                    ),
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -281,17 +307,21 @@ export function RecreationalStats() {
                     <span>Tasa de Confirmación</span>
                     <span className="font-medium">
                       {formatPercentage(
-                        ((stats.statusBreakdown.CONFIRMED || 0) + (stats.statusBreakdown.COMPLETED || 0)) / 
-                        stats.totalBookings * 100
+                        (((stats.statusBreakdown.CONFIRMED || 0) +
+                          (stats.statusBreakdown.COMPLETED || 0)) /
+                          stats.totalBookings) *
+                          100,
                       )}
                     </span>
                   </div>
-                  <Progress 
+                  <Progress
                     value={
-                      ((stats.statusBreakdown.CONFIRMED || 0) + (stats.statusBreakdown.COMPLETED || 0)) / 
-                      stats.totalBookings * 100
-                    } 
-                    className="h-2" 
+                      (((stats.statusBreakdown.CONFIRMED || 0) +
+                        (stats.statusBreakdown.COMPLETED || 0)) /
+                        stats.totalBookings) *
+                      100
+                    }
+                    className="h-2"
                   />
                 </div>
 
@@ -300,17 +330,21 @@ export function RecreationalStats() {
                     <span>Tasa de Cancelación</span>
                     <span className="font-medium">
                       {formatPercentage(
-                        ((stats.statusBreakdown.CANCELLED || 0) + (stats.statusBreakdown.NO_SHOW || 0)) / 
-                        stats.totalBookings * 100
+                        (((stats.statusBreakdown.CANCELLED || 0) +
+                          (stats.statusBreakdown.NO_SHOW || 0)) /
+                          stats.totalBookings) *
+                          100,
                       )}
                     </span>
                   </div>
-                  <Progress 
+                  <Progress
                     value={
-                      ((stats.statusBreakdown.CANCELLED || 0) + (stats.statusBreakdown.NO_SHOW || 0)) / 
-                      stats.totalBookings * 100
-                    } 
-                    className="h-2 [&>div]:bg-red-500" 
+                      (((stats.statusBreakdown.CANCELLED || 0) +
+                        (stats.statusBreakdown.NO_SHOW || 0)) /
+                        stats.totalBookings) *
+                      100
+                    }
+                    className="h-2 [&>div]:bg-red-500"
                   />
                 </div>
 
@@ -319,13 +353,19 @@ export function RecreationalStats() {
                     <span>Reservas Completadas</span>
                     <span className="font-medium">
                       {formatPercentage(
-                        (stats.statusBreakdown.COMPLETED || 0) / stats.totalBookings * 100
+                        ((stats.statusBreakdown.COMPLETED || 0) /
+                          stats.totalBookings) *
+                          100,
                       )}
                     </span>
                   </div>
-                  <Progress 
-                    value={(stats.statusBreakdown.COMPLETED || 0) / stats.totalBookings * 100} 
-                    className="h-2 [&>div]:bg-green-500" 
+                  <Progress
+                    value={
+                      ((stats.statusBreakdown.COMPLETED || 0) /
+                        stats.totalBookings) *
+                      100
+                    }
+                    className="h-2 [&>div]:bg-green-500"
                   />
                 </div>
               </CardContent>
@@ -359,12 +399,16 @@ export function RecreationalStats() {
                       <TableRow key={facility.facilityName}>
                         <TableCell>
                           <div className="flex items-center">
-                            <Badge 
+                            <Badge
                               variant={index < 3 ? "default" : "outline"}
                               className={
-                                index === 0 ? "bg-yellow-500" :
-                                index === 1 ? "bg-gray-400" :
-                                index === 2 ? "bg-orange-600" : ""
+                                index === 0
+                                  ? "bg-yellow-500"
+                                  : index === 1
+                                    ? "bg-gray-400"
+                                    : index === 2
+                                      ? "bg-orange-600"
+                                      : ""
                               }
                             >
                               #{index + 1}
@@ -378,9 +422,9 @@ export function RecreationalStats() {
                         <TableCell>{facility.totalHoursBooked}h</TableCell>
                         <TableCell>
                           <div className="flex items-center space-x-2">
-                            <Progress 
-                              value={facility.utilizationRate} 
-                              className="w-20 h-2" 
+                            <Progress
+                              value={facility.utilizationRate}
+                              className="w-20 h-2"
                             />
                             <span className="text-xs">
                               {formatPercentage(facility.utilizationRate)}

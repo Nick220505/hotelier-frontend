@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -20,36 +20,68 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { attendanceApi, type Attendance } from '@/lib/api/attendance';
-import { employeesApi, type Employee } from '@/lib/api/employees';
-import { Calendar, Clock, Plus, Pencil, Trash2, CheckCircle } from 'lucide-react';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import { attendanceApi, type Attendance } from "@/lib/api/attendance";
+import { employeesApi, type Employee } from "@/lib/api/employees";
+import {
+  Calendar,
+  Clock,
+  Plus,
+  Pencil,
+  Trash2,
+  CheckCircle,
+} from "lucide-react";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 const getStatusBadge = (status: string) => {
   switch (status) {
-    case 'PRESENT':
-      return <Badge variant="default" className="bg-green-500">Presente</Badge>;
-    case 'ABSENT':
+    case "PRESENT":
+      return (
+        <Badge variant="default" className="bg-green-500">
+          Presente
+        </Badge>
+      );
+    case "ABSENT":
       return <Badge variant="destructive">Ausente</Badge>;
-    case 'LATE':
-      return <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-300">Tarde</Badge>;
-    case 'EARLY_LEAVE':
+    case "LATE":
+      return (
+        <Badge
+          variant="outline"
+          className="bg-yellow-50 text-yellow-700 border-yellow-300"
+        >
+          Tarde
+        </Badge>
+      );
+    case "EARLY_LEAVE":
       return <Badge variant="secondary">Salida Temprana</Badge>;
-    case 'SICK_LEAVE':
-      return <Badge variant="outline" className="bg-red-50 text-red-700 border-red-300">Incapacidad</Badge>;
-    case 'VACATION':
-      return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">Vacaciones</Badge>;
+    case "SICK_LEAVE":
+      return (
+        <Badge
+          variant="outline"
+          className="bg-red-50 text-red-700 border-red-300"
+        >
+          Incapacidad
+        </Badge>
+      );
+    case "VACATION":
+      return (
+        <Badge
+          variant="outline"
+          className="bg-blue-50 text-blue-700 border-blue-300"
+        >
+          Vacaciones
+        </Badge>
+      );
     default:
       return <Badge>{status}</Badge>;
   }
@@ -61,16 +93,21 @@ export function AttendanceTab() {
   const [loading, setLoading] = useState(true);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [editingAttendance, setEditingAttendance] = useState<Attendance | null>(null);
-  const [deletingAttendance, setDeletingAttendance] = useState<Attendance | null>(null);
-  const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [editingAttendance, setEditingAttendance] = useState<Attendance | null>(
+    null,
+  );
+  const [deletingAttendance, setDeletingAttendance] =
+    useState<Attendance | null>(null);
+  const [selectedDate, setSelectedDate] = useState(
+    format(new Date(), "yyyy-MM-dd"),
+  );
   const [formData, setFormData] = useState({
-    employeeId: '',
-    date: format(new Date(), 'yyyy-MM-dd'),
-    checkIn: '',
-    checkOut: '',
-    status: 'PRESENT',
-    notes: '',
+    employeeId: "",
+    date: format(new Date(), "yyyy-MM-dd"),
+    checkIn: "",
+    checkOut: "",
+    status: "PRESENT",
+    notes: "",
     hoursWorked: 0,
     overtimeHours: 0,
   });
@@ -85,8 +122,8 @@ export function AttendanceTab() {
       setAttendances(attendanceData);
       setEmployees(employeesData);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      toast.error('Error al cargar asistencias');
+      console.error("Error fetching data:", error);
+      toast.error("Error al cargar asistencias");
     } finally {
       setLoading(false);
     }
@@ -98,13 +135,13 @@ export function AttendanceTab() {
 
   const calculateHoursWorked = (checkIn: string, checkOut: string): number => {
     if (!checkIn || !checkOut) return 0;
-    
-    const [inHours, inMinutes] = checkIn.split(':').map(Number);
-    const [outHours, outMinutes] = checkOut.split(':').map(Number);
-    
+
+    const [inHours, inMinutes] = checkIn.split(":").map(Number);
+    const [outHours, outMinutes] = checkOut.split(":").map(Number);
+
     const inTotalMinutes = inHours * 60 + inMinutes;
     const outTotalMinutes = outHours * 60 + outMinutes;
-    
+
     const diffMinutes = outTotalMinutes - inTotalMinutes;
     return Math.round((diffMinutes / 60) * 100) / 100;
   };
@@ -115,26 +152,28 @@ export function AttendanceTab() {
       setFormData({
         employeeId: attendance.employeeId.toString(),
         date: attendance.date,
-        checkIn: attendance.checkIn || '',
-        checkOut: attendance.checkOut || '',
+        checkIn: attendance.checkIn || "",
+        checkOut: attendance.checkOut || "",
         status: attendance.status,
-        notes: attendance.notes || '',
-        hoursWorked: typeof attendance.hoursWorked === 'number' 
-          ? attendance.hoursWorked 
-          : parseFloat(attendance.hoursWorked?.toString() || '0'),
-        overtimeHours: typeof attendance.overtimeHours === 'number' 
-          ? attendance.overtimeHours 
-          : parseFloat(attendance.overtimeHours?.toString() || '0'),
+        notes: attendance.notes || "",
+        hoursWorked:
+          typeof attendance.hoursWorked === "number"
+            ? attendance.hoursWorked
+            : parseFloat(attendance.hoursWorked?.toString() || "0"),
+        overtimeHours:
+          typeof attendance.overtimeHours === "number"
+            ? attendance.overtimeHours
+            : parseFloat(attendance.overtimeHours?.toString() || "0"),
       });
     } else {
       setEditingAttendance(null);
       setFormData({
-        employeeId: '',
+        employeeId: "",
         date: selectedDate,
-        checkIn: '',
-        checkOut: '',
-        status: 'PRESENT',
-        notes: '',
+        checkIn: "",
+        checkOut: "",
+        status: "PRESENT",
+        notes: "",
         hoursWorked: 0,
         overtimeHours: 0,
       });
@@ -142,10 +181,13 @@ export function AttendanceTab() {
     setDialogOpen(true);
   };
 
-  const handleTimeChange = (field: 'checkIn' | 'checkOut', value: string) => {
+  const handleTimeChange = (field: "checkIn" | "checkOut", value: string) => {
     const newFormData = { ...formData, [field]: value };
     if (newFormData.checkIn && newFormData.checkOut) {
-      newFormData.hoursWorked = calculateHoursWorked(newFormData.checkIn, newFormData.checkOut);
+      newFormData.hoursWorked = calculateHoursWorked(
+        newFormData.checkIn,
+        newFormData.checkOut,
+      );
     }
     setFormData(newFormData);
   };
@@ -159,48 +201,51 @@ export function AttendanceTab() {
 
       if (editingAttendance) {
         await attendanceApi.update(editingAttendance.id, data);
-        toast.success('Asistencia actualizada exitosamente');
+        toast.success("Asistencia actualizada exitosamente");
       } else {
         await attendanceApi.create(data);
-        toast.success('Asistencia registrada exitosamente');
+        toast.success("Asistencia registrada exitosamente");
       }
       setDialogOpen(false);
       fetchData();
     } catch (error) {
-      console.error('Error saving attendance:', error);
-      toast.error('Error al guardar asistencia');
+      console.error("Error saving attendance:", error);
+      toast.error("Error al guardar asistencia");
     }
   };
 
   const handleDeleteAttendance = async () => {
     if (!deletingAttendance) return;
-    
+
     try {
       await attendanceApi.delete(deletingAttendance.id);
-      toast.success('Asistencia eliminada exitosamente');
+      toast.success("Asistencia eliminada exitosamente");
       setDeleteDialogOpen(false);
       setDeletingAttendance(null);
       fetchData();
     } catch (error) {
-      console.error('Error deleting attendance:', error);
-      toast.error('Error al eliminar asistencia');
+      console.error("Error deleting attendance:", error);
+      toast.error("Error al eliminar asistencia");
     }
   };
 
   const getEmployeeInfo = (employeeId: number) => {
-    const employee = employees.find(e => e.id === employeeId);
+    const employee = employees.find((e) => e.id === employeeId);
     return {
-      name: employee?.name || 'Desconocido',
-      position: employee?.position || '-',
-      department: employee?.department || '-',
+      name: employee?.name || "Desconocido",
+      position: employee?.position || "-",
+      department: employee?.department || "-",
     };
   };
 
-  const presentCount = attendances.filter(a => a.status === 'PRESENT').length;
-  const absentCount = attendances.filter(a => a.status === 'ABSENT').length;
-  const lateCount = attendances.filter(a => a.status === 'LATE').length;
+  const presentCount = attendances.filter((a) => a.status === "PRESENT").length;
+  const absentCount = attendances.filter((a) => a.status === "ABSENT").length;
+  const lateCount = attendances.filter((a) => a.status === "LATE").length;
   const totalHours = attendances.reduce((sum, a) => {
-    const hours = typeof a.hoursWorked === 'number' ? a.hoursWorked : parseFloat(a.hoursWorked?.toString() || '0');
+    const hours =
+      typeof a.hoursWorked === "number"
+        ? a.hoursWorked
+        : parseFloat(a.hoursWorked?.toString() || "0");
     return sum + (isNaN(hours) ? 0 : hours);
   }, 0);
 
@@ -214,7 +259,9 @@ export function AttendanceTab() {
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{presentCount}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {presentCount}
+            </div>
             <p className="text-xs text-muted-foreground">Asistieron hoy</p>
           </CardContent>
         </Card>
@@ -236,7 +283,9 @@ export function AttendanceTab() {
             <Clock className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{lateCount}</div>
+            <div className="text-2xl font-bold text-yellow-600">
+              {lateCount}
+            </div>
             <p className="text-xs text-muted-foreground">Llegaron tarde</p>
           </CardContent>
         </Card>
@@ -309,17 +358,24 @@ export function AttendanceTab() {
                     const info = getEmployeeInfo(attendance.employeeId);
                     return (
                       <TableRow key={attendance.id}>
-                        <TableCell className="font-medium">{info.name}</TableCell>
+                        <TableCell className="font-medium">
+                          {info.name}
+                        </TableCell>
                         <TableCell>{info.department}</TableCell>
                         <TableCell>{info.position}</TableCell>
-                        <TableCell>{attendance.checkIn || '-'}</TableCell>
-                        <TableCell>{attendance.checkOut || '-'}</TableCell>
+                        <TableCell>{attendance.checkIn || "-"}</TableCell>
+                        <TableCell>{attendance.checkOut || "-"}</TableCell>
                         <TableCell>
-                          {typeof attendance.hoursWorked === 'number' 
-                            ? attendance.hoursWorked.toFixed(1) 
-                            : parseFloat(attendance.hoursWorked?.toString() || '0').toFixed(1)}h
+                          {typeof attendance.hoursWorked === "number"
+                            ? attendance.hoursWorked.toFixed(1)
+                            : parseFloat(
+                                attendance.hoursWorked?.toString() || "0",
+                              ).toFixed(1)}
+                          h
                         </TableCell>
-                        <TableCell>{getStatusBadge(attendance.status)}</TableCell>
+                        <TableCell>
+                          {getStatusBadge(attendance.status)}
+                        </TableCell>
                         <TableCell className="text-right">
                           <Button
                             variant="ghost"
@@ -354,12 +410,12 @@ export function AttendanceTab() {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              {editingAttendance ? 'Editar Asistencia' : 'Registrar Asistencia'}
+              {editingAttendance ? "Editar Asistencia" : "Registrar Asistencia"}
             </DialogTitle>
             <DialogDescription>
               {editingAttendance
-                ? 'Actualiza el registro de asistencia'
-                : 'Completa los datos de asistencia del empleado'}
+                ? "Actualiza el registro de asistencia"
+                : "Completa los datos de asistencia del empleado"}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -367,7 +423,9 @@ export function AttendanceTab() {
               <Label htmlFor="employee">Empleado</Label>
               <Select
                 value={formData.employeeId}
-                onValueChange={(value) => setFormData({ ...formData, employeeId: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, employeeId: value })
+                }
                 disabled={!!editingAttendance}
               >
                 <SelectTrigger>
@@ -375,7 +433,10 @@ export function AttendanceTab() {
                 </SelectTrigger>
                 <SelectContent>
                   {employees.map((employee) => (
-                    <SelectItem key={employee.id} value={employee.id.toString()}>
+                    <SelectItem
+                      key={employee.id}
+                      value={employee.id.toString()}
+                    >
                       {employee.name} - {employee.position}
                     </SelectItem>
                   ))}
@@ -388,7 +449,9 @@ export function AttendanceTab() {
                 id="date"
                 type="date"
                 value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, date: e.target.value })
+                }
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -398,7 +461,7 @@ export function AttendanceTab() {
                   id="checkIn"
                   type="time"
                   value={formData.checkIn}
-                  onChange={(e) => handleTimeChange('checkIn', e.target.value)}
+                  onChange={(e) => handleTimeChange("checkIn", e.target.value)}
                 />
               </div>
               <div className="grid gap-2">
@@ -407,7 +470,7 @@ export function AttendanceTab() {
                   id="checkOut"
                   type="time"
                   value={formData.checkOut}
-                  onChange={(e) => handleTimeChange('checkOut', e.target.value)}
+                  onChange={(e) => handleTimeChange("checkOut", e.target.value)}
                 />
               </div>
             </div>
@@ -415,7 +478,9 @@ export function AttendanceTab() {
               <Label htmlFor="status">Estado</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) => setFormData({ ...formData, status: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, status: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -437,7 +502,12 @@ export function AttendanceTab() {
                 type="number"
                 step="0.5"
                 value={formData.hoursWorked}
-                onChange={(e) => setFormData({ ...formData, hoursWorked: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setFormData({
+                    ...formData,
+                    hoursWorked: parseFloat(e.target.value),
+                  })
+                }
                 readOnly
               />
             </div>
@@ -446,7 +516,9 @@ export function AttendanceTab() {
               <Textarea
                 id="notes"
                 value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, notes: e.target.value })
+                }
                 placeholder="Notas adicionales (opcional)"
                 rows={3}
               />
@@ -457,7 +529,7 @@ export function AttendanceTab() {
               Cancelar
             </Button>
             <Button onClick={handleSaveAttendance}>
-              {editingAttendance ? 'Actualizar' : 'Registrar'}
+              {editingAttendance ? "Actualizar" : "Registrar"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -469,11 +541,15 @@ export function AttendanceTab() {
           <DialogHeader>
             <DialogTitle>Confirmar Eliminación</DialogTitle>
             <DialogDescription>
-              ¿Estás seguro de que deseas eliminar este registro de asistencia? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar este registro de asistencia?
+              Esta acción no se puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
               Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDeleteAttendance}>
@@ -485,4 +561,3 @@ export function AttendanceTab() {
     </div>
   );
 }
-

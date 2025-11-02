@@ -45,13 +45,19 @@ export default function CleaningAssignments({
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "pendiente":
-        return <Badge className="bg-yellow-100 text-yellow-800">Pendiente</Badge>;
+        return (
+          <Badge className="bg-yellow-100 text-yellow-800">Pendiente</Badge>
+        );
       case "en_proceso":
         return <Badge className="bg-blue-100 text-blue-800">En Proceso</Badge>;
       case "completado":
-        return <Badge className="bg-green-100 text-green-800">Completado</Badge>;
+        return (
+          <Badge className="bg-green-100 text-green-800">Completado</Badge>
+        );
       case "inspeccionado":
-        return <Badge className="bg-purple-100 text-purple-800">Inspeccionado</Badge>;
+        return (
+          <Badge className="bg-purple-100 text-purple-800">Inspeccionado</Badge>
+        );
       case "necesita_mantenimiento":
         return (
           <Badge className="bg-orange-100 text-orange-800">Mantenimiento</Badge>
@@ -90,7 +96,11 @@ export default function CleaningAssignments({
                 <TableCell>
                   <div className="flex gap-2">
                     {a.status === "pendiente" && (
-                      <Button variant="outline" size="sm" onClick={() => onStart(a.id)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => onStart(a.id)}
+                      >
                         <Play className="mr-2 h-4 w-4" /> Iniciar
                       </Button>
                     )}

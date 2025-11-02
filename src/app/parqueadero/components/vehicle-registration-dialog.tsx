@@ -62,7 +62,7 @@ export default function VehicleRegistrationDialog({
   onVehicleAdd,
 }: VehicleRegistrationDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const vehicleForm = useForm<VehicleFormData>({
     resolver: zodResolver(vehicleSchema),
     defaultValues: {
@@ -110,7 +110,10 @@ export default function VehicleRegistrationDialog({
                   {...vehicleForm.register("licensePlate")}
                   placeholder="ABC123"
                   onChange={(e) => {
-                    vehicleForm.setValue("licensePlate", e.target.value.toUpperCase());
+                    vehicleForm.setValue(
+                      "licensePlate",
+                      e.target.value.toUpperCase(),
+                    );
                   }}
                 />
                 {vehicleForm.formState.errors.licensePlate && (
@@ -166,10 +169,7 @@ export default function VehicleRegistrationDialog({
                   name="type"
                   control={vehicleForm.control}
                   render={({ field }) => (
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    >
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
                         <SelectValue placeholder="Seleccionar tipo" />
                       </SelectTrigger>
@@ -210,10 +210,7 @@ export default function VehicleRegistrationDialog({
                   name="guestType"
                   control={vehicleForm.control}
                   render={({ field }) => (
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    >
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
                         <SelectValue placeholder="Seleccionar tipo" />
                       </SelectTrigger>
@@ -247,10 +244,7 @@ export default function VehicleRegistrationDialog({
                   name="assignedSpace"
                   control={vehicleForm.control}
                   render={({ field }) => (
-                    <Select
-                      value={field.value}
-                      onValueChange={field.onChange}
-                    >
+                    <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger>
                         <SelectValue placeholder="Seleccionar espacio" />
                       </SelectTrigger>
@@ -282,7 +276,11 @@ export default function VehicleRegistrationDialog({
               />
             </div>
             <div className="flex justify-end space-x-2">
-              <Button type="button" variant="outline" onClick={() => setIsOpen(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsOpen(false)}
+              >
                 Cancelar
               </Button>
               <Button type="submit">Registrar Vehículo</Button>

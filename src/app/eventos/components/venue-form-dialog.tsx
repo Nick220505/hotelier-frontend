@@ -45,23 +45,25 @@ export function VenueFormDialog({
 }: VenueFormDialogProps) {
   const form = useForm<VenueFormData>({
     resolver: zodResolver(venueSchema),
-    defaultValues: venue ? {
-      name: venue.name,
-      capacity: venue.capacity,
-      area: venue.area,
-      hourlyRate: venue.hourlyRate,
-      location: venue.location,
-      description: venue.description,
-      available: venue.available,
-    } : {
-      name: "",
-      capacity: 0,
-      area: 0,
-      hourlyRate: 0,
-      location: "",
-      description: "",
-      available: true,
-    },
+    defaultValues: venue
+      ? {
+          name: venue.name,
+          capacity: venue.capacity,
+          area: venue.area,
+          hourlyRate: venue.hourlyRate,
+          location: venue.location,
+          description: venue.description,
+          available: venue.available,
+        }
+      : {
+          name: "",
+          capacity: 0,
+          area: 0,
+          hourlyRate: 0,
+          location: "",
+          description: "",
+          available: true,
+        },
   });
 
   const handleSubmit = async (data: VenueFormData) => {
@@ -76,8 +78,8 @@ export function VenueFormDialog({
         <DialogHeader>
           <DialogTitle>{isEdit ? "Editar Salón" : "Agregar Salón"}</DialogTitle>
           <DialogDescription>
-            {isEdit 
-              ? "Modifica los datos del salón de eventos" 
+            {isEdit
+              ? "Modifica los datos del salón de eventos"
               : "Completa los datos para crear un nuevo salón de eventos"}
           </DialogDescription>
         </DialogHeader>
@@ -173,7 +175,9 @@ export function VenueFormDialog({
             <Checkbox
               id="available"
               checked={form.watch("available")}
-              onCheckedChange={(checked) => form.setValue("available", checked as boolean)}
+              onCheckedChange={(checked) =>
+                form.setValue("available", checked as boolean)
+              }
             />
             <Label htmlFor="available" className="cursor-pointer">
               Disponible para reservas
@@ -181,7 +185,11 @@ export function VenueFormDialog({
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancelar
             </Button>
             <Button type="submit">

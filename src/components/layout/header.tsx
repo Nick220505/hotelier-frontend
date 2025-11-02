@@ -10,14 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  Settings,
-  User,
-  LogOut,
-  Sun,
-  Moon,
-  Monitor,
-} from "lucide-react";
+import { Settings, User, LogOut, Sun, Moon, Monitor } from "lucide-react";
 import { NotificationsMenu } from "@/components/notifications/notifications-menu";
 import { useTheme } from "next-themes";
 import { LogoutDialog } from "@/components/auth/logout-dialog";

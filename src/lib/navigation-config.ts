@@ -105,7 +105,7 @@ export const navigationConfig: NavigationGroup[] = [
         title: "Personal",
         url: "/personal",
         icon: "UserCheck",
-        excludeRoles: ["cliente","huesped", "guest", "customer"],
+        excludeRoles: ["cliente", "huesped", "guest", "customer"],
       },
       {
         title: "Parqueadero",

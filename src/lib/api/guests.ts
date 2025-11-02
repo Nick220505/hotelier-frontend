@@ -15,11 +15,16 @@ export interface Guest {
   updatedAt: string;
 }
 
-export type CreateGuest = Omit<Guest, "id" | "createdAt" | "updatedAt" | "vip"> & {
+export type CreateGuest = Omit<
+  Guest,
+  "id" | "createdAt" | "updatedAt" | "vip"
+> & {
   vip?: boolean;
 };
 
-const base = createApiEndpoints<Guest, CreateGuest, Partial<CreateGuest>>("/guests");
+const base = createApiEndpoints<Guest, CreateGuest, Partial<CreateGuest>>(
+  "/guests",
+);
 
 export interface ActiveGuest extends Guest {
   roomNumber?: string;
@@ -29,6 +34,8 @@ export interface ActiveGuest extends Guest {
 
 export const guestsApi = {
   ...base,
-  search: (term: string): Promise<Guest[]> => apiRequest(`/guests?search=${encodeURIComponent(term)}`),
-  getActiveGuests: async (): Promise<ActiveGuest[]> => apiRequest('/guests/active'),
+  search: (term: string): Promise<Guest[]> =>
+    apiRequest(`/guests?search=${encodeURIComponent(term)}`),
+  getActiveGuests: async (): Promise<ActiveGuest[]> =>
+    apiRequest("/guests/active"),
 };

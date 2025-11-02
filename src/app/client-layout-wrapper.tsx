@@ -21,9 +21,7 @@ function DashboardLayout({ children }: { children: ReactNode }) {
           <Header />
           <div className="flex-1 overflow-y-auto">
             <div className="flex flex-1 flex-col gap-4 p-1 sm:p-2 md:p-3 lg:p-4 xl:p-6">
-              <div className="w-full min-w-0 overflow-x-auto">
-                {children}
-              </div>
+              <div className="w-full min-w-0 overflow-x-auto">{children}</div>
             </div>
           </div>
         </SidebarInset>

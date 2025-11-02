@@ -58,7 +58,6 @@ interface BackendCustomerReport {
   updatedAt: string;
 }
 
-
 // Frontend types
 export interface OccupancyReport {
   id: string;
@@ -358,19 +357,21 @@ export const reportsApi = {
 
     try {
       // Try to get generic reports from available backend endpoints
-      await apiRequest(`/reports/by-date-range?startDate=${startDate}&endDate=${endDate}`).catch(() => []);
-      
+      await apiRequest(
+        `/reports/by-date-range?startDate=${startDate}&endDate=${endDate}`,
+      ).catch(() => []);
+
       // Return structured data with fallback values
       return {
         occupancy: [], // No occupancy data available from current backend
-        operational: [], // No operational data available from current backend  
+        operational: [], // No operational data available from current backend
         customer: [], // No customer data available from current backend
         financial: {
           revenue: { room: 0, restaurant: 0, services: 0, events: 0, total: 0 },
           expenses: 0,
           grossProfit: 0,
-          profitMargin: 0
-        }
+          profitMargin: 0,
+        },
       };
     } catch {
       return {
@@ -381,8 +382,8 @@ export const reportsApi = {
           revenue: { room: 0, restaurant: 0, services: 0, events: 0, total: 0 },
           expenses: 0,
           grossProfit: 0,
-          profitMargin: 0
-        }
+          profitMargin: 0,
+        },
       };
     }
   },
@@ -427,9 +428,11 @@ export const reportsApi = {
   getOccupancyByMonthYear: async (
     year: number,
     month?: number,
-  ): Promise<Array<{ date: string; occupancyPercentage: number; totalRevenue: number }>> => {
+  ): Promise<
+    Array<{ date: string; occupancyPercentage: number; totalRevenue: number }>
+  > => {
     try {
-      const monthParam = month ? `&month=${month}` : '';
+      const monthParam = month ? `&month=${month}` : "";
       return await apiRequest(
         `/reports/analytics/occupancy?year=${year}${monthParam}`,
       );
@@ -440,7 +443,9 @@ export const reportsApi = {
 
   getMonthlyRevenueComparison: async (
     year: number,
-  ): Promise<Array<{ month: string; revenue: number; expenses: number; profit: number }>> => {
+  ): Promise<
+    Array<{ month: string; revenue: number; expenses: number; profit: number }>
+  > => {
     try {
       return await apiRequest(
         `/reports/analytics/monthly-revenue?year=${year}`,
@@ -455,43 +460,48 @@ export const reportsApi = {
     month?: number,
   ): Promise<void> => {
     try {
-      const monthParam = month ? `&month=${month}` : '';
-      const response = await fetch(`${getAPIBaseURL()}/reports/download/financial-report?year=${year}${monthParam}`, {
-        headers: {
-          'Authorization': `Bearer ${authCookies.getAccessToken()}`,
+      const monthParam = month ? `&month=${month}` : "";
+      const response = await fetch(
+        `${getAPIBaseURL()}/reports/download/financial-report?year=${year}${monthParam}`,
+        {
+          headers: {
+            Authorization: `Bearer ${authCookies.getAccessToken()}`,
+          },
         },
-      });
-      
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const blob = await response.blob();
-      const contentDisposition = response.headers.get('content-disposition');
-      let filename = `reporte-financiero-${year}${month ? `-${month}` : ''}.pdf`;
+      const contentDisposition = response.headers.get("content-disposition");
+      let filename = `reporte-financiero-${year}${month ? `-${month}` : ""}.pdf`;
 
       if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        const filenameMatch = contentDisposition.match(
+          /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
+        );
         if (filenameMatch && filenameMatch[1]) {
-          filename = filenameMatch[1].replace(/['"]/g, '');
+          filename = filenameMatch[1].replace(/['"]/g, "");
         }
       }
-      
+
       // Create blob URL
       const url = window.URL.createObjectURL(blob);
-      
+
       // Create temporary link and trigger download
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', filename);
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
-      
+
       // Cleanup
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error downloading report:', error);
+      console.error("Error downloading report:", error);
       throw error;
     }
   },

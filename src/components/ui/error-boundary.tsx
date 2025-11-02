@@ -3,7 +3,13 @@
 import React from "react";
 import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 import { Button } from "./button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "./card";
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -13,10 +19,13 @@ interface ErrorBoundaryState {
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
-  fallback?: React.ComponentType<{error: Error; retry: () => void}>;
+  fallback?: React.ComponentType<{ error: Error; retry: () => void }>;
 }
 
-export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends React.Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -39,7 +48,12 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
     if (this.state.hasError) {
       if (this.props.fallback) {
         const FallbackComponent = this.props.fallback;
-        return <FallbackComponent error={this.state.error!} retry={this.handleRetry} />;
+        return (
+          <FallbackComponent
+            error={this.state.error!}
+            retry={this.handleRetry}
+          />
+        );
       }
 
       return (
@@ -55,7 +69,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {process.env.NODE_ENV === 'development' && this.state.error && (
+              {process.env.NODE_ENV === "development" && this.state.error && (
                 <div className="p-3 bg-muted rounded-lg">
                   <p className="text-sm font-mono text-muted-foreground">
                     {this.state.error.message}
@@ -67,7 +81,7 @@ export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoun
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Reintentar
                 </Button>
-                <Button onClick={() => window.location.href = '/'}>
+                <Button onClick={() => (window.location.href = "/")}>
                   <Home className="w-4 h-4 mr-2" />
                   Ir al inicio
                 </Button>

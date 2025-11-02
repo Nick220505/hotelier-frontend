@@ -53,7 +53,6 @@ export function GuestsManagement({ initialGuests }: GuestsManagementProps) {
     }
   };
 
-
   const openCreate = () => {
     setEditingGuest(null);
     setOpenDialog(true);
@@ -116,7 +115,9 @@ export function GuestsManagement({ initialGuests }: GuestsManagementProps) {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Button variant="outline" onClick={loadGuests}>Refrescar</Button>
+            <Button variant="outline" onClick={loadGuests}>
+              Refrescar
+            </Button>
           </div>
           {loading ? (
             <div>Cargando...</div>
@@ -144,10 +145,18 @@ export function GuestsManagement({ initialGuests }: GuestsManagementProps) {
                     <TableCell>{g.vip ? "Sí" : "No"}</TableCell>
                     <TableCell>
                       <div className="flex gap-2">
-                        <Button variant="ghost" size="icon" onClick={() => openEdit(g)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => openEdit(g)}
+                        >
                           <Pencil className="h-4 w-4" />
                         </Button>
-                        <Button variant="ghost" size="icon" onClick={() => handleDelete(g)}>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDelete(g)}
+                        >
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

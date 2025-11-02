@@ -46,7 +46,7 @@ export function ExitDialog({
   selectedSpace,
   exitForm,
   onFormChange,
-  onSubmit
+  onSubmit,
 }: ExitDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -54,7 +54,8 @@ export function ExitDialog({
         <DialogHeader>
           <DialogTitle>Registrar Salida</DialogTitle>
           <DialogDescription>
-            Vehículo: {selectedSpace?.currentVehicle?.licensePlate} - {selectedSpace?.currentVehicle?.owner}
+            Vehículo: {selectedSpace?.currentVehicle?.licensePlate} -{" "}
+            {selectedSpace?.currentVehicle?.owner}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">
@@ -64,7 +65,7 @@ export function ExitDialog({
               id="amount"
               type="number"
               value={exitForm.amount}
-              onChange={(e) => onFormChange('amount', e.target.value)}
+              onChange={(e) => onFormChange("amount", e.target.value)}
               placeholder="15000"
             />
           </div>
@@ -73,7 +74,7 @@ export function ExitDialog({
             <Textarea
               id="notes"
               value={exitForm.notes}
-              onChange={(e) => onFormChange('notes', e.target.value)}
+              onChange={(e) => onFormChange("notes", e.target.value)}
               placeholder="Observaciones adicionales..."
             />
           </div>

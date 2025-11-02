@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Shield } from 'lucide-react';
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Shield } from "lucide-react";
 
 export default function AuditoriaLoading() {
   return (
@@ -68,7 +68,10 @@ export default function AuditoriaLoading() {
         <CardContent>
           <div className="space-y-4">
             {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
-              <div key={i} className="flex items-center justify-between p-4 border rounded">
+              <div
+                key={i}
+                className="flex items-center justify-between p-4 border rounded"
+              >
                 <div className="flex items-center gap-4">
                   <Skeleton className="h-8 w-8 rounded-full" />
                   <div className="space-y-2">

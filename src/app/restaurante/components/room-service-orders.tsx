@@ -72,7 +72,7 @@ export function RoomServiceOrders({
               <TableHead>Estado</TableHead>
               <TableHead>Tiempo</TableHead>
               <TableHead>Mesero</TableHead>
-              {!hasRole('cliente') && <TableHead>Acciones</TableHead>}
+              {!hasRole("cliente") && <TableHead>Acciones</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -83,18 +83,20 @@ export function RoomServiceOrders({
                 <TableCell>{order.guest}</TableCell>
                 <TableCell>
                   <div className="space-y-1">
-                    {order.items.map((item: RoomServiceOrderItem, index: number) => (
-                      <div key={index} className="text-sm">
-                        {item.quantity}x {item.name} - ${item.price}
-                      </div>
-                    ))}
+                    {order.items.map(
+                      (item: RoomServiceOrderItem, index: number) => (
+                        <div key={index} className="text-sm">
+                          {item.quantity}x {item.name} - ${item.price}
+                        </div>
+                      ),
+                    )}
                   </div>
                 </TableCell>
                 <TableCell>${order.total.toLocaleString()}</TableCell>
                 <TableCell>{getOrderStatusBadge(order.status)}</TableCell>
                 <TableCell>{order.estimatedTime}</TableCell>
                 <TableCell>{order.waiter}</TableCell>
-                {!hasRole('cliente') && (
+                {!hasRole("cliente") && (
                   <TableCell>
                     <div className="flex space-x-2">
                       {order.status === "pending" && (
@@ -105,7 +107,9 @@ export function RoomServiceOrders({
                           disabled={loadingOrders.has(order.id)}
                         >
                           <Clock className="mr-2 h-4 w-4" />
-                          {loadingOrders.has(order.id) ? "Procesando..." : "Preparar"}
+                          {loadingOrders.has(order.id)
+                            ? "Procesando..."
+                            : "Preparar"}
                         </Button>
                       )}
                       {order.status === "preparing" && (
@@ -115,7 +119,9 @@ export function RoomServiceOrders({
                           disabled={loadingOrders.has(order.id)}
                         >
                           <CheckCircle className="mr-2 h-4 w-4" />
-                          {loadingOrders.has(order.id) ? "Completando..." : "Listo"}
+                          {loadingOrders.has(order.id)
+                            ? "Completando..."
+                            : "Listo"}
                         </Button>
                       )}
                       {order.status === "ready" && (
@@ -126,7 +132,9 @@ export function RoomServiceOrders({
                           disabled={loadingOrders.has(order.id)}
                         >
                           <Truck className="mr-2 h-4 w-4" />
-                          {loadingOrders.has(order.id) ? "Entregando..." : "Entregar"}
+                          {loadingOrders.has(order.id)
+                            ? "Entregando..."
+                            : "Entregar"}
                         </Button>
                       )}
                     </div>

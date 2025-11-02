@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -20,42 +20,50 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { employeesApi, type Employee } from '@/lib/api/employees';
-import { UserPlus, Pencil, Trash2, Search } from 'lucide-react';
-import { toast } from 'sonner';
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { employeesApi, type Employee } from "@/lib/api/employees";
+import { UserPlus, Pencil, Trash2, Search } from "lucide-react";
+import { toast } from "sonner";
 
 const getDepartmentDisplayName = (department: string): string => {
   const departmentNames: Record<string, string> = {
-    'FRONT_DESK': 'Recepción',
-    'HOUSEKEEPING': 'Limpieza',
-    'MAINTENANCE': 'Mantenimiento',
-    'RESTAURANT': 'Restaurante',
-    'MANAGEMENT': 'Gerencia',
-    'SECURITY': 'Seguridad',
-    'VALET': 'Botones'
+    FRONT_DESK: "Recepción",
+    HOUSEKEEPING: "Limpieza",
+    MAINTENANCE: "Mantenimiento",
+    RESTAURANT: "Restaurante",
+    MANAGEMENT: "Gerencia",
+    SECURITY: "Seguridad",
+    VALET: "Botones",
   };
   return departmentNames[department] || department;
 };
 
 const getStatusBadge = (status?: string) => {
   switch (status) {
-    case 'ACTIVE':
-      return <Badge variant="default" className="bg-green-500">Activo</Badge>;
-    case 'INACTIVE':
+    case "ACTIVE":
+      return (
+        <Badge variant="default" className="bg-green-500">
+          Activo
+        </Badge>
+      );
+    case "INACTIVE":
       return <Badge variant="secondary">Inactivo</Badge>;
-    case 'ON_LEAVE':
+    case "ON_LEAVE":
       return <Badge variant="outline">De Permiso</Badge>;
     default:
-      return <Badge variant="default" className="bg-green-500">Activo</Badge>;
+      return (
+        <Badge variant="default" className="bg-green-500">
+          Activo
+        </Badge>
+      );
   }
 };
 
@@ -63,19 +71,21 @@ export function EmployeesTab() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [filteredEmployees, setFilteredEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedDepartment, setSelectedDepartment] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("all");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingEmployee, setEditingEmployee] = useState<Employee | null>(null);
-  const [deletingEmployee, setDeletingEmployee] = useState<Employee | null>(null);
+  const [deletingEmployee, setDeletingEmployee] = useState<Employee | null>(
+    null,
+  );
   const [formData, setFormData] = useState({
-    employeeId: '',
-    name: '',
-    department: 'FRONT_DESK',
-    position: '',
-    shift: '',
-    status: 'ACTIVE',
+    employeeId: "",
+    name: "",
+    department: "FRONT_DESK",
+    position: "",
+    shift: "",
+    status: "ACTIVE",
   });
 
   const fetchEmployees = useCallback(async () => {
@@ -85,8 +95,8 @@ export function EmployeesTab() {
       setEmployees(data);
       setFilteredEmployees(data);
     } catch (error) {
-      console.error('Error fetching employees:', error);
-      toast.error('Error al cargar empleados');
+      console.error("Error fetching employees:", error);
+      toast.error("Error al cargar empleados");
     } finally {
       setLoading(false);
     }
@@ -104,12 +114,14 @@ export function EmployeesTab() {
         (emp) =>
           emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
           emp.employeeId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          emp.position.toLowerCase().includes(searchTerm.toLowerCase())
+          emp.position.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
-    if (selectedDepartment && selectedDepartment !== 'all') {
-      filtered = filtered.filter((emp) => emp.department === selectedDepartment);
+    if (selectedDepartment && selectedDepartment !== "all") {
+      filtered = filtered.filter(
+        (emp) => emp.department === selectedDepartment,
+      );
     }
 
     setFilteredEmployees(filtered);
@@ -123,18 +135,18 @@ export function EmployeesTab() {
         name: employee.name,
         department: employee.department,
         position: employee.position,
-        shift: employee.shift || '',
-        status: employee.status || 'ACTIVE',
+        shift: employee.shift || "",
+        status: employee.status || "ACTIVE",
       });
     } else {
       setEditingEmployee(null);
       setFormData({
-        employeeId: '',
-        name: '',
-        department: 'FRONT_DESK',
-        position: '',
-        shift: '',
-        status: 'ACTIVE',
+        employeeId: "",
+        name: "",
+        department: "FRONT_DESK",
+        position: "",
+        shift: "",
+        status: "ACTIVE",
       });
     }
     setDialogOpen(true);
@@ -144,31 +156,31 @@ export function EmployeesTab() {
     try {
       if (editingEmployee) {
         await employeesApi.update(editingEmployee.id, formData);
-        toast.success('Empleado actualizado exitosamente');
+        toast.success("Empleado actualizado exitosamente");
       } else {
         await employeesApi.create(formData);
-        toast.success('Empleado creado exitosamente');
+        toast.success("Empleado creado exitosamente");
       }
       setDialogOpen(false);
       fetchEmployees();
     } catch (error) {
-      console.error('Error saving employee:', error);
-      toast.error('Error al guardar empleado');
+      console.error("Error saving employee:", error);
+      toast.error("Error al guardar empleado");
     }
   };
 
   const handleDeleteEmployee = async () => {
     if (!deletingEmployee) return;
-    
+
     try {
       await employeesApi.delete(deletingEmployee.id);
-      toast.success('Empleado eliminado exitosamente');
+      toast.success("Empleado eliminado exitosamente");
       setDeleteDialogOpen(false);
       setDeletingEmployee(null);
       fetchEmployees();
     } catch (error) {
-      console.error('Error deleting employee:', error);
-      toast.error('Error al eliminar empleado');
+      console.error("Error deleting employee:", error);
+      toast.error("Error al eliminar empleado");
     }
   };
 
@@ -190,7 +202,10 @@ export function EmployeesTab() {
                 className="pl-9"
               />
             </div>
-            <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
+            <Select
+              value={selectedDepartment}
+              onValueChange={setSelectedDepartment}
+            >
               <SelectTrigger className="w-full md:w-[200px]">
                 <SelectValue placeholder="Departamento" />
               </SelectTrigger>
@@ -241,11 +256,15 @@ export function EmployeesTab() {
                 ) : (
                   filteredEmployees.map((employee) => (
                     <TableRow key={employee.id}>
-                      <TableCell className="font-medium">{employee.employeeId}</TableCell>
+                      <TableCell className="font-medium">
+                        {employee.employeeId}
+                      </TableCell>
                       <TableCell>{employee.name}</TableCell>
-                      <TableCell>{getDepartmentDisplayName(employee.department)}</TableCell>
+                      <TableCell>
+                        {getDepartmentDisplayName(employee.department)}
+                      </TableCell>
                       <TableCell>{employee.position}</TableCell>
-                      <TableCell>{employee.shift || '-'}</TableCell>
+                      <TableCell>{employee.shift || "-"}</TableCell>
                       <TableCell>{getStatusBadge(employee.status)}</TableCell>
                       <TableCell className="text-right">
                         <Button
@@ -280,12 +299,12 @@ export function EmployeesTab() {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              {editingEmployee ? 'Editar Empleado' : 'Nuevo Empleado'}
+              {editingEmployee ? "Editar Empleado" : "Nuevo Empleado"}
             </DialogTitle>
             <DialogDescription>
               {editingEmployee
-                ? 'Actualiza la información del empleado'
-                : 'Completa los datos del nuevo empleado'}
+                ? "Actualiza la información del empleado"
+                : "Completa los datos del nuevo empleado"}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -294,7 +313,9 @@ export function EmployeesTab() {
               <Input
                 id="employeeId"
                 value={formData.employeeId}
-                onChange={(e) => setFormData({ ...formData, employeeId: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, employeeId: e.target.value })
+                }
                 placeholder="EMP001"
                 disabled={!!editingEmployee}
               />
@@ -304,7 +325,9 @@ export function EmployeesTab() {
               <Input
                 id="name"
                 value={formData.name}
-                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, name: e.target.value })
+                }
                 placeholder="María García"
               />
             </div>
@@ -312,7 +335,9 @@ export function EmployeesTab() {
               <Label htmlFor="department">Departamento</Label>
               <Select
                 value={formData.department}
-                onValueChange={(value) => setFormData({ ...formData, department: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, department: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -333,7 +358,9 @@ export function EmployeesTab() {
               <Input
                 id="position"
                 value={formData.position}
-                onChange={(e) => setFormData({ ...formData, position: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, position: e.target.value })
+                }
                 placeholder="Recepcionista"
               />
             </div>
@@ -342,7 +369,9 @@ export function EmployeesTab() {
               <Input
                 id="shift"
                 value={formData.shift}
-                onChange={(e) => setFormData({ ...formData, shift: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, shift: e.target.value })
+                }
                 placeholder="Mañana"
               />
             </div>
@@ -350,7 +379,9 @@ export function EmployeesTab() {
               <Label htmlFor="status">Estado</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) => setFormData({ ...formData, status: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, status: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -368,7 +399,7 @@ export function EmployeesTab() {
               Cancelar
             </Button>
             <Button onClick={handleSaveEmployee}>
-              {editingEmployee ? 'Actualizar' : 'Crear'}
+              {editingEmployee ? "Actualizar" : "Crear"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -380,12 +411,16 @@ export function EmployeesTab() {
           <DialogHeader>
             <DialogTitle>Confirmar Eliminación</DialogTitle>
             <DialogDescription>
-              ¿Estás seguro de que deseas eliminar a{' '}
-              <strong>{deletingEmployee?.name}</strong>? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar a{" "}
+              <strong>{deletingEmployee?.name}</strong>? Esta acción no se puede
+              deshacer.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
               Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDeleteEmployee}>
@@ -397,4 +432,3 @@ export function EmployeesTab() {
     </div>
   );
 }
-

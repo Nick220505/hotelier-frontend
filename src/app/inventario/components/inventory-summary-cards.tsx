@@ -27,11 +27,21 @@ interface InventorySummaryCardsProps {
   movements: InventoryMovement[];
 }
 
-export function InventorySummaryCards({ inventoryItems, movements }: InventorySummaryCardsProps) {
+export function InventorySummaryCards({
+  inventoryItems,
+  movements,
+}: InventorySummaryCardsProps) {
   const totalItems = inventoryItems.length;
-  const lowStockItems = inventoryItems.filter(item => item.currentStock <= item.minimumStock).length;
-  const totalValue = inventoryItems.reduce((acc, item) => acc + (item.currentStock * item.unitCost), 0);
-  const todaysMovements = movements.filter(mov => mov.date === new Date().toISOString().split("T")[0]).length;
+  const lowStockItems = inventoryItems.filter(
+    (item) => item.currentStock <= item.minimumStock,
+  ).length;
+  const totalValue = inventoryItems.reduce(
+    (acc, item) => acc + item.currentStock * item.unitCost,
+    0,
+  );
+  const todaysMovements = movements.filter(
+    (mov) => mov.date === new Date().toISOString().split("T")[0],
+  ).length;
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -53,7 +63,9 @@ export function InventorySummaryCards({ inventoryItems, movements }: InventorySu
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold text-red-600">{lowStockItems}</div>
-          <p className="text-xs text-muted-foreground">Requieren reabastecimiento</p>
+          <p className="text-xs text-muted-foreground">
+            Requieren reabastecimiento
+          </p>
         </CardContent>
       </Card>
 

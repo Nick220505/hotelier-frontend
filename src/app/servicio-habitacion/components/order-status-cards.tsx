@@ -10,10 +10,10 @@ interface OrderStatusCardsProps {
 
 export function OrderStatusCards({ orders }: OrderStatusCardsProps) {
   const statusCounts = {
-    pending: orders.filter(o => o.status === "pending").length,
-    preparing: orders.filter(o => o.status === "preparing").length,
-    ready: orders.filter(o => o.status === "ready").length,
-    delivered: orders.filter(o => o.status === "delivered").length,
+    pending: orders.filter((o) => o.status === "pending").length,
+    preparing: orders.filter((o) => o.status === "preparing").length,
+    ready: orders.filter((o) => o.status === "ready").length,
+    delivered: orders.filter((o) => o.status === "delivered").length,
   };
 
   return (
@@ -27,7 +27,7 @@ export function OrderStatusCards({ orders }: OrderStatusCardsProps) {
           <div className="text-2xl font-bold">{statusCounts.pending}</div>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Preparando</CardTitle>
@@ -37,7 +37,7 @@ export function OrderStatusCards({ orders }: OrderStatusCardsProps) {
           <div className="text-2xl font-bold">{statusCounts.preparing}</div>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Listas</CardTitle>
@@ -47,7 +47,7 @@ export function OrderStatusCards({ orders }: OrderStatusCardsProps) {
           <div className="text-2xl font-bold">{statusCounts.ready}</div>
         </CardContent>
       </Card>
-      
+
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Entregadas</CardTitle>

@@ -47,7 +47,7 @@ export function EntryDialog({
   selectedSpace,
   entryForm,
   onFormChange,
-  onSubmit
+  onSubmit,
 }: EntryDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -64,7 +64,7 @@ export function EntryDialog({
             <Input
               id="licensePlate"
               value={entryForm.licensePlate}
-              onChange={(e) => onFormChange('licensePlate', e.target.value)}
+              onChange={(e) => onFormChange("licensePlate", e.target.value)}
               placeholder="ABC123"
             />
           </div>
@@ -73,7 +73,7 @@ export function EntryDialog({
             <Input
               id="ownerName"
               value={entryForm.ownerName}
-              onChange={(e) => onFormChange('ownerName', e.target.value)}
+              onChange={(e) => onFormChange("ownerName", e.target.value)}
               placeholder="Juan Pérez"
             />
           </div>
@@ -82,7 +82,7 @@ export function EntryDialog({
             <Input
               id="room"
               value={entryForm.room}
-              onChange={(e) => onFormChange('room', e.target.value)}
+              onChange={(e) => onFormChange("room", e.target.value)}
               placeholder="205"
             />
           </div>

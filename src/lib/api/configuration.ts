@@ -40,4 +40,3 @@ export const configurationApi = {
     return response.value || (response as unknown as HotelConfig);
   },
 };
-

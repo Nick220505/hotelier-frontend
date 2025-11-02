@@ -1,38 +1,54 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+} from "recharts";
 import { Package } from "lucide-react";
 
 interface InventoryPieChartProps {
-  categoryStats: Record<string, { count: number; value: number; lowStock: number }>;
+  categoryStats: Record<
+    string,
+    { count: number; value: number; lowStock: number }
+  >;
 }
 
 const COLORS = [
-  '#3b82f6', // blue
-  '#f59e0b', // amber
-  '#10b981', // green
-  '#8b5cf6', // purple
-  '#ef4444', // red
-  '#06b6d4', // cyan
-  '#f97316', // orange
-  '#ec4899', // pink
+  "#3b82f6", // blue
+  "#f59e0b", // amber
+  "#10b981", // green
+  "#8b5cf6", // purple
+  "#ef4444", // red
+  "#06b6d4", // cyan
+  "#f97316", // orange
+  "#ec4899", // pink
 ];
 
 const CATEGORY_NAMES: Record<string, string> = {
-  LINENS: 'Lencería',
-  AMENITIES: 'Amenidades',
-  CLEANING_SUPPLIES: 'Suministros de Limpieza',
-  ELECTRONICS: 'Electrónicos',
-  FOOD_BEVERAGE: 'Alimentos y Bebidas',
-  FURNITURE: 'Mobiliario',
-  MAINTENANCE: 'Mantenimiento',
-  OTHER: 'Otros',
+  LINENS: "Lencería",
+  AMENITIES: "Amenidades",
+  CLEANING_SUPPLIES: "Suministros de Limpieza",
+  ELECTRONICS: "Electrónicos",
+  FOOD_BEVERAGE: "Alimentos y Bebidas",
+  FURNITURE: "Mobiliario",
+  MAINTENANCE: "Mantenimiento",
+  OTHER: "Otros",
 };
 
 export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
   const chartData = Object.entries(categoryStats).map(([category, stats]) => ({
-    name: CATEGORY_NAMES[category] || category.replace(/_/g, ' '),
+    name: CATEGORY_NAMES[category] || category.replace(/_/g, " "),
     value: stats.value,
     count: stats.count,
     lowStock: stats.lowStock,
@@ -46,20 +62,34 @@ export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
             <Package className="h-5 w-5" />
             Distribución de Inventario por Categoría
           </CardTitle>
-          <CardDescription>
-            Valor del inventario por categoría
-          </CardDescription>
+          <CardDescription>Valor del inventario por categoría</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-[350px]">
-          <p className="text-muted-foreground">No hay datos de inventario disponibles</p>
+          <p className="text-muted-foreground">
+            No hay datos de inventario disponibles
+          </p>
         </CardContent>
       </Card>
     );
   }
 
-  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: { cx: number; cy: number; midAngle: number; innerRadius: number; outerRadius: number; percent: number }) => {
+  const renderCustomLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+  }: {
+    cx: number;
+    cy: number;
+    midAngle: number;
+    innerRadius: number;
+    outerRadius: number;
+    percent: number;
+  }) => {
     if (percent < 0.05) return null; // Don't show label if less than 5%
-    
+
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -70,7 +100,7 @@ export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
         x={x}
         y={y}
         fill="white"
-        textAnchor={x > cx ? 'start' : 'end'}
+        textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
         className="text-xs font-semibold"
       >
@@ -79,14 +109,23 @@ export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
     );
   };
 
-  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ payload: { name: string; value: number; count: number; lowStock: number } }> }) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{
+      payload: { name: string; value: number; count: number; lowStock: number };
+    }>;
+  }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-semibold text-sm mb-1">{data.name}</p>
           <p className="text-sm text-gray-600">
-            Valor: <span className="font-medium">${data.value.toLocaleString()}</span>
+            Valor:{" "}
+            <span className="font-medium">${data.value.toLocaleString()}</span>
           </p>
           <p className="text-sm text-gray-600">
             Productos: <span className="font-medium">{data.count}</span>
@@ -109,9 +148,7 @@ export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
           <Package className="h-5 w-5" />
           Distribución de Inventario por Categoría
         </CardTitle>
-        <CardDescription>
-          Valor del inventario por categoría
-        </CardDescription>
+        <CardDescription>Valor del inventario por categoría</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
@@ -127,18 +164,17 @@ export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
               dataKey="value"
             >
               {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              wrapperStyle={{ fontSize: '12px' }}
-              iconType="circle"
-            />
+            <Legend wrapperStyle={{ fontSize: "12px" }} iconType="circle" />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>
   );
 }
-

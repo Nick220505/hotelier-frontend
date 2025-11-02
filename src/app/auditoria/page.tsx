@@ -1,15 +1,20 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuthContext } from '@/contexts/auth-context';
-import { auditApi, type AuditLog, type AuditLogQuery, AuditAction } from '@/lib/api/audit';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, Activity, Users, BarChart3 } from 'lucide-react';
-import { AuditLogsTable } from './components/audit-logs-table';
-import { AuditStatistics } from './components/audit-statistics';
-import { AuditFilters } from './components/audit-filters';
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useAuthContext } from "@/contexts/auth-context";
+import {
+  auditApi,
+  type AuditLog,
+  type AuditLogQuery,
+  AuditAction,
+} from "@/lib/api/audit";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Shield, Activity, Users, BarChart3 } from "lucide-react";
+import { AuditLogsTable } from "./components/audit-logs-table";
+import { AuditStatistics } from "./components/audit-statistics";
+import { AuditFilters } from "./components/audit-filters";
 
 export default function AuditoriaPage() {
   const { user, isLoading: authLoading } = useAuthContext();
@@ -21,22 +26,24 @@ export default function AuditoriaPage() {
   const [query, setQuery] = useState<AuditLogQuery>({
     skip: 0,
     take: 50,
-    order: 'desc',
+    order: "desc",
   });
 
   // Check authentication and permissions
   useEffect(() => {
     if (!authLoading && (!user || !hasRequiredPermissions(user))) {
-      router.push('/dashboard');
+      router.push("/dashboard");
       return;
     }
   }, [user, authLoading, router]);
 
   const hasRequiredPermissions = (user: unknown): boolean => {
     // Only administrators and managers can view audit logs
-    return (user as { roles?: Array<{ name: string }> })?.roles?.some((role) => 
-      ['administrador', 'gerente'].includes(role.name)
-    ) || false;
+    return (
+      (user as { roles?: Array<{ name: string }> })?.roles?.some((role) =>
+        ["administrador", "gerente"].includes(role.name),
+      ) || false
+    );
   };
 
   // Load audit logs
@@ -51,8 +58,12 @@ export default function AuditoriaPage() {
         setLogs(response.data);
         setTotal(response.total);
       } catch (err: unknown) {
-        console.error('Error loading audit logs:', err);
-        setError(err instanceof Error ? err.message : 'Error al cargar los logs de auditoría');
+        console.error("Error loading audit logs:", err);
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Error al cargar los logs de auditoría",
+        );
         setLogs([]);
         setTotal(0);
       } finally {
@@ -64,7 +75,7 @@ export default function AuditoriaPage() {
   }, [user, authLoading, query]);
 
   const handleQueryChange = (newQuery: Partial<AuditLogQuery>) => {
-    setQuery(prev => ({
+    setQuery((prev) => ({
       ...prev,
       ...newQuery,
       skip: newQuery.skip !== undefined ? newQuery.skip : 0, // Reset pagination when filters change
@@ -72,7 +83,7 @@ export default function AuditoriaPage() {
   };
 
   const handlePageChange = (page: number) => {
-    setQuery(prev => ({
+    setQuery((prev) => ({
       ...prev,
       skip: page * (prev.take || 50),
     }));
@@ -86,7 +97,9 @@ export default function AuditoriaPage() {
             <Shield className="h-8 w-8" />
             Auditoría del Sistema
           </h1>
-          <p className="text-muted-foreground">Cargando registros de auditoría...</p>
+          <p className="text-muted-foreground">
+            Cargando registros de auditoría...
+          </p>
         </div>
         <div className="grid gap-4 md:grid-cols-4">
           {[1, 2, 3, 4].map((i) => (
@@ -120,16 +133,20 @@ export default function AuditoriaPage() {
   }
 
   // Calculate quick stats from current logs
-  const uniqueUsers = new Set(logs.map(log => log.userId)).size;
-  const recentLogs = logs.filter(log => {
+  const uniqueUsers = new Set(logs.map((log) => log.userId)).size;
+  const recentLogs = logs.filter((log) => {
     const logDate = new Date(log.createdAt);
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     return logDate > yesterday;
   }).length;
 
-  const criticalActions = logs.filter(log => 
-    [AuditAction.DELETE, AuditAction.LOGIN_FAILED, AuditAction.SYSTEM_CONFIG_CHANGE].includes(log.action)
+  const criticalActions = logs.filter((log) =>
+    [
+      AuditAction.DELETE,
+      AuditAction.LOGIN_FAILED,
+      AuditAction.SYSTEM_CONFIG_CHANGE,
+    ].includes(log.action),
   ).length;
 
   return (
@@ -148,7 +165,9 @@ export default function AuditoriaPage() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Registros</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total de Registros
+            </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -158,10 +177,12 @@ export default function AuditoriaPage() {
             </p>
           </CardContent>
         </Card>
-        
+
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Usuarios Activos</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Usuarios Activos
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -174,20 +195,22 @@ export default function AuditoriaPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Actividad Reciente</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Actividad Reciente
+            </CardTitle>
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{recentLogs}</div>
-            <p className="text-xs text-muted-foreground">
-              Últimas 24 horas
-            </p>
+            <p className="text-xs text-muted-foreground">Últimas 24 horas</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Acciones Críticas</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Acciones Críticas
+            </CardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -207,12 +230,12 @@ export default function AuditoriaPage() {
         </TabsList>
 
         <TabsContent value="logs" className="space-y-4">
-          <AuditFilters 
+          <AuditFilters
             query={query}
             onQueryChange={handleQueryChange}
             loading={loading}
           />
-          
+
           {error ? (
             <Card>
               <CardContent className="p-6">

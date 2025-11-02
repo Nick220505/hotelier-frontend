@@ -6,7 +6,13 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
@@ -59,7 +65,7 @@ export function ManualEntryDialog({
     resolver: zodResolver(manualEntrySchema),
     defaultValues: {
       employeeId: 0,
-      date: new Date().toISOString().split('T')[0],
+      date: new Date().toISOString().split("T")[0],
       clockInTime: "",
       clockOutTime: "",
       status: "PRESENT",
@@ -83,7 +89,10 @@ export function ManualEntryDialog({
         <DialogHeader>
           <DialogTitle>Registro Manual de Asistencia</DialogTitle>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(handleFormSubmit)}
+          className="space-y-4"
+        >
           <div className="space-y-2">
             <Label>Empleado *</Label>
             <Controller
@@ -94,21 +103,32 @@ export function ManualEntryDialog({
                   value={field.value.toString()}
                   onValueChange={(value) => field.onChange(parseInt(value))}
                 >
-                  <SelectTrigger className={form.formState.errors.employeeId ? "border-red-500" : ""}>
+                  <SelectTrigger
+                    className={
+                      form.formState.errors.employeeId ? "border-red-500" : ""
+                    }
+                  >
                     <SelectValue placeholder="Seleccionar empleado" />
                   </SelectTrigger>
                   <SelectContent>
-                    {employees.filter(e => e.isActive).map((employee) => (
-                      <SelectItem key={employee.id} value={employee.id.toString()}>
-                        {employee.name} - {employee.position}
-                      </SelectItem>
-                    ))}
+                    {employees
+                      .filter((e) => e.isActive)
+                      .map((employee) => (
+                        <SelectItem
+                          key={employee.id}
+                          value={employee.id.toString()}
+                        >
+                          {employee.name} - {employee.position}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               )}
             />
             {form.formState.errors.employeeId && (
-              <p className="text-sm text-red-500">{form.formState.errors.employeeId.message}</p>
+              <p className="text-sm text-red-500">
+                {form.formState.errors.employeeId.message}
+              </p>
             )}
           </div>
 
@@ -120,7 +140,9 @@ export function ManualEntryDialog({
               className={form.formState.errors.date ? "border-red-500" : ""}
             />
             {form.formState.errors.date && (
-              <p className="text-sm text-red-500">{form.formState.errors.date.message}</p>
+              <p className="text-sm text-red-500">
+                {form.formState.errors.date.message}
+              </p>
             )}
           </div>
 
@@ -130,10 +152,14 @@ export function ManualEntryDialog({
               <Input
                 type="time"
                 {...form.register("clockInTime")}
-                className={form.formState.errors.clockInTime ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.clockInTime ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.clockInTime && (
-                <p className="text-sm text-red-500">{form.formState.errors.clockInTime.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.clockInTime.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
@@ -141,7 +167,9 @@ export function ManualEntryDialog({
               <Input
                 type="time"
                 {...form.register("clockOutTime")}
-                className={form.formState.errors.clockOutTime ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.clockOutTime ? "border-red-500" : ""
+                }
               />
             </div>
           </div>
@@ -153,7 +181,11 @@ export function ManualEntryDialog({
               control={form.control}
               render={({ field }) => (
                 <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className={form.formState.errors.status ? "border-red-500" : ""}>
+                  <SelectTrigger
+                    className={
+                      form.formState.errors.status ? "border-red-500" : ""
+                    }
+                  >
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -167,7 +199,9 @@ export function ManualEntryDialog({
               )}
             />
             {form.formState.errors.status && (
-              <p className="text-sm text-red-500">{form.formState.errors.status.message}</p>
+              <p className="text-sm text-red-500">
+                {form.formState.errors.status.message}
+              </p>
             )}
           </div>
 
@@ -180,15 +214,17 @@ export function ManualEntryDialog({
           </div>
 
           <div className="flex justify-end gap-2 pt-4">
-            <Button type="button" variant="outline" onClick={() => {
-              form.reset();
-              onOpenChange(false);
-            }}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                form.reset();
+                onOpenChange(false);
+              }}
+            >
               Cancelar
             </Button>
-            <Button type="submit">
-              Crear Registro
-            </Button>
+            <Button type="submit">Crear Registro</Button>
           </div>
         </form>
       </DialogContent>

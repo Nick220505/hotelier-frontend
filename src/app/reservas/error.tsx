@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle } from 'lucide-react';
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { AlertTriangle } from "lucide-react";
 
 export default function Error({
   error,
@@ -13,7 +13,7 @@ export default function Error({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Reservas page error:', error);
+    console.error("Reservas page error:", error);
   }, [error]);
 
   return (
@@ -30,7 +30,7 @@ export default function Error({
             Algo salió mal al cargar la información de reservas.
           </p>
           <p className="text-sm text-muted-foreground">
-            {error.message || 'Error desconocido'}
+            {error.message || "Error desconocido"}
           </p>
           <Button onClick={reset} className="w-full">
             Intentar de nuevo

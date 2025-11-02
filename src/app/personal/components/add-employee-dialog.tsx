@@ -70,7 +70,10 @@ export function AddEmployeeDialog({
             Completa los datos del nuevo empleado.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={employeeForm.handleSubmit(handleSubmit)} className="space-y-4">
+        <form
+          onSubmit={employeeForm.handleSubmit(handleSubmit)}
+          className="space-y-4"
+        >
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="name">Nombre</Label>
@@ -128,8 +131,12 @@ export function AddEmployeeDialog({
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="MANAGER">Gerente</SelectItem>
-                      <SelectItem value="RECEPTIONIST">Recepcionista</SelectItem>
-                      <SelectItem value="HOUSEKEEPER">Personal de Limpieza</SelectItem>
+                      <SelectItem value="RECEPTIONIST">
+                        Recepcionista
+                      </SelectItem>
+                      <SelectItem value="HOUSEKEEPER">
+                        Personal de Limpieza
+                      </SelectItem>
                       <SelectItem value="MAINTENANCE">Mantenimiento</SelectItem>
                       <SelectItem value="CHEF">Chef</SelectItem>
                       <SelectItem value="WAITER">Mesero</SelectItem>
@@ -193,7 +200,11 @@ export function AddEmployeeDialog({
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancelar
             </Button>
             <Button type="submit">Agregar Empleado</Button>

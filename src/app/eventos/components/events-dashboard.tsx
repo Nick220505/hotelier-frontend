@@ -4,12 +4,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { eventsApi, EventBooking as ApiEventBooking } from "@/lib/api/events";
 import { venuesApi, Venue as ApiVenue } from "@/lib/api/venues";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CalendarIcon, MapPin, DollarSign, Users } from "lucide-react";
 import EventManagement from "./event-management";
@@ -46,13 +41,13 @@ export default function EventsDashboard({
         notes: eventData.notes,
         venueId: eventData.venueId,
       });
-      
+
       // Update local state with the new event from server
       setEvents([...events, newEvent]);
-      toast.success('Evento creado exitosamente');
+      toast.success("Evento creado exitosamente");
     } catch (error) {
-      console.error('Error creating event:', error);
-      toast.error('Error al crear el evento. Por favor, inténtelo nuevamente.');
+      console.error("Error creating event:", error);
+      toast.error("Error al crear el evento. Por favor, inténtelo nuevamente.");
     }
   };
 
@@ -61,32 +56,43 @@ export default function EventsDashboard({
     updates: Partial<ApiEventBooking>,
   ) => {
     try {
-      console.log('Dashboard: Updating event with ID:', eventId, 'Updates:', updates);
-      console.log('Dashboard: Updates keys:', Object.keys(updates));
-      console.log('Dashboard: totalCost in updates:', 'totalCost' in updates, updates.totalCost);
-      
+      console.log(
+        "Dashboard: Updating event with ID:",
+        eventId,
+        "Updates:",
+        updates,
+      );
+      console.log("Dashboard: Updates keys:", Object.keys(updates));
+      console.log(
+        "Dashboard: totalCost in updates:",
+        "totalCost" in updates,
+        updates.totalCost,
+      );
+
       // Update the event via API
       const updatedEvent = await eventsApi.update(eventId, updates);
-      
-      console.log('Dashboard: Event updated successfully:', updatedEvent);
-      
+
+      console.log("Dashboard: Event updated successfully:", updatedEvent);
+
       // Update local state
-      setEvents(prevEvents => {
+      setEvents((prevEvents) => {
         const newEvents = prevEvents.map((event) =>
           event.id === eventId ? updatedEvent : event,
         );
-        console.log('Dashboard: Updated events state:', newEvents);
+        console.log("Dashboard: Updated events state:", newEvents);
         return newEvents;
       });
-      
-      toast.success('Evento actualizado exitosamente');
+
+      toast.success("Evento actualizado exitosamente");
     } catch (error) {
-      console.error('Dashboard: Error updating event:', error);
+      console.error("Dashboard: Error updating event:", error);
       // Show more detailed error information
       if (error instanceof Error) {
         toast.error(`Error al actualizar el evento: ${error.message}`);
       } else {
-        toast.error('Error al actualizar el evento. Por favor, inténtelo nuevamente.');
+        toast.error(
+          "Error al actualizar el evento. Por favor, inténtelo nuevamente.",
+        );
       }
     }
   };
@@ -95,13 +101,15 @@ export default function EventsDashboard({
     try {
       // Delete the event via API
       await eventsApi.delete(eventId);
-      
+
       // Update local state
-      setEvents(events.filter(event => event.id !== eventId));
-      toast.success('Evento eliminado exitosamente');
+      setEvents(events.filter((event) => event.id !== eventId));
+      toast.success("Evento eliminado exitosamente");
     } catch (error) {
-      console.error('Error deleting event:', error);
-      toast.error('Error al eliminar el evento. Por favor, inténtelo nuevamente.');
+      console.error("Error deleting event:", error);
+      toast.error(
+        "Error al eliminar el evento. Por favor, inténtelo nuevamente.",
+      );
     }
   };
 
@@ -112,15 +120,19 @@ export default function EventsDashboard({
   const handleVenueUpdate = async (id: number, updates: Partial<ApiVenue>) => {
     try {
       const updatedVenue = await venuesApi.update(id, updates);
-      setVenues(venues.map(venue => 
-        (typeof venue.id === 'string' ? parseInt(venue.id) : venue.id) === id 
-          ? updatedVenue 
-          : venue
-      ));
-      toast.success('Salón actualizado exitosamente');
+      setVenues(
+        venues.map((venue) =>
+          (typeof venue.id === "string" ? parseInt(venue.id) : venue.id) === id
+            ? updatedVenue
+            : venue,
+        ),
+      );
+      toast.success("Salón actualizado exitosamente");
     } catch (error) {
-      console.error('Error updating venue:', error);
-      toast.error('Error al actualizar el salón. Por favor, inténtelo nuevamente.');
+      console.error("Error updating venue:", error);
+      toast.error(
+        "Error al actualizar el salón. Por favor, inténtelo nuevamente.",
+      );
     }
   };
 
@@ -219,8 +231,8 @@ export default function EventsDashboard({
         </TabsContent>
 
         <TabsContent value="salones" className="space-y-4">
-          <VenueManagement 
-            venues={venues} 
+          <VenueManagement
+            venues={venues}
             onVenueAdd={handleVenueAdd}
             onVenueUpdate={handleVenueUpdate}
           />

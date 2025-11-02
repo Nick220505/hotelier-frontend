@@ -70,7 +70,7 @@ export function InvoiceTable({
                   <Eye className="mr-1 h-4 w-4" />
                   Ver
                 </Button>
-                {!hasRole('cliente') && invoice.status === "pendiente" && (
+                {!hasRole("cliente") && invoice.status === "pendiente" && (
                   <Button
                     size="sm"
                     variant="outline"

@@ -1,15 +1,21 @@
-'use client' // Error boundaries must be Client Components
+"use client"; // Error boundaries must be Client Components
 
 import { AlertTriangle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export default function Error({
   error,
   reset,
 }: {
-  error: Error & { digest?: string }
-  reset: () => void
+  error: Error & { digest?: string };
+  reset: () => void;
 }) {
   return (
     <div className="flex items-center justify-center min-h-[50vh] p-6">
@@ -18,15 +24,19 @@ export default function Error({
           <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
             <AlertTriangle className="h-6 w-6 text-red-600" />
           </div>
-          <CardTitle className="text-xl">Error al cargar el dashboard</CardTitle>
+          <CardTitle className="text-xl">
+            Error al cargar el dashboard
+          </CardTitle>
           <CardDescription>
             Ha ocurrido un error inesperado al cargar los datos del dashboard.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {process.env.NODE_ENV === 'development' && (
+          {process.env.NODE_ENV === "development" && (
             <div className="rounded-md bg-gray-50 p-4">
-              <h4 className="text-sm font-medium text-gray-900 mb-2">Detalles del error:</h4>
+              <h4 className="text-sm font-medium text-gray-900 mb-2">
+                Detalles del error:
+              </h4>
               <p className="text-sm text-gray-600 font-mono break-all">
                 {error.message}
               </p>
@@ -42,7 +52,11 @@ export default function Error({
               <RefreshCw className="mr-2 h-4 w-4" />
               Intentar nuevamente
             </Button>
-            <Button variant="outline" onClick={() => window.location.reload()} className="flex-1">
+            <Button
+              variant="outline"
+              onClick={() => window.location.reload()}
+              className="flex-1"
+            >
               Recargar página
             </Button>
           </div>

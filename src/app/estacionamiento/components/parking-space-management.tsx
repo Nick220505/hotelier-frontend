@@ -40,12 +40,13 @@ interface ParkingSpaceManagementProps {
   initialActivities: ParkingActivity[];
 }
 
-export function ParkingSpaceManagement({ 
-  initialSpaces, 
-  initialActivities 
+export function ParkingSpaceManagement({
+  initialSpaces,
+  initialActivities,
 }: ParkingSpaceManagementProps) {
   const [spaces, setSpaces] = useState<ParkingSpace[]>(initialSpaces);
-  const [activities, setActivities] = useState<ParkingActivity[]>(initialActivities);
+  const [activities, setActivities] =
+    useState<ParkingActivity[]>(initialActivities);
   const [selectedSpace, setSelectedSpace] = useState<ParkingSpace | null>(null);
   const [showEntryDialog, setShowEntryDialog] = useState(false);
   const [showExitDialog, setShowExitDialog] = useState(false);
@@ -64,12 +65,16 @@ export function ParkingSpaceManagement({
     notes: "",
   });
 
-
-  const filteredSpaces = spaces.filter(space =>
-    space.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    space.zone.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    space.currentVehicle?.licensePlate?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    space.currentVehicle?.owner?.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredSpaces = spaces.filter(
+    (space) =>
+      space.number.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      space.zone.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      space.currentVehicle?.licensePlate
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
+      space.currentVehicle?.owner
+        ?.toLowerCase()
+        .includes(searchTerm.toLowerCase()),
   );
 
   const handleSpaceClick = (space: ParkingSpace) => {
@@ -97,8 +102,8 @@ export function ParkingSpaceManagement({
       timestamp: new Date().toISOString(),
     };
 
-    const updatedSpaces = spaces.map(space => 
-      space.id === selectedSpace.id 
+    const updatedSpaces = spaces.map((space) =>
+      space.id === selectedSpace.id
         ? {
             ...space,
             status: "occupied" as const,
@@ -107,14 +112,14 @@ export function ParkingSpaceManagement({
               owner: entryForm.ownerName,
               entryTime: new Date().toISOString(),
               room: entryForm.room || undefined,
-            }
+            },
           }
-        : space
+        : space,
     );
 
     setSpaces(updatedSpaces);
     setActivities([newActivity, ...activities]);
-    
+
     // Reset form
     setEntryForm({
       licensePlate: "",
@@ -122,10 +127,10 @@ export function ParkingSpaceManagement({
       room: "",
       guestType: "guest",
     });
-    
+
     setShowEntryDialog(false);
     setSelectedSpace(null);
-    
+
     toast.success("Vehículo registrado exitosamente");
   };
 
@@ -153,37 +158,37 @@ export function ParkingSpaceManagement({
       amount: exitForm.amount ? parseFloat(exitForm.amount) : undefined,
     };
 
-    const updatedSpaces = spaces.map(space => 
-      space.id === selectedSpace.id 
+    const updatedSpaces = spaces.map((space) =>
+      space.id === selectedSpace.id
         ? {
             ...space,
             status: "available" as const,
             currentVehicle: undefined,
           }
-        : space
+        : space,
     );
 
     setSpaces(updatedSpaces);
     setActivities([newActivity, ...activities]);
-    
+
     // Reset form
     setExitForm({
       amount: "",
       notes: "",
     });
-    
+
     setShowExitDialog(false);
     setSelectedSpace(null);
-    
+
     toast.success("Vehículo retirado exitosamente");
   };
 
   const handleEntryFormChange = (field: string, value: string) => {
-    setEntryForm(prev => ({ ...prev, [field]: value }));
+    setEntryForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleExitFormChange = (field: string, value: string) => {
-    setExitForm(prev => ({ ...prev, [field]: value }));
+    setExitForm((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -191,7 +196,9 @@ export function ParkingSpaceManagement({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Estacionamiento</h1>
-          <p className="text-muted-foreground">Gestión de espacios de estacionamiento</p>
+          <p className="text-muted-foreground">
+            Gestión de espacios de estacionamiento
+          </p>
         </div>
       </div>
 
@@ -199,10 +206,7 @@ export function ParkingSpaceManagement({
       <ParkingStatistics spaces={spaces} />
 
       {/* Search and Filter */}
-      <ParkingSearch 
-        searchTerm={searchTerm} 
-        onSearchChange={setSearchTerm} 
-      />
+      <ParkingSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
 
       {/* Parking Spaces Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">

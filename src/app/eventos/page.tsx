@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import EventsDashboard from "./components/events-dashboard";
@@ -19,7 +19,7 @@ export default function EventosPage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch all data from API
         const [events, venues] = await Promise.all([
           eventsApi.getAll(),

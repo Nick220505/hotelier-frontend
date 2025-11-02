@@ -1,7 +1,13 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Search } from "lucide-react";
 
 interface ShiftFiltersProps {
@@ -19,7 +25,7 @@ export function ShiftFilters({
   selectedDate,
   setSelectedDate,
   departmentFilter,
-  setDepartmentFilter
+  setDepartmentFilter,
 }: ShiftFiltersProps) {
   return (
     <div className="flex gap-4">
@@ -32,7 +38,7 @@ export function ShiftFilters({
           className="pl-10 w-80"
         />
       </div>
-      
+
       <Input
         type="date"
         value={selectedDate}

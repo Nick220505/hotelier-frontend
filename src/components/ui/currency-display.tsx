@@ -15,11 +15,11 @@ interface DualCurrencyData {
   usd: { amount: number; formatted: string };
 }
 
-export function CurrencyDisplay({ 
-  amount, 
-  currency, 
-  showDual = false, 
-  className = "" 
+export function CurrencyDisplay({
+  amount,
+  currency,
+  showDual = false,
+  className = "",
 }: CurrencyDisplayProps) {
   const [dualDisplay, setDualDisplay] = useState<DualCurrencyData | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,17 +34,17 @@ export function CurrencyDisplay({
           `${process.env.NEXT_PUBLIC_API_URL}/currency/dual-display?amount=${amount}&currency=${currency}`,
           {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
-        
+
         if (response.ok) {
           const data = await response.json();
           setDualDisplay(data);
         }
       } catch (error) {
-        console.error('Error fetching dual currency display:', error);
+        console.error("Error fetching dual currency display:", error);
       } finally {
         setLoading(false);
       }
@@ -54,21 +54,17 @@ export function CurrencyDisplay({
   }, [amount, currency, showDual]);
 
   const formatAmount = (value: number, curr: string): string => {
-    const locale = curr === 'COP' ? 'es-CO' : 'en-US';
+    const locale = curr === "COP" ? "es-CO" : "en-US";
     return new Intl.NumberFormat(locale, {
-      style: 'currency',
+      style: "currency",
       currency: curr.toUpperCase(),
-      minimumFractionDigits: curr === 'COP' ? 0 : 2,
-      maximumFractionDigits: curr === 'COP' ? 0 : 2,
+      minimumFractionDigits: curr === "COP" ? 0 : 2,
+      maximumFractionDigits: curr === "COP" ? 0 : 2,
     }).format(value);
   };
 
   if (!showDual) {
-    return (
-      <span className={className}>
-        {formatAmount(amount, currency)}
-      </span>
-    );
+    return <span className={className}>{formatAmount(amount, currency)}</span>;
   }
 
   if (loading) {
@@ -80,20 +76,20 @@ export function CurrencyDisplay({
   }
 
   if (!dualDisplay) {
-    return (
-      <span className={className}>
-        {formatAmount(amount, currency)}
-      </span>
-    );
+    return <span className={className}>{formatAmount(amount, currency)}</span>;
   }
 
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
       <span className="font-medium">
-        {currency === 'COP' ? dualDisplay.cop.formatted : dualDisplay.usd.formatted}
+        {currency === "COP"
+          ? dualDisplay.cop.formatted
+          : dualDisplay.usd.formatted}
       </span>
       <Badge variant="outline" className="text-xs w-fit">
-        {currency === 'COP' ? dualDisplay.usd.formatted : dualDisplay.cop.formatted}
+        {currency === "COP"
+          ? dualDisplay.usd.formatted
+          : dualDisplay.cop.formatted}
       </Badge>
     </div>
   );
@@ -114,11 +110,11 @@ interface CurrencyConverterProps {
   onConvert?: (result: ConversionResult) => void;
 }
 
-export function CurrencyConverter({ 
-  amount, 
-  fromCurrency, 
-  toCurrency, 
-  onConvert 
+export function CurrencyConverter({
+  amount,
+  fromCurrency,
+  toCurrency,
+  onConvert,
 }: CurrencyConverterProps) {
   const [result, setResult] = useState<ConversionResult | null>(null);
   const [loading, setLoading] = useState(false);
@@ -144,18 +140,18 @@ export function CurrencyConverter({
           `${process.env.NEXT_PUBLIC_API_URL}/currency/convert?amount=${amount}&from=${fromCurrency}&to=${toCurrency}`,
           {
             headers: {
-              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-          }
+          },
         );
-        
+
         if (response.ok) {
           const data = await response.json();
           setResult(data);
           onConvert?.(data);
         }
       } catch (error) {
-        console.error('Error converting currency:', error);
+        console.error("Error converting currency:", error);
       } finally {
         setLoading(false);
       }
@@ -176,14 +172,12 @@ export function CurrencyConverter({
 
   return (
     <div className="text-sm text-gray-600">
-      {new Intl.NumberFormat('en-US', {
-        style: 'currency',
+      {new Intl.NumberFormat("en-US", {
+        style: "currency",
         currency: result.convertedCurrency,
-        minimumFractionDigits: result.convertedCurrency === 'COP' ? 0 : 2,
+        minimumFractionDigits: result.convertedCurrency === "COP" ? 0 : 2,
       }).format(result.convertedAmount)}
-      <span className="text-xs ml-1">
-        (Rate: {result.rate})
-      </span>
+      <span className="text-xs ml-1">(Rate: {result.rate})</span>
     </div>
   );
 }

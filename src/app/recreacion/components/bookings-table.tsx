@@ -1,4 +1,12 @@
-import { MoreHorizontal, Edit, Eye, CheckCircle, XCircle, UserCheck, UserX } from "lucide-react";
+import {
+  MoreHorizontal,
+  Edit,
+  Eye,
+  CheckCircle,
+  XCircle,
+  UserCheck,
+  UserX,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,7 +25,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import type { RecreationalBooking, RecreationalFacility, BookingStatus } from "@/lib/api/recreational";
+import type {
+  RecreationalBooking,
+  RecreationalFacility,
+  BookingStatus,
+} from "@/lib/api/recreational";
 
 interface BookingsTableProps {
   bookings: RecreationalBooking[];
@@ -34,17 +46,37 @@ interface BookingsTableProps {
 const getStatusBadge = (status: BookingStatus) => {
   switch (status) {
     case "PENDING":
-      return <Badge variant="secondary" className="bg-yellow-500">Pendiente</Badge>;
+      return (
+        <Badge variant="secondary" className="bg-yellow-500">
+          Pendiente
+        </Badge>
+      );
     case "CONFIRMED":
-      return <Badge variant="default" className="bg-blue-500">Confirmada</Badge>;
+      return (
+        <Badge variant="default" className="bg-blue-500">
+          Confirmada
+        </Badge>
+      );
     case "CHECKED_IN":
-      return <Badge variant="default" className="bg-green-500">En Curso</Badge>;
+      return (
+        <Badge variant="default" className="bg-green-500">
+          En Curso
+        </Badge>
+      );
     case "COMPLETED":
-      return <Badge variant="default" className="bg-gray-500">Completada</Badge>;
+      return (
+        <Badge variant="default" className="bg-gray-500">
+          Completada
+        </Badge>
+      );
     case "CANCELLED":
       return <Badge variant="destructive">Cancelada</Badge>;
     case "NO_SHOW":
-      return <Badge variant="destructive" className="bg-orange-500">No Show</Badge>;
+      return (
+        <Badge variant="destructive" className="bg-orange-500">
+          No Show
+        </Badge>
+      );
     default:
       return <Badge variant="outline">{status}</Badge>;
   }
@@ -53,9 +85,17 @@ const getStatusBadge = (status: BookingStatus) => {
 const getPriorityBadge = (priority: string) => {
   switch (priority) {
     case "VIP":
-      return <Badge variant="default" className="bg-purple-500">VIP</Badge>;
+      return (
+        <Badge variant="default" className="bg-purple-500">
+          VIP
+        </Badge>
+      );
     case "HIGH":
-      return <Badge variant="default" className="bg-orange-500">Alta</Badge>;
+      return (
+        <Badge variant="default" className="bg-orange-500">
+          Alta
+        </Badge>
+      );
     case "NORMAL":
       return <Badge variant="outline">Normal</Badge>;
     case "MAINTENANCE":
@@ -77,7 +117,10 @@ export function BookingsTable({
   onCheckOut,
 }: BookingsTableProps) {
   const getFacilityName = (facilityId: number) => {
-    return facilities.find(f => f.id === facilityId)?.name || "Instalación no encontrada";
+    return (
+      facilities.find((f) => f.id === facilityId)?.name ||
+      "Instalación no encontrada"
+    );
   };
 
   const getBookingActions = (booking: RecreationalBooking) => {
@@ -85,50 +128,41 @@ export function BookingsTable({
 
     if (booking.status === "PENDING") {
       actions.push(
-        <DropdownMenuItem 
-          key="confirm"
-          onClick={() => onConfirm(booking)}
-        >
+        <DropdownMenuItem key="confirm" onClick={() => onConfirm(booking)}>
           <CheckCircle className="mr-2 h-4 w-4" />
           Confirmar
-        </DropdownMenuItem>
+        </DropdownMenuItem>,
       );
     }
 
     if (booking.status === "CONFIRMED") {
       actions.push(
-        <DropdownMenuItem 
-          key="checkin"
-          onClick={() => onCheckIn(booking)}
-        >
+        <DropdownMenuItem key="checkin" onClick={() => onCheckIn(booking)}>
           <UserCheck className="mr-2 h-4 w-4" />
           Check-in
-        </DropdownMenuItem>
+        </DropdownMenuItem>,
       );
     }
 
     if (booking.status === "CHECKED_IN") {
       actions.push(
-        <DropdownMenuItem 
-          key="checkout"
-          onClick={() => onCheckOut(booking)}
-        >
+        <DropdownMenuItem key="checkout" onClick={() => onCheckOut(booking)}>
           <UserX className="mr-2 h-4 w-4" />
           Check-out
-        </DropdownMenuItem>
+        </DropdownMenuItem>,
       );
     }
 
     if (["PENDING", "CONFIRMED"].includes(booking.status)) {
       actions.push(
-        <DropdownMenuItem 
+        <DropdownMenuItem
           key="cancel"
           onClick={() => onCancel(booking)}
           className="text-destructive"
         >
           <XCircle className="mr-2 h-4 w-4" />
           Cancelar
-        </DropdownMenuItem>
+        </DropdownMenuItem>,
       );
     }
 
@@ -153,7 +187,10 @@ export function BookingsTable({
         <TableBody>
           {bookings.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={8} className="text-center text-muted-foreground">
+              <TableCell
+                colSpan={8}
+                className="text-center text-muted-foreground"
+              >
                 No se encontraron reservas
               </TableCell>
             </TableRow>
@@ -170,7 +207,9 @@ export function BookingsTable({
                   </div>
                 </TableCell>
                 <TableCell>
-                  <div className="font-medium">{getFacilityName(booking.facilityId)}</div>
+                  <div className="font-medium">
+                    {getFacilityName(booking.facilityId)}
+                  </div>
                 </TableCell>
                 <TableCell>
                   <div className="text-sm">
@@ -186,17 +225,13 @@ export function BookingsTable({
                   </div>
                 </TableCell>
                 <TableCell>{booking.participants}</TableCell>
-                <TableCell>
-                  {getStatusBadge(booking.status)}
-                </TableCell>
-                <TableCell>
-                  {getPriorityBadge(booking.priority)}
-                </TableCell>
+                <TableCell>{getStatusBadge(booking.status)}</TableCell>
+                <TableCell>{getPriorityBadge(booking.priority)}</TableCell>
                 <TableCell>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         className="h-8 w-8 p-0"
                         disabled={actioningId === booking.id}
                       >

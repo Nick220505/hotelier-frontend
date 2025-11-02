@@ -8,7 +8,9 @@ interface BillingDetailsDisplayProps {
   billingData: ReservationBillingDetails;
 }
 
-export function BillingDetailsDisplay({ billingData }: BillingDetailsDisplayProps) {
+export function BillingDetailsDisplay({
+  billingData,
+}: BillingDetailsDisplayProps) {
   return (
     <div className="bg-muted/50 p-4 rounded-lg space-y-3">
       <Label className="text-lg font-semibold">Cargos Relacionados</Label>
@@ -18,9 +20,13 @@ export function BillingDetailsDisplay({ billingData }: BillingDetailsDisplayProp
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Calendar className="h-4 w-4 text-blue-500" />
-              <span>Reservación (Hab. {billingData.reservation.room?.number}):</span>
+              <span>
+                Reservación (Hab. {billingData.reservation.room?.number}):
+              </span>
             </div>
-            <span className="font-medium">${billingData.roomCharges.toLocaleString()}</span>
+            <span className="font-medium">
+              ${billingData.roomCharges.toLocaleString()}
+            </span>
           </div>
         )}
 
@@ -32,11 +38,18 @@ export function BillingDetailsDisplay({ billingData }: BillingDetailsDisplayProp
                 <UtensilsCrossed className="h-4 w-4 text-orange-500" />
                 <span>Servicio a la habitación:</span>
               </div>
-              <span className="font-medium">${billingData.roomServiceTotal.toLocaleString()}</span>
+              <span className="font-medium">
+                ${billingData.roomServiceTotal.toLocaleString()}
+              </span>
             </div>
             {billingData.roomServiceCharges.map((rs) => (
-              <div key={rs.orderId} className="ml-6 text-xs text-muted-foreground flex justify-between">
-                <span>• {rs.orderNumber} - {rs.orderTime}</span>
+              <div
+                key={rs.orderId}
+                className="ml-6 text-xs text-muted-foreground flex justify-between"
+              >
+                <span>
+                  • {rs.orderNumber} - {rs.orderTime}
+                </span>
                 <span>${rs.total.toLocaleString()}</span>
               </div>
             ))}
@@ -51,11 +64,18 @@ export function BillingDetailsDisplay({ billingData }: BillingDetailsDisplayProp
                 <PartyPopper className="h-4 w-4 text-purple-500" />
                 <span>Eventos Corporativos:</span>
               </div>
-              <span className="font-medium">${billingData.eventTotal.toLocaleString()}</span>
+              <span className="font-medium">
+                ${billingData.eventTotal.toLocaleString()}
+              </span>
             </div>
             {billingData.eventCharges.map((evt) => (
-              <div key={evt.bookingId} className="ml-6 text-xs text-muted-foreground flex justify-between">
-                <span>• {evt.title} - {evt.attendees} personas</span>
+              <div
+                key={evt.bookingId}
+                className="ml-6 text-xs text-muted-foreground flex justify-between"
+              >
+                <span>
+                  • {evt.title} - {evt.attendees} personas
+                </span>
                 <span>${evt.total.toLocaleString()}</span>
               </div>
             ))}

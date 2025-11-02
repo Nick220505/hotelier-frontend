@@ -1,7 +1,20 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Tooltip,
+} from "recharts";
 import { UserCheck } from "lucide-react";
 
 interface DepartmentStats {
@@ -15,29 +28,29 @@ interface EmployeesPieChartProps {
 }
 
 const COLORS = [
-  '#3b82f6', // blue
-  '#10b981', // green
-  '#f59e0b', // amber
-  '#8b5cf6', // purple
-  '#ef4444', // red
-  '#06b6d4', // cyan
-  '#f97316', // orange
+  "#3b82f6", // blue
+  "#10b981", // green
+  "#f59e0b", // amber
+  "#8b5cf6", // purple
+  "#ef4444", // red
+  "#06b6d4", // cyan
+  "#f97316", // orange
 ];
 
 const DEPARTMENT_NAMES: Record<string, string> = {
-  FRONT_DESK: 'Recepción',
-  HOUSEKEEPING: 'Limpieza',
-  MAINTENANCE: 'Mantenimiento',
-  RESTAURANT: 'Restaurante',
-  MANAGEMENT: 'Gerencia',
-  SECURITY: 'Seguridad',
-  VALET: 'Valet',
+  FRONT_DESK: "Recepción",
+  HOUSEKEEPING: "Limpieza",
+  MAINTENANCE: "Mantenimiento",
+  RESTAURANT: "Restaurante",
+  MANAGEMENT: "Gerencia",
+  SECURITY: "Seguridad",
+  VALET: "Valet",
 };
 
 export function EmployeesPieChart({ departmentStats }: EmployeesPieChartProps) {
   const chartData = departmentStats
-    .filter(dept => dept.totalCount > 0)
-    .map(dept => ({
+    .filter((dept) => dept.totalCount > 0)
+    .map((dept) => ({
       name: DEPARTMENT_NAMES[dept.department] || dept.department,
       value: dept.totalCount,
       activeCount: dept.activeCount,
@@ -52,20 +65,34 @@ export function EmployeesPieChart({ departmentStats }: EmployeesPieChartProps) {
             <UserCheck className="h-5 w-5" />
             Distribución de Personal por Departamento
           </CardTitle>
-          <CardDescription>
-            Cantidad de empleados por área
-          </CardDescription>
+          <CardDescription>Cantidad de empleados por área</CardDescription>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-[350px]">
-          <p className="text-muted-foreground">No hay datos de empleados disponibles</p>
+          <p className="text-muted-foreground">
+            No hay datos de empleados disponibles
+          </p>
         </CardContent>
       </Card>
     );
   }
 
-  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }: { cx: number; cy: number; midAngle: number; innerRadius: number; outerRadius: number; percent: number }) => {
+  const renderCustomLabel = ({
+    cx,
+    cy,
+    midAngle,
+    innerRadius,
+    outerRadius,
+    percent,
+  }: {
+    cx: number;
+    cy: number;
+    midAngle: number;
+    innerRadius: number;
+    outerRadius: number;
+    percent: number;
+  }) => {
     if (percent < 0.05) return null; // Don't show label if less than 5%
-    
+
     const RADIAN = Math.PI / 180;
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
     const x = cx + radius * Math.cos(-midAngle * RADIAN);
@@ -76,7 +103,7 @@ export function EmployeesPieChart({ departmentStats }: EmployeesPieChartProps) {
         x={x}
         y={y}
         fill="white"
-        textAnchor={x > cx ? 'start' : 'end'}
+        textAnchor={x > cx ? "start" : "end"}
         dominantBaseline="central"
         className="text-xs font-semibold"
       >
@@ -85,10 +112,20 @@ export function EmployeesPieChart({ departmentStats }: EmployeesPieChartProps) {
     );
   };
 
-  const CustomTooltip = ({ active, payload }: { active?: boolean; payload?: Array<{ payload: { name: string; value: number; activeCount: number } }> }) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+  }: {
+    active?: boolean;
+    payload?: Array<{
+      payload: { name: string; value: number; activeCount: number };
+    }>;
+  }) => {
     if (active && payload && payload.length) {
       const data = payload[0].payload;
-      const activePercentage = ((data.activeCount / data.value) * 100).toFixed(0);
+      const activePercentage = ((data.activeCount / data.value) * 100).toFixed(
+        0,
+      );
       return (
         <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
           <p className="font-semibold text-sm mb-1">{data.name}</p>
@@ -116,9 +153,7 @@ export function EmployeesPieChart({ departmentStats }: EmployeesPieChartProps) {
           <UserCheck className="h-5 w-5" />
           Distribución de Personal por Departamento
         </CardTitle>
-        <CardDescription>
-          Cantidad de empleados por área
-        </CardDescription>
+        <CardDescription>Cantidad de empleados por área</CardDescription>
       </CardHeader>
       <CardContent>
         <ResponsiveContainer width="100%" height={350}>
@@ -134,18 +169,17 @@ export function EmployeesPieChart({ departmentStats }: EmployeesPieChartProps) {
               dataKey="value"
             >
               {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                <Cell
+                  key={`cell-${index}`}
+                  fill={COLORS[index % COLORS.length]}
+                />
               ))}
             </Pie>
             <Tooltip content={<CustomTooltip />} />
-            <Legend 
-              wrapperStyle={{ fontSize: '12px' }}
-              iconType="circle"
-            />
+            <Legend wrapperStyle={{ fontSize: "12px" }} iconType="circle" />
           </PieChart>
         </ResponsiveContainer>
       </CardContent>
     </Card>
   );
 }
-

@@ -37,7 +37,7 @@ export const getAPIBaseURL = () => {
 
 export interface RequestOptions extends RequestInit {
   body?: string;
-  responseType?: 'json' | 'blob' | 'text';
+  responseType?: "json" | "blob" | "text";
 }
 
 // Flag to prevent multiple simultaneous refresh attempts
@@ -70,10 +70,10 @@ async function refreshAccessToken(): Promise<string | null> {
       }
 
       const data = await response.json();
-      
+
       // Update stored tokens
       authCookies.setTokens(data.accessToken, data.refreshToken);
-      
+
       return data.accessToken;
     } catch (error) {
       console.error("Token refresh failed:", error);
@@ -120,7 +120,7 @@ export async function apiRequest<T>(
 
     if (!response.ok) {
       // If we get a 401, try to refresh the token
-      if (response.status === 401 && !endpoint.includes('/auth/refresh')) {
+      if (response.status === 401 && !endpoint.includes("/auth/refresh")) {
         const newToken = await refreshAccessToken();
         if (newToken) {
           // Retry the original request with the new token
@@ -131,7 +131,7 @@ export async function apiRequest<T>(
               Authorization: `Bearer ${newToken}`,
             },
           };
-          
+
           const retryResponse = await fetch(url, retryConfig);
           if (retryResponse.ok) {
             // Handle empty responses
@@ -144,30 +144,30 @@ export async function apiRequest<T>(
             return await retryResponse.json();
           }
         }
-        
+
         // If refresh failed or retry failed, redirect to login
         console.error("Authentication failed after token refresh attempt");
         if (typeof window !== "undefined") {
           window.location.href = "/login";
         }
       }
-      
+
       // Only log errors that are not expected application errors
       if (![409, 422].includes(response.status)) {
         console.error(`API request failed:`, {
           url,
-          method: config.method || 'GET',
+          method: config.method || "GET",
           status: response.status,
           statusText: response.statusText,
           headers: Object.fromEntries(response.headers.entries()),
         });
       }
-      
+
       // Try to get error details from response
       let errorMessage = `HTTP error! status: ${response.status}`;
       try {
         const errorText = await response.text();
-        
+
         // Try to parse as JSON to get structured error
         try {
           const errorJson = JSON.parse(errorText);
@@ -183,16 +183,17 @@ export async function apiRequest<T>(
       } catch {
         console.error("Could not read error response body");
       }
-      
+
       // Add specific error messages for common HTTP status codes
       if (response.status === 403) {
-        errorMessage = "Access denied. You don't have permission to perform this action.";
+        errorMessage =
+          "Access denied. You don't have permission to perform this action.";
       } else if (response.status === 401) {
         errorMessage = "Authentication required. Please login again.";
       } else if (response.status === 404) {
         errorMessage = "The requested resource was not found.";
       }
-      
+
       throw new Error(errorMessage);
     }
 
@@ -205,17 +206,19 @@ export async function apiRequest<T>(
     }
 
     // Handle different response types
-    if (options.responseType === 'blob') {
+    if (options.responseType === "blob") {
       return response.blob() as Promise<T>;
-    } else if (options.responseType === 'text') {
+    } else if (options.responseType === "text") {
       return response.text() as Promise<T>;
     }
     return response.json();
   } catch (error: unknown) {
     // Solo logueamos errores que no son esperados
-    if (!(error instanceof Error) || 
-        (!error.message?.includes("no está disponible") && 
-         !error.message?.includes("validation failed"))) {
+    if (
+      !(error instanceof Error) ||
+      (!error.message?.includes("no está disponible") &&
+        !error.message?.includes("validation failed"))
+    ) {
       console.error(`API request failed for ${endpoint}:`, error);
     }
     throw error;

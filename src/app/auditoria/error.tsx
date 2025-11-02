@@ -1,9 +1,15 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
+import { useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { AlertTriangle, RefreshCw, Home } from "lucide-react";
 
 export default function AuditoriaError({
   error,
@@ -13,7 +19,7 @@ export default function AuditoriaError({
   reset: () => void;
 }) {
   useEffect(() => {
-    console.error('Audit page error:', error);
+    console.error("Audit page error:", error);
   }, [error]);
 
   return (
@@ -41,7 +47,7 @@ export default function AuditoriaError({
         <CardContent className="space-y-4">
           <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-sm font-mono text-red-800">
-              {error.message || 'Error desconocido'}
+              {error.message || "Error desconocido"}
             </p>
             {error.digest && (
               <p className="text-xs text-red-600 mt-1">
@@ -49,24 +55,34 @@ export default function AuditoriaError({
               </p>
             )}
           </div>
-          
+
           <div className="flex items-center gap-3">
             <Button onClick={reset} className="flex items-center gap-2">
               <RefreshCw className="h-4 w-4" />
               Intentar de nuevo
             </Button>
-            <Button variant="outline" onClick={() => window.location.href = '/'}>
+            <Button
+              variant="outline"
+              onClick={() => (window.location.href = "/")}
+            >
               <Home className="h-4 w-4 mr-2" />
               Volver al inicio
             </Button>
           </div>
 
           <div className="text-sm text-muted-foreground">
-            <p><strong>Posibles soluciones:</strong></p>
+            <p>
+              <strong>Posibles soluciones:</strong>
+            </p>
             <ul className="list-disc list-inside mt-2 space-y-1">
-              <li>Verificar que tengas los permisos necesarios para acceder a auditoría</li>
+              <li>
+                Verificar que tengas los permisos necesarios para acceder a
+                auditoría
+              </li>
               <li>Refrescar la página o intentar de nuevo más tarde</li>
-              <li>Contactar al administrador del sistema si el problema persiste</li>
+              <li>
+                Contactar al administrador del sistema si el problema persiste
+              </li>
             </ul>
           </div>
         </CardContent>

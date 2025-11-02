@@ -142,7 +142,9 @@ export function ReservationsTable({
                   <div className="text-sm">
                     <div>{reservation.guestEmail}</div>
                     {reservation.guestPhone && (
-                      <div className="text-muted-foreground">{reservation.guestPhone}</div>
+                      <div className="text-muted-foreground">
+                        {reservation.guestPhone}
+                      </div>
                     )}
                   </div>
                 </TableCell>
@@ -169,26 +171,35 @@ export function ReservationsTable({
                 </TableCell>
                 <TableCell>
                   <div className="text-sm">
-                    <div className="font-medium">{reservation.guests} huéspedes</div>
+                    <div className="font-medium">
+                      {reservation.guests} huéspedes
+                    </div>
                   </div>
                 </TableCell>
                 <TableCell>
                   <div className="text-sm">
-                    {(reservation.discountPercent || reservation.discountAmount) ? (
+                    {reservation.discountPercent ||
+                    reservation.discountAmount ? (
                       <div>
                         {reservation.discountPercent && (
                           <div>{reservation.discountPercent}% descuento</div>
                         )}
                         {reservation.discountAmount && (
-                          <div>{formatCurrency(reservation.discountAmount)} fijo</div>
+                          <div>
+                            {formatCurrency(reservation.discountAmount)} fijo
+                          </div>
                         )}
                       </div>
                     ) : (
-                      <span className="text-muted-foreground">Sin descuentos</span>
+                      <span className="text-muted-foreground">
+                        Sin descuentos
+                      </span>
                     )}
                   </div>
                 </TableCell>
-                <TableCell>{formatCurrency(Number(reservation.totalAmount))}</TableCell>
+                <TableCell>
+                  {formatCurrency(Number(reservation.totalAmount))}
+                </TableCell>
                 <TableCell>{getStatusBadge(reservation.status)}</TableCell>
                 <TableCell>
                   {getChannelDisplayName(reservation.channel)}
@@ -225,14 +236,18 @@ export function ReservationsTable({
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onUpdateStatus(reservation.id, "CONFIRMED")}
+                              onClick={() =>
+                                onUpdateStatus(reservation.id, "CONFIRMED")
+                              }
                             >
                               Confirmar
                             </Button>
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onUpdateStatus(reservation.id, "CANCELLED")}
+                              onClick={() =>
+                                onUpdateStatus(reservation.id, "CANCELLED")
+                              }
                             >
                               Cancelar
                             </Button>
@@ -243,14 +258,18 @@ export function ReservationsTable({
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onUpdateStatus(reservation.id, "CHECKED_IN")}
+                              onClick={() =>
+                                onUpdateStatus(reservation.id, "CHECKED_IN")
+                              }
                             >
                               Check-in
                             </Button>
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onUpdateStatus(reservation.id, "CANCELLED")}
+                              onClick={() =>
+                                onUpdateStatus(reservation.id, "CANCELLED")
+                              }
                             >
                               Cancelar
                             </Button>

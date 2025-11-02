@@ -2,7 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/auth-context";
-import { reservationsApi, type Reservation, type BookingChannel } from "@/lib/api/reservations";
+import {
+  reservationsApi,
+  type Reservation,
+  type BookingChannel,
+} from "@/lib/api/reservations";
 import { roomsApi, type Room } from "@/lib/api/rooms";
 import { configurationApi } from "@/lib/api/configuration";
 
@@ -33,12 +37,16 @@ import { toast } from "sonner";
 import { Search, Calendar, MapPin, CalendarPlus } from "lucide-react";
 import { formatCurrency, type SupportedCurrency } from "@/lib/utils/currency";
 
-
-type CreateReservationPayload = Omit<Reservation, "id" | "createdAt" | "updatedAt" | "user" | "room" | "totalAmount" | "status">;
+type CreateReservationPayload = Omit<
+  Reservation,
+  "id" | "createdAt" | "updatedAt" | "user" | "room" | "totalAmount" | "status"
+>;
 
 export function MyReservationsManagement() {
   const { hasRole } = useAuthContext();
-  const [myReservations, setMyReservations] = useState<ReservationWithCompanions[]>([]);
+  const [myReservations, setMyReservations] = useState<
+    ReservationWithCompanions[]
+  >([]);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [currencyCode, setCurrencyCode] = useState<string>("COP");
   const [loading, setLoading] = useState(true);
@@ -46,8 +54,6 @@ export function MyReservationsManagement() {
 
   // Dialog state
   const [openDialog, setOpenDialog] = useState(false);
-
-
 
   useEffect(() => {
     async function load() {
@@ -70,7 +76,7 @@ export function MyReservationsManagement() {
   }, []);
 
   const formatCurrencyAmount = (val: number) => {
-    return formatCurrency(val, (currencyCode as SupportedCurrency) || 'COP');
+    return formatCurrency(val, (currencyCode as SupportedCurrency) || "COP");
   };
 
   const handleCreateMyReservation = async (formData: {
@@ -87,7 +93,7 @@ export function MyReservationsManagement() {
   }) => {
     try {
       setLoading(true);
-      
+
       const payload: CreateReservationPayload = {
         guestName: formData.guestName,
         guestEmail: formData.guestEmail,
@@ -109,7 +115,9 @@ export function MyReservationsManagement() {
       setMyReservations(mine);
 
       setOpenDialog(false);
-      toast.success("Reserva creada", { description: "Tu reserva ha sido creada exitosamente." });
+      toast.success("Reserva creada", {
+        description: "Tu reserva ha sido creada exitosamente.",
+      });
     } catch (e) {
       console.error("Error creating self reservation:", e);
       toast.error("Error", { description: "No se pudo crear la reserva." });
@@ -121,48 +129,50 @@ export function MyReservationsManagement() {
   // Spanish status translations
   const getStatusInSpanish = (status: string) => {
     const statusMap: Record<string, string> = {
-      'PENDING': 'Pendiente',
-      'CONFIRMED': 'Confirmada',
-      'CHECKED_IN': 'Check-in',
-      'CHECKED_OUT': 'Check-out',
-      'CANCELLED': 'Cancelada'
+      PENDING: "Pendiente",
+      CONFIRMED: "Confirmada",
+      CHECKED_IN: "Check-in",
+      CHECKED_OUT: "Check-out",
+      CANCELLED: "Cancelada",
     };
     return statusMap[status] || status;
   };
 
   // Status badge variant with custom colors
-  const getStatusVariant = (status: string): "default" | "secondary" | "destructive" | "outline" => {
+  const getStatusVariant = (
+    status: string,
+  ): "default" | "secondary" | "destructive" | "outline" => {
     switch (status) {
-      case 'PENDING':
-        return 'secondary'; // Gray
-      case 'CONFIRMED':
-        return 'default'; // Blue
-      case 'CHECKED_IN':
-        return 'default'; // Green will be handled with custom class
-      case 'CHECKED_OUT':
-        return 'outline'; // White/transparent
-      case 'CANCELLED':
-        return 'destructive'; // Red
+      case "PENDING":
+        return "secondary"; // Gray
+      case "CONFIRMED":
+        return "default"; // Blue
+      case "CHECKED_IN":
+        return "default"; // Green will be handled with custom class
+      case "CHECKED_OUT":
+        return "outline"; // White/transparent
+      case "CANCELLED":
+        return "destructive"; // Red
       default:
-        return 'secondary';
+        return "secondary";
     }
   };
 
   // Status badge custom classes for better colors
   const getStatusClasses = (status: string) => {
     switch (status) {
-      case 'PENDING':
-        return 'bg-yellow-100 text-yellow-800 hover:bg-yellow-200';
-      case 'CONFIRMED':
-        return 'bg-blue-100 text-blue-800 hover:bg-blue-200';
-      case 'CHECKED_IN':
-        return 'bg-green-100 text-green-800 hover:bg-green-200';
-      case 'CHECKED_OUT':
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
-      case 'CANCELLED':
-        return 'bg-red-100 text-red-800 hover:bg-red-200';
+      case "PENDING":
+        return "bg-yellow-100 text-yellow-800 hover:bg-yellow-200";
+      case "CONFIRMED":
+        return "bg-blue-100 text-blue-800 hover:bg-blue-200";
+      case "CHECKED_IN":
+        return "bg-green-100 text-green-800 hover:bg-green-200";
+      case "CHECKED_OUT":
+        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
+      case "CANCELLED":
+        return "bg-red-100 text-red-800 hover:bg-red-200";
       default:
-        return 'bg-gray-100 text-gray-800 hover:bg-gray-200';
+        return "bg-gray-100 text-gray-800 hover:bg-gray-200";
     }
   };
 
@@ -171,7 +181,9 @@ export function MyReservationsManagement() {
     const searchLower = searchTerm.toLowerCase();
     return (
       reservation.id.toString().includes(searchLower) ||
-      (reservation.room?.number || reservation.roomId.toString()).toLowerCase().includes(searchLower) ||
+      (reservation.room?.number || reservation.roomId.toString())
+        .toLowerCase()
+        .includes(searchLower) ||
       getStatusInSpanish(reservation.status).toLowerCase().includes(searchLower)
     );
   });
@@ -183,7 +195,9 @@ export function MyReservationsManagement() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Mis Reservas</h1>
-          <p className="text-muted-foreground">Gestiona tus reservas del hotel</p>
+          <p className="text-muted-foreground">
+            Gestiona tus reservas del hotel
+          </p>
         </div>
         <Button onClick={() => setOpenDialog(true)}>Nueva Reserva</Button>
       </div>
@@ -212,12 +226,14 @@ export function MyReservationsManagement() {
             <EmptyState
               icon={CalendarPlus}
               title={searchTerm ? "Sin resultados" : "No tienes reservas"}
-              description={searchTerm 
-                ? "No encontramos reservas que coincidan con tu búsqueda" 
-                : "Crea tu primera reserva para comenzar"}
+              description={
+                searchTerm
+                  ? "No encontramos reservas que coincidan con tu búsqueda"
+                  : "Crea tu primera reserva para comenzar"
+              }
               action={{
                 label: "Nueva Reserva",
-                onClick: () => setOpenDialog(true)
+                onClick: () => setOpenDialog(true),
               }}
             />
           ) : (
@@ -229,9 +245,15 @@ export function MyReservationsManagement() {
                     <TableHead>Huésped</TableHead>
                     <TableHead>Contacto</TableHead>
                     <TableHead className="w-24">Habitación</TableHead>
-                    <TableHead className="hidden sm:table-cell">Entrada</TableHead>
-                    <TableHead className="hidden sm:table-cell">Salida</TableHead>
-                    <TableHead className="hidden md:table-cell w-20">Noches</TableHead>
+                    <TableHead className="hidden sm:table-cell">
+                      Entrada
+                    </TableHead>
+                    <TableHead className="hidden sm:table-cell">
+                      Salida
+                    </TableHead>
+                    <TableHead className="hidden md:table-cell w-20">
+                      Noches
+                    </TableHead>
                     <TableHead>Huéspedes</TableHead>
                     <TableHead>Descuentos</TableHead>
                     <TableHead>Total</TableHead>
@@ -249,34 +271,50 @@ export function MyReservationsManagement() {
                         <div className="text-sm">
                           <div>{r.guestEmail}</div>
                           {r.guestPhone && (
-                            <div className="text-muted-foreground">{r.guestPhone}</div>
+                            <div className="text-muted-foreground">
+                              {r.guestPhone}
+                            </div>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <MapPin className="h-4 w-4 text-muted-foreground" />
-                          <span className="font-medium">{r.room?.number ?? r.roomId}</span>
+                          <span className="font-medium">
+                            {r.room?.number ?? r.roomId}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm">{new Date(r.checkInDate).toLocaleDateString('es-ES')}</span>
+                          <span className="text-sm">
+                            {new Date(r.checkInDate).toLocaleDateString(
+                              "es-ES",
+                            )}
+                          </span>
                         </div>
                       </TableCell>
                       <TableCell className="hidden sm:table-cell">
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
-                          <span className="text-sm">{new Date(r.checkOutDate).toLocaleDateString('es-ES')}</span>
+                          <span className="text-sm">
+                            {new Date(r.checkOutDate).toLocaleDateString(
+                              "es-ES",
+                            )}
+                          </span>
                         </div>
                       </TableCell>
-                      <TableCell className="hidden md:table-cell text-center">{r.nights}</TableCell>
+                      <TableCell className="hidden md:table-cell text-center">
+                        {r.nights}
+                      </TableCell>
                       <TableCell>
                         <div className="text-sm">
                           {r.companions && r.companions.length > 0 ? (
                             <div>
-                              <div className="font-medium">{1 + r.companions.length} huéspedes</div>
+                              <div className="font-medium">
+                                {1 + r.companions.length} huéspedes
+                              </div>
                               <div className="text-muted-foreground">
                                 <div>1 principal</div>
                                 {r.companions.slice(0, 2).map((c, i) => (
@@ -290,28 +328,36 @@ export function MyReservationsManagement() {
                           ) : (
                             <div>
                               <div className="font-medium">1 huésped</div>
-                              <div className="text-muted-foreground">Solo principal</div>
+                              <div className="text-muted-foreground">
+                                Solo principal
+                              </div>
                             </div>
                           )}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="text-sm">
-                          {(r.discountPercent || r.discountAmount) ? (
+                          {r.discountPercent || r.discountAmount ? (
                             <div>
                               {r.discountPercent && (
                                 <div>{r.discountPercent}% descuento</div>
                               )}
                               {r.discountAmount && (
-                                <div>{formatCurrencyAmount(r.discountAmount)} fijo</div>
+                                <div>
+                                  {formatCurrencyAmount(r.discountAmount)} fijo
+                                </div>
                               )}
                             </div>
                           ) : (
-                            <span className="text-muted-foreground">Sin descuentos</span>
+                            <span className="text-muted-foreground">
+                              Sin descuentos
+                            </span>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium text-sm lg:text-base">{formatCurrencyAmount(Number(r.totalAmount))}</TableCell>
+                      <TableCell className="font-medium text-sm lg:text-base">
+                        {formatCurrencyAmount(Number(r.totalAmount))}
+                      </TableCell>
                       <TableCell>
                         <Badge
                           variant={getStatusVariant(r.status)}
@@ -329,13 +375,13 @@ export function MyReservationsManagement() {
         </CardContent>
       </Card>
 
-            <NewReservationDialog
+      <NewReservationDialog
         isOpen={openDialog}
         onClose={() => setOpenDialog(false)}
         onAddReservation={handleCreateMyReservation}
         rooms={rooms}
         loading={loading}
-        hideDiscounts={hasRole('cliente')}
+        hideDiscounts={hasRole("cliente")}
       />
     </div>
   );

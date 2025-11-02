@@ -14,7 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Plus, Trash2, Loader2 } from "lucide-react";
 import { MenuItem } from "@/lib/api/restaurant";
 
@@ -57,12 +63,12 @@ interface NewOrderDialogProps {
   isLoading?: boolean;
 }
 
-export function NewOrderDialog({ 
-  open, 
-  onOpenChange, 
-  menuItems, 
+export function NewOrderDialog({
+  open,
+  onOpenChange,
+  menuItems,
   onCreateOrder,
-  isLoading = false
+  isLoading = false,
 }: NewOrderDialogProps) {
   const form = useForm<NewOrderFormData>({
     resolver: zodResolver(newOrderSchema),
@@ -95,7 +101,7 @@ export function NewOrderDialog({
         <DialogHeader>
           <DialogTitle>Nueva Orden de Room Service</DialogTitle>
           <DialogDescription>
-            Crea una nueva orden para el servicio a la habitación 
+            Crea una nueva orden para el servicio a la habitación
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -107,10 +113,14 @@ export function NewOrderDialog({
                 {...form.register("roomNumber")}
                 placeholder="101"
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.roomNumber ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.roomNumber ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.roomNumber && (
-                <p className="text-sm text-red-500">{form.formState.errors.roomNumber.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.roomNumber.message}
+                </p>
               )}
             </div>
             <div>
@@ -120,10 +130,14 @@ export function NewOrderDialog({
                 {...form.register("guestName")}
                 placeholder="Juan Pérez"
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.guestName ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.guestName ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.guestName && (
-                <p className="text-sm text-red-500">{form.formState.errors.guestName.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guestName.message}
+                </p>
               )}
             </div>
           </div>
@@ -132,20 +146,27 @@ export function NewOrderDialog({
             <Label>Productos</Label>
             <div className="space-y-2">
               {fields.map((field, index) => (
-                <div key={field.id} className="flex gap-2 p-3 border rounded-lg">
-                  <Select 
+                <div
+                  key={field.id}
+                  className="flex gap-2 p-3 border rounded-lg"
+                >
+                  <Select
                     value={form.watch(`selectedItems.${index}.menuItemId`)}
-                    onValueChange={(value) => form.setValue(`selectedItems.${index}.menuItemId`, value)}
+                    onValueChange={(value) =>
+                      form.setValue(`selectedItems.${index}.menuItemId`, value)
+                    }
                   >
                     <SelectTrigger className="flex-1">
                       <SelectValue placeholder="Seleccionar producto" />
                     </SelectTrigger>
                     <SelectContent>
-                      {menuItems.filter(menuItem => menuItem.available).map(menuItem => (
-                        <SelectItem key={menuItem.id} value={menuItem.id}>
-                          {menuItem.name} - ${menuItem.price.toLocaleString()}
-                        </SelectItem>
-                      ))}
+                      {menuItems
+                        .filter((menuItem) => menuItem.available)
+                        .map((menuItem) => (
+                          <SelectItem key={menuItem.id} value={menuItem.id}>
+                            {menuItem.name} - ${menuItem.price.toLocaleString()}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                   <Input
@@ -168,7 +189,11 @@ export function NewOrderDialog({
                   </Button>
                 </div>
               ))}
-              <Button variant="outline" onClick={addItemToOrder} className="w-full">
+              <Button
+                variant="outline"
+                onClick={addItemToOrder}
+                className="w-full"
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Agregar Producto
               </Button>
@@ -176,29 +201,49 @@ export function NewOrderDialog({
           </div>
 
           <div>
-            <Label htmlFor="specialInstructions">Instrucciones Especiales</Label>
+            <Label htmlFor="specialInstructions">
+              Instrucciones Especiales
+            </Label>
             <Textarea
               id="specialInstructions"
               {...form.register("specialInstructions")}
               placeholder="Instrucciones especiales para la orden..."
               disabled={form.formState.isSubmitting}
-              className={form.formState.errors.specialInstructions ? "border-red-500" : ""}
+              className={
+                form.formState.errors.specialInstructions
+                  ? "border-red-500"
+                  : ""
+              }
             />
             {form.formState.errors.specialInstructions && (
-              <p className="text-sm text-red-500">{form.formState.errors.specialInstructions.message}</p>
+              <p className="text-sm text-red-500">
+                {form.formState.errors.specialInstructions.message}
+              </p>
             )}
           </div>
 
           {form.formState.errors.selectedItems && (
-            <p className="text-sm text-red-500">{form.formState.errors.selectedItems.message}</p>
+            <p className="text-sm text-red-500">
+              {form.formState.errors.selectedItems.message}
+            </p>
           )}
-          
+
           <div className="flex gap-2">
-            <Button type="submit" disabled={isLoading || form.formState.isSubmitting} className="flex-1">
-              {(isLoading || form.formState.isSubmitting) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button
+              type="submit"
+              disabled={isLoading || form.formState.isSubmitting}
+              className="flex-1"
+            >
+              {(isLoading || form.formState.isSubmitting) && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Crear Orden
             </Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancelar
             </Button>
           </div>

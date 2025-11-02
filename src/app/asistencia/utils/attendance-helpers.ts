@@ -19,13 +19,15 @@ export interface AttendanceSummary {
 
 export const calculateSummary = (
   records: Attendance[],
-  totalEmployees: number
+  totalEmployees: number,
 ): AttendanceSummary => {
   return {
     totalEmployees,
-    presentToday: records.filter(r => r.status === "PRESENT").length,
-    absentToday: records.filter(r => r.status === "ABSENT").length,
-    lateToday: records.filter(r => r.status === "LATE").length,
-    averageHours: records.reduce((acc, r) => acc + (r.hoursWorked || 0), 0) / Math.max(records.length, 1),
+    presentToday: records.filter((r) => r.status === "PRESENT").length,
+    absentToday: records.filter((r) => r.status === "ABSENT").length,
+    lateToday: records.filter((r) => r.status === "LATE").length,
+    averageHours:
+      records.reduce((acc, r) => acc + (r.hoursWorked || 0), 0) /
+      Math.max(records.length, 1),
   };
 };

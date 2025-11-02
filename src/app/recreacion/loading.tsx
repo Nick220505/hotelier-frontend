@@ -37,9 +37,11 @@ export default function RecreacionLoading() {
       {/* Tabs Skeleton */}
       <div className="space-y-4">
         <div className="flex space-x-1">
-          {["Resumen", "Instalaciones", "Reservas", "Estadísticas"].map((tab, i) => (
-            <Skeleton key={i} className="h-10 w-24" />
-          ))}
+          {["Resumen", "Instalaciones", "Reservas", "Estadísticas"].map(
+            (tab, i) => (
+              <Skeleton key={i} className="h-10 w-24" />
+            ),
+          )}
         </div>
 
         {/* Content Area Skeleton */}

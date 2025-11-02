@@ -84,7 +84,7 @@ export function AttendanceTable({
     }
   };
 
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Date().toISOString().split("T")[0];
 
   return (
     <Card>
@@ -115,29 +115,21 @@ export function AttendanceTable({
                   <TableCell className="font-medium">
                     {record.employeeName}
                   </TableCell>
-                  <TableCell>
-                    {getDepartmentLabel(record.department)}
-                  </TableCell>
-                  <TableCell>
-                    {record.clockInTime || "-"}
-                  </TableCell>
-                  <TableCell>
-                    {record.clockOutTime || "-"}
-                  </TableCell>
+                  <TableCell>{getDepartmentLabel(record.department)}</TableCell>
+                  <TableCell>{record.clockInTime || "-"}</TableCell>
+                  <TableCell>{record.clockOutTime || "-"}</TableCell>
                   <TableCell>
                     {record.totalHours ? `${record.totalHours}h` : "-"}
                   </TableCell>
                   <TableCell>
-                    <Badge 
-                      variant="secondary" 
+                    <Badge
+                      variant="secondary"
                       className={`text-white ${getStatusColor(record.status)}`}
                     >
                       {getStatusLabel(record.status)}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    {record.notes || "-"}
-                  </TableCell>
+                  <TableCell>{record.notes || "-"}</TableCell>
                   <TableCell>
                     <div className="flex gap-2">
                       {record.date === today && !record.clockInTime && (
@@ -150,26 +142,33 @@ export function AttendanceTable({
                           Entrada
                         </Button>
                       )}
-                      {record.date === today && record.clockInTime && !record.clockOutTime && (
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => onClockOut(record.id)}
-                        >
-                          <LogOut className="h-4 w-4 mr-1" />
-                          Salida
-                        </Button>
-                      )}
+                      {record.date === today &&
+                        record.clockInTime &&
+                        !record.clockOutTime && (
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => onClockOut(record.id)}
+                          >
+                            <LogOut className="h-4 w-4 mr-1" />
+                            Salida
+                          </Button>
+                        )}
                     </div>
                   </TableCell>
                 </TableRow>
               ))}
-              
+
               {/* Show employees who haven't been marked for today */}
               {employees
-                .filter(emp => emp.isActive)
-                .filter(emp => !records.some(r => r.employeeId === emp.id && r.date === today))
-                .map(emp => (
+                .filter((emp) => emp.isActive)
+                .filter(
+                  (emp) =>
+                    !records.some(
+                      (r) => r.employeeId === emp.id && r.date === today,
+                    ),
+                )
+                .map((emp) => (
                   <TableRow key={`missing-${emp.id}`}>
                     <TableCell className="font-medium text-muted-foreground">
                       {emp.name}
@@ -181,7 +180,10 @@ export function AttendanceTable({
                     <TableCell>-</TableCell>
                     <TableCell>-</TableCell>
                     <TableCell>
-                      <Badge variant="secondary" className="bg-gray-400 text-white">
+                      <Badge
+                        variant="secondary"
+                        className="bg-gray-400 text-white"
+                      >
                         Sin registro
                       </Badge>
                     </TableCell>
@@ -197,16 +199,19 @@ export function AttendanceTable({
                       </Button>
                     </TableCell>
                   </TableRow>
-                ))
-              }
-              
-              {records.length === 0 && employees.filter(e => e.isActive).length === 0 && (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center text-muted-foreground">
-                    No hay registros de asistencia para mostrar
-                  </TableCell>
-                </TableRow>
-              )}
+                ))}
+
+              {records.length === 0 &&
+                employees.filter((e) => e.isActive).length === 0 && (
+                  <TableRow>
+                    <TableCell
+                      colSpan={8}
+                      className="text-center text-muted-foreground"
+                    >
+                      No hay registros de asistencia para mostrar
+                    </TableCell>
+                  </TableRow>
+                )}
             </TableBody>
           </Table>
         </div>

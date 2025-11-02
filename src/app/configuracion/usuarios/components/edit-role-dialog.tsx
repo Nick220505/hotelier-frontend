@@ -74,7 +74,10 @@ export function EditRoleDialog({
             Modifica los detalles del rol seleccionado
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-4">
+        <form
+          onSubmit={form.handleSubmit(handleFormSubmit)}
+          className="space-y-4"
+        >
           <div className="space-y-2">
             <Label htmlFor="edit-name">Nombre del Rol</Label>
             <Input
@@ -85,7 +88,9 @@ export function EditRoleDialog({
               className={form.formState.errors.name ? "border-red-500" : ""}
             />
             {form.formState.errors.name && (
-              <p className="text-sm text-red-500">{form.formState.errors.name.message}</p>
+              <p className="text-sm text-red-500">
+                {form.formState.errors.name.message}
+              </p>
             )}
           </div>
           <div className="space-y-2">
@@ -95,18 +100,28 @@ export function EditRoleDialog({
               placeholder="Describe las responsabilidades de este rol..."
               {...form.register("description")}
               disabled={form.formState.isSubmitting}
-              className={form.formState.errors.description ? "border-red-500" : ""}
+              className={
+                form.formState.errors.description ? "border-red-500" : ""
+              }
             />
             {form.formState.errors.description && (
-              <p className="text-sm text-red-500">{form.formState.errors.description.message}</p>
+              <p className="text-sm text-red-500">
+                {form.formState.errors.description.message}
+              </p>
             )}
           </div>
           <DialogFooter>
-            <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>
+            <Button
+              variant="outline"
+              type="button"
+              onClick={() => onOpenChange(false)}
+            >
               Cancelar
             </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Actualizando..." : "Actualizar Rol"}
+              {form.formState.isSubmitting
+                ? "Actualizando..."
+                : "Actualizar Rol"}
             </Button>
           </DialogFooter>
         </form>
@@ -114,4 +129,3 @@ export function EditRoleDialog({
     </Dialog>
   );
 }
-

@@ -282,7 +282,9 @@ export default function EmployeeManagement({
                     <Input
                       id="salario"
                       type="number"
-                      {...employeeForm.register("salary", { valueAsNumber: true })}
+                      {...employeeForm.register("salary", {
+                        valueAsNumber: true,
+                      })}
                       placeholder="2500000"
                     />
                     {employeeForm.formState.errors.salary && (
@@ -293,7 +295,9 @@ export default function EmployeeManagement({
                   </div>
                 </div>
                 <div className="flex justify-end space-x-2">
-                  <Button type="button" variant="outline">Cancelar</Button>
+                  <Button type="button" variant="outline">
+                    Cancelar
+                  </Button>
                   <Button type="submit">Crear Empleado</Button>
                 </div>
               </div>

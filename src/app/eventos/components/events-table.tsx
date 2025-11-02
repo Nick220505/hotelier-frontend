@@ -103,138 +103,140 @@ export function EventsTable({
   };
   return (
     <>
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Eventos Programados</CardTitle>
-        <CardDescription>
-          Gestione los eventos y reservas del hotel
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="p-6">
-        <div className="w-full overflow-x-auto">
-          <Table className="w-full">
-            <TableHeader>
-            <TableRow>
-              <TableHead className="min-w-[180px]">Evento</TableHead>
-              <TableHead className="min-w-[120px]">Cliente</TableHead>
-              <TableHead className="min-w-[100px]">Fecha</TableHead>
-              <TableHead className="min-w-[80px]">Hora</TableHead>
-              <TableHead className="min-w-[120px]">Lugar</TableHead>
-              <TableHead className="min-w-[100px]">Capacidad</TableHead>
-              <TableHead className="min-w-[150px]">Servicios</TableHead>
-              <TableHead className="min-w-[120px]">Presupuesto</TableHead>
-              <TableHead className="min-w-[100px]">Estado</TableHead>
-              <TableHead className="min-w-[280px] w-[280px]">Acciones</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {events.map((event) => (
-              <TableRow key={event.id}>
-                <TableCell className="font-medium">{event.title}</TableCell>
-                <TableCell>{event.client}</TableCell>
-                <TableCell>
-                  <div className="flex items-center">
-                    <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
-                    {event.date}
-                  </div>
-                </TableCell>
-                <TableCell>{event.time}</TableCell>
-                <TableCell>{event.venue}</TableCell>
-                <TableCell>{event.capacity} personas</TableCell>
-                <TableCell>
-                  <div className="flex flex-wrap gap-1">
-                    {event.services.catering && (
-                      <Badge variant="outline" className="text-xs">
-                        Catering
-                      </Badge>
-                    )}
-                    {event.services.audiovisual && (
-                      <Badge variant="outline" className="text-xs">
-                        A/V
-                      </Badge>
-                    )}
-                    {event.services.decoration && (
-                      <Badge variant="outline" className="text-xs">
-                        Decoración
-                      </Badge>
-                    )}
-                    {event.services.accommodation && (
-                      <Badge variant="outline" className="text-xs">
-                        Alojamiento
-                      </Badge>
-                    )}
-                  </div>
-                </TableCell>
-                <TableCell>
-                  <div>
-                    <div className="font-medium">
-                      ${calculateTotalBudget(event).toLocaleString()}
-                    </div>
-                    <div className="text-xs text-muted-foreground">
-                      Base: ${event.budget.toLocaleString()}
-                    </div>
-                  </div>
-                </TableCell>
-                <TableCell>{getStatusBadge(event.status)}</TableCell>
-                <TableCell>
-                  <div className="flex space-x-1">
-                    {event.status !== "confirmed" && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 px-2"
-                        onClick={() =>
-                          onEventUpdate?.(event.id, { status: "confirmed" })
-                        }
-                      >
-                        <Check className="h-3 w-3 mr-1" />
-                        Confirmar
-                      </Button>
-                    )}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 px-2"
-                      onClick={() => handleEditClick(event)}
-                    >
-                      <Edit className="h-3 w-3 mr-1" />
-                      Editar
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="h-8 px-2 text-red-600 hover:text-red-700"
-                      onClick={() => handleDeleteClick(event)}
-                    >
-                      <Trash className="h-3 w-3 mr-1" />
-                      Eliminar
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-          </Table>
-        </div>
-      </CardContent>
-    </Card>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Eventos Programados</CardTitle>
+          <CardDescription>
+            Gestione los eventos y reservas del hotel
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="p-6">
+          <div className="w-full overflow-x-auto">
+            <Table className="w-full">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="min-w-[180px]">Evento</TableHead>
+                  <TableHead className="min-w-[120px]">Cliente</TableHead>
+                  <TableHead className="min-w-[100px]">Fecha</TableHead>
+                  <TableHead className="min-w-[80px]">Hora</TableHead>
+                  <TableHead className="min-w-[120px]">Lugar</TableHead>
+                  <TableHead className="min-w-[100px]">Capacidad</TableHead>
+                  <TableHead className="min-w-[150px]">Servicios</TableHead>
+                  <TableHead className="min-w-[120px]">Presupuesto</TableHead>
+                  <TableHead className="min-w-[100px]">Estado</TableHead>
+                  <TableHead className="min-w-[280px] w-[280px]">
+                    Acciones
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {events.map((event) => (
+                  <TableRow key={event.id}>
+                    <TableCell className="font-medium">{event.title}</TableCell>
+                    <TableCell>{event.client}</TableCell>
+                    <TableCell>
+                      <div className="flex items-center">
+                        <Calendar className="mr-2 h-4 w-4 text-muted-foreground" />
+                        {event.date}
+                      </div>
+                    </TableCell>
+                    <TableCell>{event.time}</TableCell>
+                    <TableCell>{event.venue}</TableCell>
+                    <TableCell>{event.capacity} personas</TableCell>
+                    <TableCell>
+                      <div className="flex flex-wrap gap-1">
+                        {event.services.catering && (
+                          <Badge variant="outline" className="text-xs">
+                            Catering
+                          </Badge>
+                        )}
+                        {event.services.audiovisual && (
+                          <Badge variant="outline" className="text-xs">
+                            A/V
+                          </Badge>
+                        )}
+                        {event.services.decoration && (
+                          <Badge variant="outline" className="text-xs">
+                            Decoración
+                          </Badge>
+                        )}
+                        {event.services.accommodation && (
+                          <Badge variant="outline" className="text-xs">
+                            Alojamiento
+                          </Badge>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">
+                          ${calculateTotalBudget(event).toLocaleString()}
+                        </div>
+                        <div className="text-xs text-muted-foreground">
+                          Base: ${event.budget.toLocaleString()}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{getStatusBadge(event.status)}</TableCell>
+                    <TableCell>
+                      <div className="flex space-x-1">
+                        {event.status !== "confirmed" && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="h-8 px-2"
+                            onClick={() =>
+                              onEventUpdate?.(event.id, { status: "confirmed" })
+                            }
+                          >
+                            <Check className="h-3 w-3 mr-1" />
+                            Confirmar
+                          </Button>
+                        )}
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 px-2"
+                          onClick={() => handleEditClick(event)}
+                        >
+                          <Edit className="h-3 w-3 mr-1" />
+                          Editar
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="h-8 px-2 text-red-600 hover:text-red-700"
+                          onClick={() => handleDeleteClick(event)}
+                        >
+                          <Trash className="h-3 w-3 mr-1" />
+                          Eliminar
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
 
-    {/* Edit Event Dialog */}
-    <EditEventDialog
-      open={editDialogOpen}
-      onOpenChange={setEditDialogOpen}
-      event={editingEvent}
-      onEventUpdate={handleEventUpdate}
-      venues={venues}
-    />
+      {/* Edit Event Dialog */}
+      <EditEventDialog
+        open={editDialogOpen}
+        onOpenChange={setEditDialogOpen}
+        event={editingEvent}
+        onEventUpdate={handleEventUpdate}
+        venues={venues}
+      />
 
-    {/* Delete Event Dialog */}
-    <DeleteEventDialog
-      open={deleteDialogOpen}
-      onOpenChange={setDeleteDialogOpen}
-      event={deletingEvent}
-      onEventDelete={handleEventDelete}
-    />
+      {/* Delete Event Dialog */}
+      <DeleteEventDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        event={deletingEvent}
+        onEventDelete={handleEventDelete}
+      />
     </>
   );
 }

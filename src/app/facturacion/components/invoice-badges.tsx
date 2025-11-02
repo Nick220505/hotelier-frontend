@@ -49,7 +49,7 @@ export function PaymentMethodBadge({ method }: PaymentMethodBadgeProps) {
       DEBIT_CARD: "Tarjeta de Débito",
       BANK_TRANSFER: "Transferencia Bancaria",
       CHECK: "Cheque",
-      GIFT_CARD: "Tarjeta de Regalo"
+      GIFT_CARD: "Tarjeta de Regalo",
     };
     return displayNames[method] || method;
   };

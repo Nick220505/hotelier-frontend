@@ -357,7 +357,11 @@ export function ViewReservationDialog({
                 {isProcessing ? "Procesando..." : "Checkout"}
               </Button>
             )}
-          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="w-full sm:w-auto"
+          >
             Cerrar
           </Button>
         </div>

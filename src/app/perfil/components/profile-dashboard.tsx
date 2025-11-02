@@ -56,7 +56,10 @@ export default function ProfileDashboard({
     } catch (error: unknown) {
       console.error("Error updating profile:", error);
       toast.error("Error", {
-        description: error instanceof Error ? error.message : "No se pudo actualizar el perfil.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "No se pudo actualizar el perfil.",
       });
     } finally {
       setIsSaving(false);

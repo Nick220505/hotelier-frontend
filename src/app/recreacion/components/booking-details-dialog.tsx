@@ -1,6 +1,17 @@
 "use client";
 
-import { Calendar, Clock, MapPin, Users, User, Phone, Mail, Home, AlertTriangle, FileText } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  MapPin,
+  Users,
+  User,
+  Phone,
+  Mail,
+  Home,
+  AlertTriangle,
+  FileText,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -13,7 +24,11 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { type RecreationalBooking, type RecreationalFacility, type BookingStatus } from "@/lib/api/recreational";
+import {
+  type RecreationalBooking,
+  type RecreationalFacility,
+  type BookingStatus,
+} from "@/lib/api/recreational";
 
 interface BookingDetailsDialogProps {
   booking: RecreationalBooking | null;
@@ -33,17 +48,37 @@ export function BookingDetailsDialog({
   const getStatusBadge = (status: BookingStatus) => {
     switch (status) {
       case "PENDING":
-        return <Badge variant="secondary" className="bg-yellow-500">Pendiente</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-500">
+            Pendiente
+          </Badge>
+        );
       case "CONFIRMED":
-        return <Badge variant="default" className="bg-blue-500">Confirmada</Badge>;
+        return (
+          <Badge variant="default" className="bg-blue-500">
+            Confirmada
+          </Badge>
+        );
       case "CHECKED_IN":
-        return <Badge variant="default" className="bg-green-500">En Curso</Badge>;
+        return (
+          <Badge variant="default" className="bg-green-500">
+            En Curso
+          </Badge>
+        );
       case "COMPLETED":
-        return <Badge variant="default" className="bg-gray-500">Completada</Badge>;
+        return (
+          <Badge variant="default" className="bg-gray-500">
+            Completada
+          </Badge>
+        );
       case "CANCELLED":
         return <Badge variant="destructive">Cancelada</Badge>;
       case "NO_SHOW":
-        return <Badge variant="destructive" className="bg-orange-500">No Show</Badge>;
+        return (
+          <Badge variant="destructive" className="bg-orange-500">
+            No Show
+          </Badge>
+        );
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -52,9 +87,17 @@ export function BookingDetailsDialog({
   const getPriorityBadge = (priority: string) => {
     switch (priority) {
       case "VIP":
-        return <Badge variant="default" className="bg-purple-500">VIP</Badge>;
+        return (
+          <Badge variant="default" className="bg-purple-500">
+            VIP
+          </Badge>
+        );
       case "HIGH":
-        return <Badge variant="default" className="bg-orange-500">Alta</Badge>;
+        return (
+          <Badge variant="default" className="bg-orange-500">
+            Alta
+          </Badge>
+        );
       case "NORMAL":
         return <Badge variant="outline">Normal</Badge>;
       case "MAINTENANCE":
@@ -64,14 +107,14 @@ export function BookingDetailsDialog({
     }
   };
 
-
   const calculateActualDuration = () => {
     if (!booking.actualCheckIn || !booking.actualCheckOut) return null;
-    
+
     const checkIn = new Date(booking.actualCheckIn);
     const checkOut = new Date(booking.actualCheckOut);
-    const duration = (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60);
-    
+    const duration =
+      (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60);
+
     return Math.round(duration * 100) / 100;
   };
 
@@ -83,7 +126,9 @@ export function BookingDetailsDialog({
         <DialogHeader>
           <div className="flex items-center justify-between">
             <div>
-              <DialogTitle className="text-xl">Reserva #{booking.id}</DialogTitle>
+              <DialogTitle className="text-xl">
+                Reserva #{booking.id}
+              </DialogTitle>
               <DialogDescription className="flex items-center mt-1">
                 <User className="h-4 w-4 mr-1" />
                 {booking.guestName}
@@ -157,18 +202,22 @@ export function BookingDetailsDialog({
                   </div>
                 </div>
               )}
-              
+
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <div className="flex items-center text-sm">
                     <Calendar className="h-3 w-3 mr-2 text-muted-foreground" />
                     <span className="font-medium">Fecha:</span>
-                    <span className="ml-2">{new Date(booking.bookingDate).toLocaleDateString()}</span>
+                    <span className="ml-2">
+                      {new Date(booking.bookingDate).toLocaleDateString()}
+                    </span>
                   </div>
                   <div className="flex items-center text-sm">
                     <Clock className="h-3 w-3 mr-2 text-muted-foreground" />
                     <span className="font-medium">Horario:</span>
-                    <span className="ml-2">{booking.startTime} - {booking.endTime}</span>
+                    <span className="ml-2">
+                      {booking.startTime} - {booking.endTime}
+                    </span>
                   </div>
                   <div className="flex items-center text-sm">
                     <Clock className="h-3 w-3 mr-2 text-muted-foreground" />

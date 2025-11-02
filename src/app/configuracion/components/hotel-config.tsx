@@ -6,7 +6,13 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Hotel, Save, RefreshCw } from "lucide-react";
 
 const hotelConfigSchema = z.object({
@@ -28,7 +34,11 @@ interface HotelConfigProps {
   onSave: (config: HotelConfigData) => void;
 }
 
-export function HotelConfig({ initialData, isLoading, onSave }: HotelConfigProps) {
+export function HotelConfig({
+  initialData,
+  isLoading,
+  onSave,
+}: HotelConfigProps) {
   const form = useForm<HotelConfigData>({
     resolver: zodResolver(hotelConfigSchema),
     defaultValues: {
@@ -69,7 +79,9 @@ export function HotelConfig({ initialData, isLoading, onSave }: HotelConfigProps
                 {...form.register("propertyName")}
               />
               {form.formState.errors.propertyName && (
-                <p className="text-sm text-red-500">{form.formState.errors.propertyName.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.propertyName.message}
+                </p>
               )}
             </div>
 
@@ -82,7 +94,9 @@ export function HotelConfig({ initialData, isLoading, onSave }: HotelConfigProps
                 {...form.register("propertyEmail")}
               />
               {form.formState.errors.propertyEmail && (
-                <p className="text-sm text-red-500">{form.formState.errors.propertyEmail.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.propertyEmail.message}
+                </p>
               )}
             </div>
 
@@ -94,7 +108,9 @@ export function HotelConfig({ initialData, isLoading, onSave }: HotelConfigProps
                 {...form.register("propertyPhone")}
               />
               {form.formState.errors.propertyPhone && (
-                <p className="text-sm text-red-500">{form.formState.errors.propertyPhone.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.propertyPhone.message}
+                </p>
               )}
             </div>
 
@@ -106,7 +122,9 @@ export function HotelConfig({ initialData, isLoading, onSave }: HotelConfigProps
                 {...form.register("propertyAddress")}
               />
               {form.formState.errors.propertyAddress && (
-                <p className="text-sm text-red-500">{form.formState.errors.propertyAddress.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.propertyAddress.message}
+                </p>
               )}
             </div>
           </div>
@@ -120,7 +138,9 @@ export function HotelConfig({ initialData, isLoading, onSave }: HotelConfigProps
                 {...form.register("checkInTime")}
               />
               {form.formState.errors.checkInTime && (
-                <p className="text-sm text-red-500">{form.formState.errors.checkInTime.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.checkInTime.message}
+                </p>
               )}
             </div>
 
@@ -132,7 +152,9 @@ export function HotelConfig({ initialData, isLoading, onSave }: HotelConfigProps
                 {...form.register("checkOutTime")}
               />
               {form.formState.errors.checkOutTime && (
-                <p className="text-sm text-red-500">{form.formState.errors.checkOutTime.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.checkOutTime.message}
+                </p>
               )}
             </div>
           </div>

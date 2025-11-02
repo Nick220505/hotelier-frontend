@@ -15,7 +15,11 @@ interface OrderDetailsDialogProps {
   order: RoomServiceOrder | null;
 }
 
-export function OrderDetailsDialog({ open, onOpenChange, order }: OrderDetailsDialogProps) {
+export function OrderDetailsDialog({
+  open,
+  onOpenChange,
+  order,
+}: OrderDetailsDialogProps) {
   const getStatusColor = (status: RoomServiceOrder["status"]) => {
     switch (status) {
       case "pending":
@@ -63,7 +67,7 @@ export function OrderDetailsDialog({ open, onOpenChange, order }: OrderDetailsDi
               <strong>Huésped:</strong> {order.guest}
             </div>
             <div>
-              <strong>Estado:</strong> 
+              <strong>Estado:</strong>
               <Badge className={`ml-2 ${getStatusColor(order.status)}`}>
                 {getStatusText(order.status)}
               </Badge>
@@ -72,12 +76,15 @@ export function OrderDetailsDialog({ open, onOpenChange, order }: OrderDetailsDi
               <strong>Total:</strong> ${order.total.toLocaleString()}
             </div>
           </div>
-          
+
           <div>
             <strong>Productos:</strong>
             <div className="mt-2 space-y-2">
               {order.items.map((item, index) => (
-                <div key={index} className="flex justify-between p-2 bg-muted rounded">
+                <div
+                  key={index}
+                  className="flex justify-between p-2 bg-muted rounded"
+                >
                   <span>{item}</span>
                 </div>
               ))}
@@ -85,15 +92,16 @@ export function OrderDetailsDialog({ open, onOpenChange, order }: OrderDetailsDi
           </div>
 
           <div>
-            <strong>Hora de pedido:</strong> {new Date(order.orderTime).toLocaleString()}
+            <strong>Hora de pedido:</strong>{" "}
+            {new Date(order.orderTime).toLocaleString()}
           </div>
-          
+
           {order.estimatedTime && (
             <div>
               <strong>Tiempo estimado:</strong> {order.estimatedTime}
             </div>
           )}
-          
+
           {order.waiter && (
             <div>
               <strong>Mesero asignado:</strong> {order.waiter}

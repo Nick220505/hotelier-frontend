@@ -66,7 +66,7 @@ export default function VenueManagement({
 }: VenueManagementProps) {
   const [editingVenue, setEditingVenue] = useState<Venue | null>(null);
   const [editFormData, setEditFormData] = useState<Partial<Venue>>({});
-  
+
   const editForm = useForm<VenueFormData>({
     resolver: zodResolver(venueSchema),
     defaultValues: {
@@ -108,14 +108,19 @@ export default function VenueManagement({
   const handleSaveEdit = async () => {
     if (editingVenue && onVenueUpdate) {
       try {
-        const venueId = typeof editingVenue.id === 'string' ? parseInt(editingVenue.id) : editingVenue.id;
+        const venueId =
+          typeof editingVenue.id === "string"
+            ? parseInt(editingVenue.id)
+            : editingVenue.id;
         await onVenueUpdate(venueId, editFormData);
         setEditingVenue(null);
         editForm.reset();
-        toast.success('Salón actualizado exitosamente');
+        toast.success("Salón actualizado exitosamente");
       } catch (error) {
-        console.error('Error updating venue:', error);
-        toast.error('Error al actualizar el salón. Por favor, inténtelo nuevamente.');
+        console.error("Error updating venue:", error);
+        toast.error(
+          "Error al actualizar el salón. Por favor, inténtelo nuevamente.",
+        );
       }
     }
   };
@@ -130,10 +135,10 @@ export default function VenueManagement({
       const createdVenue = await venuesApi.create(data);
       onVenueAdd(createdVenue);
       newVenueForm.reset();
-      toast.success('Salón creado exitosamente');
+      toast.success("Salón creado exitosamente");
     } catch (error) {
-      console.error('Error creating venue:', error);
-      toast.error('Error al crear el salón. Por favor, inténtelo nuevamente.');
+      console.error("Error creating venue:", error);
+      toast.error("Error al crear el salón. Por favor, inténtelo nuevamente.");
     }
   };
 
@@ -148,7 +153,10 @@ export default function VenueManagement({
   return (
     <div className="w-full max-w-full overflow-hidden space-y-4">
       {/* Edit Venue Dialog */}
-      <Dialog open={!!editingVenue} onOpenChange={(open) => !open && handleCancelEdit()}>
+      <Dialog
+        open={!!editingVenue}
+        onOpenChange={(open) => !open && handleCancelEdit()}
+      >
         <DialogContent className="max-w-2xl">
           <DialogHeader>
             <DialogTitle>Editar Salón</DialogTitle>
@@ -161,8 +169,10 @@ export default function VenueManagement({
               <Label htmlFor="edit-venue-name">Nombre del Salón</Label>
               <Input
                 id="edit-venue-name"
-                value={editFormData.name || ''}
-                onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
+                value={editFormData.name || ""}
+                onChange={(e) =>
+                  setEditFormData({ ...editFormData, name: e.target.value })
+                }
                 placeholder="Nombre del salón"
               />
             </div>
@@ -172,8 +182,13 @@ export default function VenueManagement({
                 <Input
                   id="edit-capacity"
                   type="number"
-                  value={editFormData.capacity || ''}
-                  onChange={(e) => setEditFormData({...editFormData, capacity: Number(e.target.value)})}
+                  value={editFormData.capacity || ""}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      capacity: Number(e.target.value),
+                    })
+                  }
                   placeholder="0"
                 />
               </div>
@@ -182,8 +197,13 @@ export default function VenueManagement({
                 <Input
                   id="edit-area"
                   type="number"
-                  value={editFormData.area || ''}
-                  onChange={(e) => setEditFormData({...editFormData, area: Number(e.target.value)})}
+                  value={editFormData.area || ""}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      area: Number(e.target.value),
+                    })
+                  }
                   placeholder="0"
                 />
               </div>
@@ -192,8 +212,13 @@ export default function VenueManagement({
                 <Input
                   id="edit-hourly-rate"
                   type="number"
-                  value={editFormData.hourlyRate || ''}
-                  onChange={(e) => setEditFormData({...editFormData, hourlyRate: Number(e.target.value)})}
+                  value={editFormData.hourlyRate || ""}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      hourlyRate: Number(e.target.value),
+                    })
+                  }
                   placeholder="0"
                 />
               </div>
@@ -203,8 +228,13 @@ export default function VenueManagement({
                 <Label htmlFor="edit-location">Ubicación</Label>
                 <Input
                   id="edit-location"
-                  value={editFormData.location || ''}
-                  onChange={(e) => setEditFormData({...editFormData, location: e.target.value})}
+                  value={editFormData.location || ""}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      location: e.target.value,
+                    })
+                  }
                   placeholder="Piso 1"
                 />
               </div>
@@ -213,7 +243,12 @@ export default function VenueManagement({
                   type="checkbox"
                   id="edit-available"
                   checked={editFormData.available ?? false}
-                  onChange={(e) => setEditFormData({...editFormData, available: e.target.checked})}
+                  onChange={(e) =>
+                    setEditFormData({
+                      ...editFormData,
+                      available: e.target.checked,
+                    })
+                  }
                   className="rounded border-gray-300"
                 />
                 <Label htmlFor="edit-available">Salón disponible</Label>
@@ -223,8 +258,13 @@ export default function VenueManagement({
               <Label htmlFor="edit-description">Descripción</Label>
               <Textarea
                 id="edit-description"
-                value={editFormData.description || ''}
-                onChange={(e) => setEditFormData({...editFormData, description: e.target.value})}
+                value={editFormData.description || ""}
+                onChange={(e) =>
+                  setEditFormData({
+                    ...editFormData,
+                    description: e.target.value,
+                  })
+                }
                 placeholder="Descripción del salón..."
               />
             </div>
@@ -233,9 +273,7 @@ export default function VenueManagement({
             <Button variant="outline" onClick={handleCancelEdit}>
               Cancelar
             </Button>
-            <Button onClick={handleSaveEdit}>
-              Guardar Cambios
-            </Button>
+            <Button onClick={handleSaveEdit}>Guardar Cambios</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -277,7 +315,9 @@ export default function VenueManagement({
                     <Input
                       id="capacidadSalon"
                       type="number"
-                      {...newVenueForm.register("capacity", { valueAsNumber: true })}
+                      {...newVenueForm.register("capacity", {
+                        valueAsNumber: true,
+                      })}
                       placeholder="0"
                     />
                     {newVenueForm.formState.errors.capacity && (
@@ -291,7 +331,9 @@ export default function VenueManagement({
                     <Input
                       id="areaSalon"
                       type="number"
-                      {...newVenueForm.register("area", { valueAsNumber: true })}
+                      {...newVenueForm.register("area", {
+                        valueAsNumber: true,
+                      })}
                       placeholder="0"
                     />
                     {newVenueForm.formState.errors.area && (
@@ -305,7 +347,9 @@ export default function VenueManagement({
                     <Input
                       id="tarifaSalon"
                       type="number"
-                      {...newVenueForm.register("hourlyRate", { valueAsNumber: true })}
+                      {...newVenueForm.register("hourlyRate", {
+                        valueAsNumber: true,
+                      })}
                       placeholder="0"
                     />
                     {newVenueForm.formState.errors.hourlyRate && (
@@ -344,7 +388,9 @@ export default function VenueManagement({
                   )}
                 </div>
                 <div className="flex justify-end space-x-2">
-                  <Button type="button" variant="outline">Cancelar</Button>
+                  <Button type="button" variant="outline">
+                    Cancelar
+                  </Button>
                   <Button type="submit">Crear Salón</Button>
                 </div>
               </div>
@@ -361,45 +407,47 @@ export default function VenueManagement({
         <CardContent className="p-6">
           <div className="w-full overflow-x-auto">
             <Table className="w-full">
-            <TableHeader>
-              <TableRow>
-                <TableHead>Salón</TableHead>
-                <TableHead>Capacidad</TableHead>
-                <TableHead>Área</TableHead>
-                <TableHead>Ubicación</TableHead>
-                <TableHead>Tarifa/Hora</TableHead>
-                <TableHead>Estado</TableHead>
-                <TableHead>Acciones</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {venues.map((venue) => (
-                <TableRow key={venue.id}>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{venue.name}</div>
-                      <div className="text-sm text-muted-foreground">
-                        {venue.description}
-                      </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>{venue.capacity} personas</TableCell>
-                  <TableCell>{venue.area} m²</TableCell>
-                  <TableCell>{venue.location}</TableCell>
-                  <TableCell>${venue.hourlyRate.toLocaleString()}</TableCell>
-                  <TableCell>{getAvailabilityBadge(venue.available)}</TableCell>
-                  <TableCell>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      onClick={() => handleEditVenue(venue)}
-                    >
-                      Editar
-                    </Button>
-                  </TableCell>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Salón</TableHead>
+                  <TableHead>Capacidad</TableHead>
+                  <TableHead>Área</TableHead>
+                  <TableHead>Ubicación</TableHead>
+                  <TableHead>Tarifa/Hora</TableHead>
+                  <TableHead>Estado</TableHead>
+                  <TableHead>Acciones</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
+              </TableHeader>
+              <TableBody>
+                {venues.map((venue) => (
+                  <TableRow key={venue.id}>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{venue.name}</div>
+                        <div className="text-sm text-muted-foreground">
+                          {venue.description}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{venue.capacity} personas</TableCell>
+                    <TableCell>{venue.area} m²</TableCell>
+                    <TableCell>{venue.location}</TableCell>
+                    <TableCell>${venue.hourlyRate.toLocaleString()}</TableCell>
+                    <TableCell>
+                      {getAvailabilityBadge(venue.available)}
+                    </TableCell>
+                    <TableCell>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditVenue(venue)}
+                      >
+                        Editar
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
             </Table>
           </div>
         </CardContent>

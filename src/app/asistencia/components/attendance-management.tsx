@@ -18,7 +18,9 @@ export function AttendanceManagement() {
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [selectedDate, setSelectedDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
 
   const getDepartmentLabel = (role: string) => {
     switch (role) {
@@ -61,20 +63,24 @@ export function AttendanceManagement() {
       setLoading(true);
 
       const updatedRecord = await attendanceApi.clockOut(recordId, currentTime);
-      
-      setAttendanceRecords(prev => prev.map(record => {
-        if (record.id === recordId) {
-          const hoursWorked = record.checkIn ? calculateHours(record.checkIn, currentTime) : 0;
-          
-          return {
-            ...record,
-            checkOut: currentTime,
-            hoursWorked,
-            status: updatedRecord.status,
-          };
-        }
-        return record;
-      }));
+
+      setAttendanceRecords((prev) =>
+        prev.map((record) => {
+          if (record.id === recordId) {
+            const hoursWorked = record.checkIn
+              ? calculateHours(record.checkIn, currentTime)
+              : 0;
+
+            return {
+              ...record,
+              checkOut: currentTime,
+              hoursWorked,
+              status: updatedRecord.status,
+            };
+          }
+          return record;
+        }),
+      );
 
       toast.success("Salida registrada");
     } catch (error) {
@@ -85,14 +91,18 @@ export function AttendanceManagement() {
     }
   };
 
-  const filteredRecords = attendanceRecords.filter(record => {
-    const matchesSearch = 
-      record.employee?.name.toLowerCase().includes(searchTerm.toLowerCase()) || false;
-    
-    const matchesDepartment = departmentFilter === "all" || record.employee?.department === departmentFilter;
-    const matchesStatus = statusFilter === "all" || record.status === statusFilter;
+  const filteredRecords = attendanceRecords.filter((record) => {
+    const matchesSearch =
+      record.employee?.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      false;
+
+    const matchesDepartment =
+      departmentFilter === "all" ||
+      record.employee?.department === departmentFilter;
+    const matchesStatus =
+      statusFilter === "all" || record.status === statusFilter;
     const matchesDate = record.date === selectedDate;
-    
+
     return matchesSearch && matchesDepartment && matchesStatus && matchesDate;
   });
 
@@ -108,19 +118,26 @@ export function AttendanceManagement() {
 
         // Load attendance records for selected date
         const attendanceData = await attendanceApi.getByDate(selectedDate);
-        
+
         // Enrich attendance records with employee data
-        const enrichedRecords = attendanceData.map(record => {
-          const employee = employeesData.find(e => e.id === record.employeeId);
+        const enrichedRecords = attendanceData.map((record) => {
+          const employee = employeesData.find(
+            (e) => e.id === record.employeeId,
+          );
           return {
             ...record,
-            employee: employee ? {
-              id: typeof employee.id === 'string' ? parseInt(employee.id) : employee.id,
-              name: employee.name,
-              email: "", // Employee type doesn't have email
-              position: employee.position || "",
-              department: employee.department,
-            } : undefined
+            employee: employee
+              ? {
+                  id:
+                    typeof employee.id === "string"
+                      ? parseInt(employee.id)
+                      : employee.id,
+                  name: employee.name,
+                  email: "", // Employee type doesn't have email
+                  position: employee.position || "",
+                  department: employee.department,
+                }
+              : undefined,
           };
         });
 
@@ -137,7 +154,9 @@ export function AttendanceManagement() {
   }, [selectedDate]);
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64">Cargando...</div>;
+    return (
+      <div className="flex items-center justify-center h-64">Cargando...</div>
+    );
   }
 
   return (
@@ -194,26 +213,41 @@ export function AttendanceManagement() {
                 <tbody>
                   {filteredRecords.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="p-8 text-center text-muted-foreground">
+                      <td
+                        colSpan={8}
+                        className="p-8 text-center text-muted-foreground"
+                      >
                         No se encontraron registros
                       </td>
                     </tr>
                   ) : (
                     filteredRecords.map((record) => (
                       <tr key={record.id} className="border-b">
-                        <td className="p-4 font-medium">{record.employee?.name || "-"}</td>
-                        <td className="p-4">{getDepartmentLabel(record.employee?.department || "")}</td>
-                        <td className="p-4">{new Date(record.date).toLocaleDateString()}</td>
+                        <td className="p-4 font-medium">
+                          {record.employee?.name || "-"}
+                        </td>
+                        <td className="p-4">
+                          {getDepartmentLabel(
+                            record.employee?.department || "",
+                          )}
+                        </td>
+                        <td className="p-4">
+                          {new Date(record.date).toLocaleDateString()}
+                        </td>
                         <td className="p-4">{record.checkIn || "-"}</td>
                         <td className="p-4">{record.checkOut || "-"}</td>
-                        <td className="p-4">{record.hoursWorked?.toFixed(2) || "-"} hrs</td>
+                        <td className="p-4">
+                          {record.hoursWorked?.toFixed(2) || "-"} hrs
+                        </td>
                         <td className="p-4">
                           <Badge className={getStatusColor(record.status)}>
                             {record.status === "PRESENT" && "Presente"}
                             {record.status === "ABSENT" && "Ausente"}
                             {record.status === "LATE" && "Tarde"}
-                            {record.status === "EARLY_LEAVE" && "Salida Temprana"}
-                            {record.status === "SICK_LEAVE" && "Licencia Médica"}
+                            {record.status === "EARLY_LEAVE" &&
+                              "Salida Temprana"}
+                            {record.status === "SICK_LEAVE" &&
+                              "Licencia Médica"}
                             {record.status === "VACATION" && "Vacaciones"}
                           </Badge>
                         </td>

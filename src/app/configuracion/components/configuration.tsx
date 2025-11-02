@@ -27,7 +27,9 @@ export default function Configuration({
   const [isLoading, setIsLoading] = useState(false);
   const [hotelConfig, setHotelConfig] = useState(initialHotelConfig);
 
-  const handleSaveHotelConfig = async (hotelConfigData: HotelConfigFormData) => {
+  const handleSaveHotelConfig = async (
+    hotelConfigData: HotelConfigFormData,
+  ) => {
     setIsLoading(true);
     try {
       // Transform frontend format to backend format
@@ -51,8 +53,8 @@ export default function Configuration({
 
       if (result.success) {
         // Update the local state with the new data including the id
-        setHotelConfig({ 
-          ...hotelConfig, 
+        setHotelConfig({
+          ...hotelConfig,
           propertyName: hotelConfigData.propertyName,
           propertyAddress: hotelConfigData.propertyAddress,
           propertyPhone: hotelConfigData.propertyPhone,
@@ -63,7 +65,8 @@ export default function Configuration({
           cancellationPolicy: hotelConfigData.cancellationPolicy || "",
         });
         toast("Configuración guardada", {
-          description: "La configuración del hotel se ha actualizado correctamente.",
+          description:
+            "La configuración del hotel se ha actualizado correctamente.",
         });
       }
     } catch (error) {

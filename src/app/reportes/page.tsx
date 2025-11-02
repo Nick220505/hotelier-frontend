@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/auth-context";
@@ -9,7 +9,17 @@ import { employeesApi, DepartmentStats, Employee } from "@/lib/api/employees";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, TrendingDown, Users, DollarSign, Calendar, Download, Package, AlertTriangle, UserCheck } from "lucide-react";
+import {
+  TrendingUp,
+  TrendingDown,
+  Users,
+  DollarSign,
+  Calendar,
+  Download,
+  Package,
+  AlertTriangle,
+  UserCheck,
+} from "lucide-react";
 import { RevenueChart } from "./components/revenue-chart";
 import { OccupancyChart } from "./components/occupancy-chart";
 import { RevenueBreakdownChart } from "./components/revenue-breakdown-chart";
@@ -17,7 +27,13 @@ import { InventoryPieChart } from "./components/inventory-pie-chart";
 import { EmployeesPieChart } from "./components/employees-pie-chart";
 import { InventoryStockLevelsChart } from "./components/inventory-stock-levels-chart";
 import { EmployeePerformanceChart } from "./components/employee-performance-chart";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { toast } from "sonner";
 
 interface MonthlyData {
@@ -51,24 +67,29 @@ interface InventoryStats {
   totalValue: number;
   lowStockCount: number;
   outOfStockCount: number;
-  categoryStats: Record<string, { count: number; value: number; lowStock: number }>;
+  categoryStats: Record<
+    string,
+    { count: number; value: number; lowStock: number }
+  >;
 }
 
 export default function ReportesPage() {
   const { user, isLoading: authLoading } = useAuthContext();
   const router = useRouter();
-  
+
   const currentYear = new Date().getFullYear();
-  
+
   const [selectedYear, setSelectedYear] = useState<number>(currentYear);
-  const [selectedMonth, setSelectedMonth] = useState<number | undefined>(undefined);
+  const [selectedMonth, setSelectedMonth] = useState<number | undefined>(
+    undefined,
+  );
   const [monthlyData, setMonthlyData] = useState<MonthlyData[]>([]);
   const [occupancyData, setOccupancyData] = useState<OccupancyData[]>([]);
   const [financialSummary, setFinancialSummary] = useState<FinancialSummary>({
     revenue: { room: 0, restaurant: 0, services: 0, events: 0, total: 0 },
     expenses: 0,
     grossProfit: 0,
-    profitMargin: 0
+    profitMargin: 0,
   });
   const [loading, setLoading] = useState(true);
   const [inventoryStats, setInventoryStats] = useState<InventoryStats>({
@@ -83,7 +104,7 @@ export default function ReportesPage() {
 
   useEffect(() => {
     if (!authLoading && !user) {
-      router.push('/login');
+      router.push("/login");
       return;
     }
   }, [user, authLoading, router]);
@@ -97,22 +118,29 @@ export default function ReportesPage() {
 
       try {
         // Get monthly revenue comparison for the whole year
-        const monthlyRevenueData = await reportsApi.getMonthlyRevenueComparison(selectedYear);
+        const monthlyRevenueData =
+          await reportsApi.getMonthlyRevenueComparison(selectedYear);
         setMonthlyData(monthlyRevenueData);
 
         // Get occupancy data for selected period
-        const occupancy = await reportsApi.getOccupancyByMonthYear(selectedYear, selectedMonth);
+        const occupancy = await reportsApi.getOccupancyByMonthYear(
+          selectedYear,
+          selectedMonth,
+        );
         setOccupancyData(occupancy);
 
         // Get financial summary for selected period
-        const startDate = selectedMonth 
-          ? `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-01`
+        const startDate = selectedMonth
+          ? `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-01`
           : `${selectedYear}-01-01`;
         const endDate = selectedMonth
-          ? `${selectedYear}-${String(selectedMonth).padStart(2, '0')}-${new Date(selectedYear, selectedMonth, 0).getDate()}`
+          ? `${selectedYear}-${String(selectedMonth).padStart(2, "0")}-${new Date(selectedYear, selectedMonth, 0).getDate()}`
           : `${selectedYear}-12-31`;
-        
-        const financial = await reportsApi.getFinancialSummary(startDate, endDate);
+
+        const financial = await reportsApi.getFinancialSummary(
+          startDate,
+          endDate,
+        );
         setFinancialSummary(financial);
 
         // Get inventory statistics
@@ -127,7 +155,7 @@ export default function ReportesPage() {
         const allEmployees = await employeesApi.getAll();
         setEmployees(allEmployees);
       } catch (error) {
-        console.error('Error fetching reports data:', error);
+        console.error("Error fetching reports data:", error);
       } finally {
         setLoading(false);
       }
@@ -148,9 +176,15 @@ export default function ReportesPage() {
     );
   }
 
-  const avgOccupancy = occupancyData.length > 0
-    ? (occupancyData.reduce((acc, item) => acc + item.occupancyPercentage, 0) / occupancyData.length).toFixed(1)
-    : '0';
+  const avgOccupancy =
+    occupancyData.length > 0
+      ? (
+          occupancyData.reduce(
+            (acc, item) => acc + item.occupancyPercentage,
+            0,
+          ) / occupancyData.length
+        ).toFixed(1)
+      : "0";
 
   const handleDownloadReport = async () => {
     try {
@@ -158,7 +192,7 @@ export default function ReportesPage() {
       await reportsApi.downloadFinancialReport(selectedYear, selectedMonth);
       toast("Reporte descargado exitosamente");
     } catch (error) {
-      console.error('Error downloading report:', error);
+      console.error("Error downloading report:", error);
       toast("Error al descargar el reporte");
     }
   };
@@ -168,10 +202,17 @@ export default function ReportesPage() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Reportes</h1>
-          <p className="text-muted-foreground">Dashboard de reportes y análisis del hotel</p>
+          <p className="text-muted-foreground">
+            Dashboard de reportes y análisis del hotel
+          </p>
         </div>
         <div className="flex gap-2">
-          <Select value={selectedMonth?.toString() || "all"} onValueChange={(value) => setSelectedMonth(value === "all" ? undefined : parseInt(value))}>
+          <Select
+            value={selectedMonth?.toString() || "all"}
+            onValueChange={(value) =>
+              setSelectedMonth(value === "all" ? undefined : parseInt(value))
+            }
+          >
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Seleccionar mes" />
             </SelectTrigger>
@@ -191,14 +232,21 @@ export default function ReportesPage() {
               <SelectItem value="12">Diciembre</SelectItem>
             </SelectContent>
           </Select>
-          <Select value={selectedYear.toString()} onValueChange={(value) => setSelectedYear(parseInt(value))}>
+          <Select
+            value={selectedYear.toString()}
+            onValueChange={(value) => setSelectedYear(parseInt(value))}
+          >
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Año" />
             </SelectTrigger>
             <SelectContent>
               <SelectItem value={String(currentYear)}>{currentYear}</SelectItem>
-              <SelectItem value={String(currentYear - 1)}>{currentYear - 1}</SelectItem>
-              <SelectItem value={String(currentYear - 2)}>{currentYear - 2}</SelectItem>
+              <SelectItem value={String(currentYear - 1)}>
+                {currentYear - 1}
+              </SelectItem>
+              <SelectItem value={String(currentYear - 2)}>
+                {currentYear - 2}
+              </SelectItem>
             </SelectContent>
           </Select>
           <Button variant="outline" size="icon" onClick={handleDownloadReport}>
@@ -211,7 +259,9 @@ export default function ReportesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ingresos Totales</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Ingresos Totales
+            </CardTitle>
             <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -222,7 +272,9 @@ export default function ReportesPage() {
               {financialSummary.profitMargin > 0 ? (
                 <>
                   <TrendingUp className="h-3 w-3 text-green-600" />
-                  <span className="text-green-600">{financialSummary.profitMargin.toFixed(1)}% margen</span>
+                  <span className="text-green-600">
+                    {financialSummary.profitMargin.toFixed(1)}% margen
+                  </span>
                 </>
               ) : (
                 <>
@@ -236,7 +288,9 @@ export default function ReportesPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ganancia Bruta</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Ganancia Bruta
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -251,13 +305,13 @@ export default function ReportesPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ocupación Promedio</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Ocupación Promedio
+            </CardTitle>
             <Calendar className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">
-              {avgOccupancy}%
-            </div>
+            <div className="text-2xl font-bold">{avgOccupancy}%</div>
             <p className="text-xs text-muted-foreground">
               {selectedMonth ? `Mes seleccionado` : `${selectedYear}`}
             </p>
@@ -266,7 +320,9 @@ export default function ReportesPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ingresos por Habitación</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Ingresos por Habitación
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -274,7 +330,12 @@ export default function ReportesPage() {
               ${financialSummary.revenue.room.toLocaleString()}
             </div>
             <p className="text-xs text-muted-foreground">
-              {((financialSummary.revenue.room / financialSummary.revenue.total) * 100 || 0).toFixed(1)}% del total
+              {(
+                (financialSummary.revenue.room /
+                  financialSummary.revenue.total) *
+                  100 || 0
+              ).toFixed(1)}
+              % del total
             </p>
           </CardContent>
         </Card>
@@ -283,7 +344,7 @@ export default function ReportesPage() {
       {/* Revenue Breakdown */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <RevenueBreakdownChart data={financialSummary.revenue} />
-        
+
         <Card>
           <CardHeader>
             <CardTitle>Resumen Financiero</CardTitle>
@@ -292,23 +353,35 @@ export default function ReportesPage() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Habitaciones</span>
-                <Badge variant="outline">${financialSummary.revenue.room.toLocaleString()}</Badge>
+                <Badge variant="outline">
+                  ${financialSummary.revenue.room.toLocaleString()}
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Restaurante</span>
-                <Badge variant="outline">${financialSummary.revenue.restaurant.toLocaleString()}</Badge>
+                <Badge variant="outline">
+                  ${financialSummary.revenue.restaurant.toLocaleString()}
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">Servicios Adicionales</span>
-                <Badge variant="outline">${financialSummary.revenue.services.toLocaleString()}</Badge>
+                <span className="text-sm font-medium">
+                  Servicios Adicionales
+                </span>
+                <Badge variant="outline">
+                  ${financialSummary.revenue.services.toLocaleString()}
+                </Badge>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-sm font-medium">Eventos</span>
-                <Badge variant="outline">${financialSummary.revenue.events.toLocaleString()}</Badge>
+                <Badge variant="outline">
+                  ${financialSummary.revenue.events.toLocaleString()}
+                </Badge>
               </div>
               <div className="border-t pt-2 flex items-center justify-between font-semibold">
                 <span>Total</span>
-                <span className="text-lg">${financialSummary.revenue.total.toLocaleString()}</span>
+                <span className="text-lg">
+                  ${financialSummary.revenue.total.toLocaleString()}
+                </span>
               </div>
               <div className="flex items-center justify-between text-red-600">
                 <span className="font-medium">Gastos</span>
@@ -333,11 +406,15 @@ export default function ReportesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Productos</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total de Productos
+            </CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{inventoryStats.totalItems}</div>
+            <div className="text-2xl font-bold">
+              {inventoryStats.totalItems}
+            </div>
             <p className="text-xs text-muted-foreground">
               ${inventoryStats.totalValue.toLocaleString()} en valor
             </p>
@@ -346,7 +423,9 @@ export default function ReportesPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Alertas de Stock</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Alertas de Stock
+            </CardTitle>
             <AlertTriangle className="h-4 w-4 text-orange-500" />
           </CardHeader>
           <CardContent>
@@ -361,7 +440,9 @@ export default function ReportesPage() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Empleados</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total de Empleados
+            </CardTitle>
             <UserCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -369,7 +450,8 @@ export default function ReportesPage() {
               {departmentStats.reduce((acc, dept) => acc + dept.totalCount, 0)}
             </div>
             <p className="text-xs text-muted-foreground">
-              {departmentStats.reduce((acc, dept) => acc + dept.activeCount, 0)} activos
+              {departmentStats.reduce((acc, dept) => acc + dept.activeCount, 0)}{" "}
+              activos
             </p>
           </CardContent>
         </Card>
@@ -381,11 +463,9 @@ export default function ReportesPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
-              {departmentStats.filter(d => d.totalCount > 0).length}
+              {departmentStats.filter((d) => d.totalCount > 0).length}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Con personal activo
-            </p>
+            <p className="text-xs text-muted-foreground">Con personal activo</p>
           </CardContent>
         </Card>
       </div>

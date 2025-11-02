@@ -32,18 +32,12 @@ export function UserRow({ user, onAssignRoles }: UserRowProps) {
         <div className="flex flex-wrap gap-1">
           {user.roles && user.roles.length > 0 ? (
             user.roles.map((role) => (
-              <Badge
-                key={role.id}
-                variant="secondary"
-                className="text-xs"
-              >
+              <Badge key={role.id} variant="secondary" className="text-xs">
                 {role.name}
               </Badge>
             ))
           ) : (
-            <span className="text-muted-foreground text-sm">
-              Sin roles
-            </span>
+            <span className="text-muted-foreground text-sm">Sin roles</span>
           )}
         </div>
       </TableCell>
@@ -55,11 +49,7 @@ export function UserRow({ user, onAssignRoles }: UserRowProps) {
         </span>
       </TableCell>
       <TableCell>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={() => onAssignRoles(user)}
-        >
+        <Button variant="outline" size="sm" onClick={() => onAssignRoles(user)}>
           <Shield className="h-4 w-4 mr-2" />
           Asignar Roles
         </Button>

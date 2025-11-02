@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,10 +10,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import { inventoryApi, type InventoryItem } from '@/lib/api/inventory';
+} from "@/components/ui/alert-dialog";
+import { inventoryApi, type InventoryItem } from "@/lib/api/inventory";
 import { toast } from "sonner";
-import { Loader2 } from 'lucide-react';
+import { Loader2 } from "lucide-react";
 
 interface DeleteInventoryItemDialogProps {
   item: InventoryItem | null;
@@ -36,14 +36,16 @@ export function DeleteInventoryItemDialog({
     setIsDeleting(true);
     try {
       await inventoryApi.deleteInventoryItem(item.id);
-      
-      toast.success('Producto eliminado exitosamente');
-      
+
+      toast.success("Producto eliminado exitosamente");
+
       onOpenChange(false);
       onItemDeleted?.();
     } catch (error) {
-      console.error('Error deleting inventory item:', error);
-      toast.error('No se pudo eliminar el producto. Por favor intenta de nuevo.');
+      console.error("Error deleting inventory item:", error);
+      toast.error(
+        "No se pudo eliminar el producto. Por favor intenta de nuevo.",
+      );
     } finally {
       setIsDeleting(false);
     }
@@ -57,18 +59,18 @@ export function DeleteInventoryItemDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>¿Eliminar producto?</AlertDialogTitle>
           <AlertDialogDescription>
-            Esta acción no se puede deshacer. Se eliminará permanentemente el producto &quot;{item.name}&quot; del inventario.
+            Esta acción no se puede deshacer. Se eliminará permanentemente el
+            producto &quot;{item.name}&quot; del inventario.
             {item.currentStock > 0 && (
               <span className="block mt-2 text-amber-600 font-medium">
-                ⚠️ Advertencia: Este producto tiene {item.currentStock} {item.unit} en stock.
+                ⚠️ Advertencia: Este producto tiene {item.currentStock}{" "}
+                {item.unit} en stock.
               </span>
             )}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel disabled={isDeleting}>
-            Cancelar
-          </AlertDialogCancel>
+          <AlertDialogCancel disabled={isDeleting}>Cancelar</AlertDialogCancel>
           <AlertDialogAction
             onClick={handleDelete}
             disabled={isDeleting}

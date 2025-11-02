@@ -21,7 +21,11 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -31,60 +35,65 @@ import { useEffect, useState, useMemo } from "react";
 import { guestsApi, type Guest } from "@/lib/api/guests";
 import { reservationsApi } from "@/lib/api/reservations";
 
-const reservationFormSchema = z.object({
-  guestName: z
-    .string({ message: "El nombre del huésped es obligatorio" })
-    .min(2, "El nombre debe tener al menos 2 caracteres")
-    .max(100, "El nombre debe tener máximo 100 caracteres"),
-  guestEmail: z
-    .string({ message: "El email es obligatorio" })
-    .email("Ingresa un email válido"),
-  guestPhone: z
-    .string()
-    .optional()
-    .refine((val) => {
-      if (!val || val.trim() === "") return true;
-      return /^(\+\d{1,3}[- ]?)?\d{10}$/.test(val);
-    }, "Ingresa un teléfono válido"),
-  guests: z.coerce
-    .number({ required_error: "El número de huéspedes es obligatorio" })
-    .min(1, "Debe ser al menos 1 huésped")
-    .max(10, "No puede exceder 10 huéspedes"),
-  checkInDate: z
-    .string({ message: "La fecha de entrada es obligatoria" })
-    .min(1, "La fecha de entrada es obligatoria")
-    .refine((date) => {
-      const checkIn = new Date(date);
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-      return checkIn >= today;
-    }, "La fecha de entrada debe ser hoy o posterior"),
-  checkOutDate: z
-    .string({ message: "La fecha de salida es obligatoria" })
-    .min(1, "La fecha de salida es obligatoria"),
-  roomId: z.coerce
-    .number({ required_error: "La habitación es obligatoria" })
-    .min(1, "Selecciona una habitación"),
-  discountPercent: z.coerce
-    .number()
-    .min(0, "El descuento debe ser mayor o igual a 0")
-    .max(100, "El descuento no puede ser mayor a 100%")
-    .nullable()
-    .optional(),
-  discountAmount: z.coerce
-    .number()
-    .min(0, "El descuento debe ser mayor o igual a 0")
-    .nullable()
-    .optional(),
-  guestId: z.coerce.number().nullable().optional(),
-}).refine((data) => {
-  const checkIn = new Date(data.checkInDate);
-  const checkOut = new Date(data.checkOutDate);
-  return checkOut > checkIn;
-}, {
-  message: "La fecha de salida debe ser posterior a la fecha de entrada",
-  path: ["checkOutDate"],
-});
+const reservationFormSchema = z
+  .object({
+    guestName: z
+      .string({ message: "El nombre del huésped es obligatorio" })
+      .min(2, "El nombre debe tener al menos 2 caracteres")
+      .max(100, "El nombre debe tener máximo 100 caracteres"),
+    guestEmail: z
+      .string({ message: "El email es obligatorio" })
+      .email("Ingresa un email válido"),
+    guestPhone: z
+      .string()
+      .optional()
+      .refine((val) => {
+        if (!val || val.trim() === "") return true;
+        return /^(\+\d{1,3}[- ]?)?\d{10}$/.test(val);
+      }, "Ingresa un teléfono válido"),
+    guests: z.coerce
+      .number({ required_error: "El número de huéspedes es obligatorio" })
+      .min(1, "Debe ser al menos 1 huésped")
+      .max(10, "No puede exceder 10 huéspedes"),
+    checkInDate: z
+      .string({ message: "La fecha de entrada es obligatoria" })
+      .min(1, "La fecha de entrada es obligatoria")
+      .refine((date) => {
+        const checkIn = new Date(date);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        return checkIn >= today;
+      }, "La fecha de entrada debe ser hoy o posterior"),
+    checkOutDate: z
+      .string({ message: "La fecha de salida es obligatoria" })
+      .min(1, "La fecha de salida es obligatoria"),
+    roomId: z.coerce
+      .number({ required_error: "La habitación es obligatoria" })
+      .min(1, "Selecciona una habitación"),
+    discountPercent: z.coerce
+      .number()
+      .min(0, "El descuento debe ser mayor o igual a 0")
+      .max(100, "El descuento no puede ser mayor a 100%")
+      .nullable()
+      .optional(),
+    discountAmount: z.coerce
+      .number()
+      .min(0, "El descuento debe ser mayor o igual a 0")
+      .nullable()
+      .optional(),
+    guestId: z.coerce.number().nullable().optional(),
+  })
+  .refine(
+    (data) => {
+      const checkIn = new Date(data.checkInDate);
+      const checkOut = new Date(data.checkOutDate);
+      return checkOut > checkIn;
+    },
+    {
+      message: "La fecha de salida debe ser posterior a la fecha de entrada",
+      path: ["checkOutDate"],
+    },
+  );
 
 type ReservationFormData = z.infer<typeof reservationFormSchema>;
 
@@ -100,19 +109,19 @@ interface NewReservationDialogProps {
 }
 
 // Subcomponent for Guest Search Section
-function GuestSearchSection({ 
-  form, 
-  enabled = true 
-}: { 
-  form: UseFormReturn<ReservationFormData>; 
-  enabled?: boolean; 
+function GuestSearchSection({
+  form,
+  enabled = true,
+}: {
+  form: UseFormReturn<ReservationFormData>;
+  enabled?: boolean;
 }) {
   const [guestSearch, setGuestSearch] = useState<string>("");
   const [guestOptions, setGuestOptions] = useState<Guest[]>([]);
 
   useEffect(() => {
     if (!enabled) return;
-    
+
     let active = true;
     (async () => {
       try {
@@ -141,9 +150,11 @@ function GuestSearchSection({
       </div>
       <div className="space-y-2">
         <Label htmlFor="guestId">Seleccionar Huésped (opcional)</Label>
-        <Select 
-          value={form.watch("guestId")?.toString() || ""} 
-          onValueChange={(value) => form.setValue("guestId", value ? parseInt(value) : null)}
+        <Select
+          value={form.watch("guestId")?.toString() || ""}
+          onValueChange={(value) =>
+            form.setValue("guestId", value ? parseInt(value) : null)
+          }
         >
           <SelectTrigger>
             <SelectValue placeholder="Sin asignar" />
@@ -162,7 +173,11 @@ function GuestSearchSection({
 }
 
 // Subcomponent for Date Selection
-function DateSelectionSection({ form }: { form: UseFormReturn<ReservationFormData> }) {
+function DateSelectionSection({
+  form,
+}: {
+  form: UseFormReturn<ReservationFormData>;
+}) {
   const formValues = form.watch();
 
   return (
@@ -175,14 +190,18 @@ function DateSelectionSection({ form }: { form: UseFormReturn<ReservationFormDat
               variant="outline"
               className={cn(
                 "w-full justify-start text-left font-normal",
-                !formValues.checkInDate && "text-muted-foreground"
+                !formValues.checkInDate && "text-muted-foreground",
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {formValues.checkInDate ? (
                 (() => {
-                  const [year, month, day] = formValues.checkInDate.split('-');
-                  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                  const [year, month, day] = formValues.checkInDate.split("-");
+                  const date = new Date(
+                    parseInt(year),
+                    parseInt(month) - 1,
+                    parseInt(day),
+                  );
                   return format(date, "PPP", { locale: es });
                 })()
               ) : (
@@ -193,15 +212,24 @@ function DateSelectionSection({ form }: { form: UseFormReturn<ReservationFormDat
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
-              selected={formValues.checkInDate ? (() => {
-                const [year, month, day] = formValues.checkInDate.split('-');
-                return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-              })() : undefined}
+              selected={
+                formValues.checkInDate
+                  ? (() => {
+                      const [year, month, day] =
+                        formValues.checkInDate.split("-");
+                      return new Date(
+                        parseInt(year),
+                        parseInt(month) - 1,
+                        parseInt(day),
+                      );
+                    })()
+                  : undefined
+              }
               onSelect={(date) => {
                 if (date) {
                   const year = date.getFullYear();
-                  const month = String(date.getMonth() + 1).padStart(2, '0');
-                  const day = String(date.getDate()).padStart(2, '0');
+                  const month = String(date.getMonth() + 1).padStart(2, "0");
+                  const day = String(date.getDate()).padStart(2, "0");
                   form.setValue("checkInDate", `${year}-${month}-${day}`);
                 }
               }}
@@ -215,10 +243,12 @@ function DateSelectionSection({ form }: { form: UseFormReturn<ReservationFormDat
           </PopoverContent>
         </Popover>
         {form.formState.errors.checkInDate && (
-          <p className="text-sm text-red-500">{form.formState.errors.checkInDate.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.checkInDate.message}
+          </p>
         )}
       </div>
-      
+
       <div className="space-y-2">
         <Label>Fecha de Salida</Label>
         <Popover>
@@ -227,14 +257,18 @@ function DateSelectionSection({ form }: { form: UseFormReturn<ReservationFormDat
               variant="outline"
               className={cn(
                 "w-full justify-start text-left font-normal",
-                !formValues.checkOutDate && "text-muted-foreground"
+                !formValues.checkOutDate && "text-muted-foreground",
               )}
             >
               <CalendarIcon className="mr-2 h-4 w-4" />
               {formValues.checkOutDate ? (
                 (() => {
-                  const [year, month, day] = formValues.checkOutDate.split('-');
-                  const date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                  const [year, month, day] = formValues.checkOutDate.split("-");
+                  const date = new Date(
+                    parseInt(year),
+                    parseInt(month) - 1,
+                    parseInt(day),
+                  );
                   return format(date, "PPP", { locale: es });
                 })()
               ) : (
@@ -245,15 +279,24 @@ function DateSelectionSection({ form }: { form: UseFormReturn<ReservationFormDat
           <PopoverContent className="w-auto p-0">
             <Calendar
               mode="single"
-              selected={formValues.checkOutDate ? (() => {
-                const [year, month, day] = formValues.checkOutDate.split('-');
-                return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-              })() : undefined}
+              selected={
+                formValues.checkOutDate
+                  ? (() => {
+                      const [year, month, day] =
+                        formValues.checkOutDate.split("-");
+                      return new Date(
+                        parseInt(year),
+                        parseInt(month) - 1,
+                        parseInt(day),
+                      );
+                    })()
+                  : undefined
+              }
               onSelect={(date) => {
                 if (date) {
                   const year = date.getFullYear();
-                  const month = String(date.getMonth() + 1).padStart(2, '0');
-                  const day = String(date.getDate()).padStart(2, '0');
+                  const month = String(date.getMonth() + 1).padStart(2, "0");
+                  const day = String(date.getDate()).padStart(2, "0");
                   form.setValue("checkOutDate", `${year}-${month}-${day}`);
                 }
               }}
@@ -263,8 +306,12 @@ function DateSelectionSection({ form }: { form: UseFormReturn<ReservationFormDat
                   today.setHours(0, 0, 0, 0);
                   return date <= today;
                 }
-                const [year, month, day] = formValues.checkInDate.split('-');
-                const checkInDate = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+                const [year, month, day] = formValues.checkInDate.split("-");
+                const checkInDate = new Date(
+                  parseInt(year),
+                  parseInt(month) - 1,
+                  parseInt(day),
+                );
                 checkInDate.setHours(0, 0, 0, 0);
                 return date <= checkInDate;
               }}
@@ -273,7 +320,9 @@ function DateSelectionSection({ form }: { form: UseFormReturn<ReservationFormDat
           </PopoverContent>
         </Popover>
         {form.formState.errors.checkOutDate && (
-          <p className="text-sm text-red-500">{form.formState.errors.checkOutDate.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.checkOutDate.message}
+          </p>
         )}
       </div>
     </div>
@@ -307,7 +356,7 @@ export function NewReservationDialog({
   });
 
   const formValues = form.watch();
-  
+
   const getRoomTypeDisplayName = (type: string) => {
     switch (type) {
       case "INDIVIDUAL":
@@ -332,11 +381,11 @@ export function NewReservationDialog({
   // Availability search (rooms based on selected dates and guests)
   const [availableRooms, setAvailableRooms] = useState<Room[] | null>(null);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
-  
+
   useEffect(() => {
     const start = formValues.checkInDate;
     const end = formValues.checkOutDate;
-    
+
     if (!start || !end) {
       setAvailableRooms(null);
       return;
@@ -384,22 +433,25 @@ export function NewReservationDialog({
 
   const nights = useMemo(() => {
     if (!formValues.checkInDate || !formValues.checkOutDate) return 0;
-    
+
     const checkIn = new Date(formValues.checkInDate);
     const checkOut = new Date(formValues.checkOutDate);
-    
+
     if (checkOut <= checkIn) return 0;
-    
-    return Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+
+    return Math.ceil(
+      (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24),
+    );
   }, [formValues.checkInDate, formValues.checkOutDate]);
 
   const calculations = useMemo(() => {
     const roomPrice = selectedRoom ? Number(selectedRoom.price) : 0;
     const baseTotal = roomPrice * nights;
-    
+
     const discountPercent = Number(formValues.discountPercent || 0);
-    
-    const discountFromPercent = discountPercent > 0 ? (baseTotal * discountPercent) / 100 : 0;
+
+    const discountFromPercent =
+      discountPercent > 0 ? (baseTotal * discountPercent) / 100 : 0;
     const finalTotal = Math.max(0, baseTotal - discountFromPercent);
 
     return {
@@ -407,7 +459,7 @@ export function NewReservationDialog({
       baseTotal,
       discountPercent,
       discountFromPercent,
-      finalTotal
+      finalTotal,
     };
   }, [selectedRoom, nights, formValues.discountPercent]);
 
@@ -437,10 +489,16 @@ export function NewReservationDialog({
             Crear una nueva reserva para el hotel
           </DialogDescription>
         </DialogHeader>
-        
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
-          <GuestSearchSection form={form} enabled={enableGuestSearch !== false} />
-          
+
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid gap-4 py-4"
+        >
+          <GuestSearchSection
+            form={form}
+            enabled={enableGuestSearch !== false}
+          />
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="guestName">Nombre del Huésped</Label>
@@ -449,10 +507,14 @@ export function NewReservationDialog({
                 placeholder="Nombre completo"
                 {...form.register("guestName")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.guestName ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.guestName ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.guestName && (
-                <p className="text-sm text-red-500">{form.formState.errors.guestName.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guestName.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
@@ -463,14 +525,18 @@ export function NewReservationDialog({
                 placeholder="email@ejemplo.com"
                 {...form.register("guestEmail")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.guestEmail ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.guestEmail ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.guestEmail && (
-                <p className="text-sm text-red-500">{form.formState.errors.guestEmail.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guestEmail.message}
+                </p>
               )}
             </div>
           </div>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="guestPhone">Teléfono</Label>
@@ -479,10 +545,14 @@ export function NewReservationDialog({
                 placeholder="+57 300 123 4567"
                 {...form.register("guestPhone")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.guestPhone ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.guestPhone ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.guestPhone && (
-                <p className="text-sm text-red-500">{form.formState.errors.guestPhone.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guestPhone.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
@@ -508,7 +578,9 @@ export function NewReservationDialog({
                 </SelectContent>
               </Select>
               {form.formState.errors.guests && (
-                <p className="text-sm text-red-500">{form.formState.errors.guests.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guests.message}
+                </p>
               )}
             </div>
           </div>
@@ -519,7 +591,9 @@ export function NewReservationDialog({
             <div className="space-y-2">
               <Label htmlFor="roomId">Habitación</Label>
               {availabilityLoading && (
-                <div className="text-xs text-muted-foreground">Buscando disponibilidad...</div>
+                <div className="text-xs text-muted-foreground">
+                  Buscando disponibilidad...
+                </div>
               )}
               <Select
                 value={formValues.roomId}
@@ -533,33 +607,38 @@ export function NewReservationDialog({
                     <div className="p-2 text-center text-sm text-muted-foreground">
                       Buscando habitaciones disponibles...
                     </div>
-                  ) : (() => {
-                    const roomsToShow = availableRooms !== null 
-                      ? availableRooms 
-                      : rooms.filter((room) => room.isAvailable);
+                  ) : (
+                    (() => {
+                      const roomsToShow =
+                        availableRooms !== null
+                          ? availableRooms
+                          : rooms.filter((room) => room.isAvailable);
 
-                    if (roomsToShow.length === 0) {
-                      return (
-                        <div className="p-2 text-center text-sm text-muted-foreground">
-                          {formValues.checkInDate && formValues.checkOutDate 
-                            ? "No hay habitaciones disponibles para las fechas seleccionadas"
-                            : "No hay habitaciones disponibles. Selecciona fechas para ver disponibilidad."
-                          }
-                        </div>
-                      );
-                    }
+                      if (roomsToShow.length === 0) {
+                        return (
+                          <div className="p-2 text-center text-sm text-muted-foreground">
+                            {formValues.checkInDate && formValues.checkOutDate
+                              ? "No hay habitaciones disponibles para las fechas seleccionadas"
+                              : "No hay habitaciones disponibles. Selecciona fechas para ver disponibilidad."}
+                          </div>
+                        );
+                      }
 
-                    return roomsToShow.map((room) => (
-                      <SelectItem key={room.id} value={room.id.toString()}>
-                        {room.number} - {getRoomTypeDisplayName(room.type)} (
-                        {formatCurrency(Number(room.price))}/noche, cap. {room.capacity})
-                      </SelectItem>
-                    ));
-                  })()}
+                      return roomsToShow.map((room) => (
+                        <SelectItem key={room.id} value={room.id.toString()}>
+                          {room.number} - {getRoomTypeDisplayName(room.type)} (
+                          {formatCurrency(Number(room.price))}/noche, cap.{" "}
+                          {room.capacity})
+                        </SelectItem>
+                      ));
+                    })()
+                  )}
                 </SelectContent>
               </Select>
               {form.formState.errors.roomId && (
-                <p className="text-sm text-red-500">{form.formState.errors.roomId.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.roomId.message}
+                </p>
               )}
             </div>
           </div>
@@ -578,10 +657,16 @@ export function NewReservationDialog({
                   placeholder="0"
                   {...form.register("discountPercent")}
                   disabled={form.formState.isSubmitting}
-                  className={form.formState.errors.discountPercent ? "border-red-500" : ""}
+                  className={
+                    form.formState.errors.discountPercent
+                      ? "border-red-500"
+                      : ""
+                  }
                 />
                 {form.formState.errors.discountPercent && (
-                  <p className="text-sm text-red-500">{form.formState.errors.discountPercent.message}</p>
+                  <p className="text-sm text-red-500">
+                    {form.formState.errors.discountPercent.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -590,22 +675,50 @@ export function NewReservationDialog({
           {/* Estimated total */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1 text-sm text-muted-foreground">
-              <div>Noches: <span className="font-medium text-foreground">{nights}</span></div>
-              <div>Subtotal: <span className="font-medium text-foreground">{formatCurrency(calculations.baseTotal)}</span></div>
-              {!hideDiscounts && calculations.discountPercent > 0 && <div>Descuento: <span className="font-medium text-foreground">{calculations.discountPercent}%</span></div>}
+              <div>
+                Noches:{" "}
+                <span className="font-medium text-foreground">{nights}</span>
+              </div>
+              <div>
+                Subtotal:{" "}
+                <span className="font-medium text-foreground">
+                  {formatCurrency(calculations.baseTotal)}
+                </span>
+              </div>
+              {!hideDiscounts && calculations.discountPercent > 0 && (
+                <div>
+                  Descuento:{" "}
+                  <span className="font-medium text-foreground">
+                    {calculations.discountPercent}%
+                  </span>
+                </div>
+              )}
             </div>
             <div className="text-right">
               <div className="text-sm">Total estimado</div>
-              <div className="text-2xl font-bold">{formatCurrency(calculations.finalTotal)}</div>
+              <div className="text-2xl font-bold">
+                {formatCurrency(calculations.finalTotal)}
+              </div>
             </div>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 pt-4">
-            <Button variant="outline" type="button" onClick={onClose} className="w-full sm:w-auto">
+            <Button
+              variant="outline"
+              type="button"
+              onClick={onClose}
+              className="w-full sm:w-auto"
+            >
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading || form.formState.isSubmitting} className="w-full sm:w-auto">
-              {(loading || form.formState.isSubmitting) && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            <Button
+              type="submit"
+              disabled={loading || form.formState.isSubmitting}
+              className="w-full sm:w-auto"
+            >
+              {(loading || form.formState.isSubmitting) && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Crear Reserva
             </Button>
           </div>

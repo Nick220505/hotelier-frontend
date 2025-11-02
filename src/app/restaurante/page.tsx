@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/auth-context";
@@ -34,7 +34,7 @@ export default function RestaurantePage() {
 
   useEffect(() => {
     if (authLoading) return;
-    
+
     if (!user) {
       setError("Authentication required");
       setLoading(false);
@@ -44,8 +44,8 @@ export default function RestaurantePage() {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [roomServiceOrders, menuItems, beverageInventory] = await Promise.all(
-          [
+        const [roomServiceOrders, menuItems, beverageInventory] =
+          await Promise.all([
             restaurantApi
               .getRoomServiceOrders()
               .catch(() => [] as RoomServiceOrder[]),
@@ -53,15 +53,17 @@ export default function RestaurantePage() {
             restaurantApi
               .getBeverageInventory()
               .catch(() => [] as BeverageInventoryItem[]),
-          ],
-        );
+          ]);
 
         // Basic sales aggregation (fallback if no backend endpoint exists)
         const todayIso = new Date().toISOString().split("T")[0];
         const restaurantSales: RestaurantSale[] = [
           {
             date: todayIso,
-            roomService: roomServiceOrders.reduce((s, o) => s + (o.total || 0), 0),
+            roomService: roomServiceOrders.reduce(
+              (s, o) => s + (o.total || 0),
+              0,
+            ),
             restaurante: 0,
             bar: 0,
             total: roomServiceOrders.reduce((s, o) => s + (o.total || 0), 0),

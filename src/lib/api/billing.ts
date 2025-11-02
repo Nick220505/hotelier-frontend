@@ -187,7 +187,7 @@ function transformInvoiceStatus(
 
 function transformPaymentMethod(method?: string): PaymentMethod | undefined {
   if (!method) return undefined;
-  
+
   // Asegurarse de que el método de pago sea uno de los valores válidos
   const validMethods: PaymentMethod[] = [
     "CASH",
@@ -197,11 +197,11 @@ function transformPaymentMethod(method?: string): PaymentMethod | undefined {
     "CHECK",
     "MOBILE_PAYMENT",
     "CRYPTOCURRENCY",
-    "GIFT_CARD"
+    "GIFT_CARD",
   ];
-  
-  return validMethods.includes(method as PaymentMethod) 
-    ? method as PaymentMethod 
+
+  return validMethods.includes(method as PaymentMethod)
+    ? (method as PaymentMethod)
     : "CASH"; // Valor por defecto si el método no es válido
 }
 
@@ -336,7 +336,8 @@ export const billingApi = {
     id: string,
     paymentMethod: string,
   ): Promise<Invoice> => {
-  const backendMethod = paymentMethod;    const backendInvoice = (await apiRequest(
+    const backendMethod = paymentMethod;
+    const backendInvoice = (await apiRequest(
       `/billing/invoices/${id}/mark-paid`,
       {
         method: "PUT",
@@ -394,43 +395,48 @@ export const billingApi = {
   // Download invoice as PDF
   downloadInvoice: async (id: string): Promise<void> => {
     try {
-      const response = await fetch(`${getAPIBaseURL()}/billing/invoices/${id}/download`, {
-        headers: {
-          'Authorization': `Bearer ${authCookies.getAccessToken()}`,
+      const response = await fetch(
+        `${getAPIBaseURL()}/billing/invoices/${id}/download`,
+        {
+          headers: {
+            Authorization: `Bearer ${authCookies.getAccessToken()}`,
+          },
         },
-      });
-      
+      );
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const blob = await response.blob();
-      const contentDisposition = response.headers.get('content-disposition');
+      const contentDisposition = response.headers.get("content-disposition");
       let filename = `factura-${id}.pdf`;
 
       if (contentDisposition) {
-        const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        const filenameMatch = contentDisposition.match(
+          /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/,
+        );
         if (filenameMatch && filenameMatch[1]) {
-          filename = filenameMatch[1].replace(/['"]/g, '');
+          filename = filenameMatch[1].replace(/['"]/g, "");
         }
       }
-      
+
       // Create blob URL
       const url = window.URL.createObjectURL(blob);
-      
+
       // Create temporary link and trigger download
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      link.setAttribute('download', filename);
+      link.setAttribute("download", filename);
       document.body.appendChild(link);
       link.click();
-      
+
       // Cleanup
       link.parentNode?.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error('Error downloading invoice:', error);
-      throw new Error('No se pudo descargar la factura');
+      console.error("Error downloading invoice:", error);
+      throw new Error("No se pudo descargar la factura");
     }
   },
 };

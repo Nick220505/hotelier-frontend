@@ -47,7 +47,8 @@ export function LoginForm() {
       router.push("/dashboard");
       toast.success("Sesión iniciada correctamente");
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Error al iniciar sesión";
+      const errorMessage =
+        err instanceof Error ? err.message : "Error al iniciar sesión";
       toast.error(errorMessage);
       form.setError("root", { message: errorMessage });
     }
@@ -67,7 +68,9 @@ export function LoginForm() {
         <CardContent className="space-y-4">
           {form.formState.errors.root && (
             <Alert variant="destructive">
-              <AlertDescription>{form.formState.errors.root.message}</AlertDescription>
+              <AlertDescription>
+                {form.formState.errors.root.message}
+              </AlertDescription>
             </Alert>
           )}
           <div className="space-y-2">
@@ -81,7 +84,9 @@ export function LoginForm() {
               className={form.formState.errors.email ? "border-red-500" : ""}
             />
             {form.formState.errors.email && (
-              <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>
+              <p className="text-sm text-red-600">
+                {form.formState.errors.email.message}
+              </p>
             )}
           </div>
           <div className="space-y-2">
@@ -95,16 +100,24 @@ export function LoginForm() {
               className={form.formState.errors.password ? "border-red-500" : ""}
             />
             {form.formState.errors.password && (
-              <p className="text-sm text-red-600">{form.formState.errors.password.message}</p>
+              <p className="text-sm text-red-600">
+                {form.formState.errors.password.message}
+              </p>
             )}
           </div>
         </CardContent>
         <CardFooter className="flex flex-col space-y-4">
-          <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+          <Button
+            type="submit"
+            className="w-full"
+            disabled={form.formState.isSubmitting}
+          >
             {form.formState.isSubmitting && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
-            {form.formState.isSubmitting ? "Iniciando sesión..." : "Iniciar Sesión"}
+            {form.formState.isSubmitting
+              ? "Iniciando sesión..."
+              : "Iniciar Sesión"}
           </Button>
           <div className="text-sm text-center text-muted-foreground">
             ¿No tienes una cuenta?{" "}

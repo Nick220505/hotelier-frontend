@@ -6,7 +6,13 @@ export interface Attendance {
   date: string;
   checkIn?: string;
   checkOut?: string;
-  status: "PRESENT" | "ABSENT" | "LATE" | "EARLY_LEAVE" | "SICK_LEAVE" | "VACATION";
+  status:
+    | "PRESENT"
+    | "ABSENT"
+    | "LATE"
+    | "EARLY_LEAVE"
+    | "SICK_LEAVE"
+    | "VACATION";
   notes?: string;
   hoursWorked?: number | string;
   overtimeHours?: number | string;
@@ -38,15 +44,20 @@ export const attendanceApi = {
   getByStatus: (status: string): Promise<Attendance[]> =>
     apiRequest(`/attendance/status/${status}`),
 
-  clockIn: (employeeId: number, date: string, checkIn: string, notes?: string): Promise<Attendance> =>
-    apiRequest('/attendance', {
-      method: 'POST',
+  clockIn: (
+    employeeId: number,
+    date: string,
+    checkIn: string,
+    notes?: string,
+  ): Promise<Attendance> =>
+    apiRequest("/attendance", {
+      method: "POST",
       body: JSON.stringify({ employeeId, date, checkIn, notes }),
     }),
 
   clockOut: (id: number, checkOut: string): Promise<Attendance> =>
     apiRequest(`/attendance/${id}`, {
-      method: 'PUT',
+      method: "PUT",
       body: JSON.stringify({ checkOut }),
     }),
 };

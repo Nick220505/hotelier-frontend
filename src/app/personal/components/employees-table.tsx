@@ -95,7 +95,10 @@ export function EmployeesTable({ employees }: EmployeesTableProps) {
         <TableBody>
           {employees.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={9} className="text-center text-muted-foreground">
+              <TableCell
+                colSpan={9}
+                className="text-center text-muted-foreground"
+              >
                 No hay empleados registrados
               </TableCell>
             </TableRow>
@@ -112,17 +115,11 @@ export function EmployeesTable({ employees }: EmployeesTableProps) {
                     employee.position.toUpperCase() as keyof typeof positionTranslations
                   ] || employee.position}
                 </TableCell>
-                <TableCell>
-                  {getDepartmentBadge(employee.department)}
-                </TableCell>
+                <TableCell>{getDepartmentBadge(employee.department)}</TableCell>
                 <TableCell>{employee.phone}</TableCell>
                 <TableCell>{employee.email}</TableCell>
-                <TableCell>
-                  ${employee.salary.toLocaleString()}
-                </TableCell>
-                <TableCell>
-                  {getEmployeeStatusBadge(employee.status)}
-                </TableCell>
+                <TableCell>${employee.salary.toLocaleString()}</TableCell>
+                <TableCell>{getEmployeeStatusBadge(employee.status)}</TableCell>
               </TableRow>
             ))
           )}

@@ -35,10 +35,14 @@ import { Vehicle, ParkingSpace } from "@/lib/api/parking";
 // Zod schema para validación
 const incidentFormSchema = z.object({
   type: z.string().min(1, "Por favor selecciona el tipo de incidencia"),
-  description: z.string().min(1, "Por favor ingresa una descripción de la incidencia"),
+  description: z
+    .string()
+    .min(1, "Por favor ingresa una descripción de la incidencia"),
   vehicle: z.string().optional(),
   space: z.string().optional(),
-  priority: z.string().min(1, "Por favor selecciona la prioridad de la incidencia"),
+  priority: z
+    .string()
+    .min(1, "Por favor selecciona la prioridad de la incidencia"),
 });
 
 type IncidentFormValues = z.infer<typeof incidentFormSchema>;
@@ -61,7 +65,7 @@ export default function IncidentReportDialog({
   onIncidentAdd,
 }: IncidentReportDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  
+
   const form = useForm<IncidentFormValues>({
     resolver: zodResolver(incidentFormSchema),
     defaultValues: {
@@ -75,7 +79,7 @@ export default function IncidentReportDialog({
 
   const onSubmit = (data: IncidentFormValues) => {
     console.log("Form submitted with data:", data);
-    
+
     try {
       onIncidentAdd({
         type: data.type,
@@ -84,7 +88,7 @@ export default function IncidentReportDialog({
         space: data.space || "",
         priority: data.priority,
       });
-      
+
       form.reset();
       setIsOpen(false);
     } catch (error) {
@@ -107,7 +111,7 @@ export default function IncidentReportDialog({
             Registrar una nueva incidencia en el parqueadero
           </DialogDescription>
         </DialogHeader>
-        
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -117,15 +121,22 @@ export default function IncidentReportDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tipo de Incidencia *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Seleccionar tipo" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Daño Vehículo">Daño Vehículo</SelectItem>
-                        <SelectItem value="Infraestructura">Infraestructura</SelectItem>
+                        <SelectItem value="Daño Vehículo">
+                          Daño Vehículo
+                        </SelectItem>
+                        <SelectItem value="Infraestructura">
+                          Infraestructura
+                        </SelectItem>
                         <SelectItem value="Seguridad">Seguridad</SelectItem>
                         <SelectItem value="Limpieza">Limpieza</SelectItem>
                         <SelectItem value="Otro">Otro</SelectItem>
@@ -135,14 +146,17 @@ export default function IncidentReportDialog({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="priority"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Prioridad *</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Seleccionar prioridad" />
@@ -159,7 +173,7 @@ export default function IncidentReportDialog({
                 )}
               />
             </div>
-            
+
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -167,7 +181,10 @@ export default function IncidentReportDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Vehículo (Opcional)</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Seleccionar vehículo" />
@@ -177,7 +194,10 @@ export default function IncidentReportDialog({
                         {vehicles
                           .filter((v) => v.status === "parqueado")
                           .map((vehicle) => (
-                            <SelectItem key={vehicle.id} value={vehicle.licensePlate}>
+                            <SelectItem
+                              key={vehicle.id}
+                              value={vehicle.licensePlate}
+                            >
                               {vehicle.licensePlate} - {vehicle.owner}
                             </SelectItem>
                           ))}
@@ -187,14 +207,17 @@ export default function IncidentReportDialog({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="space"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Espacio (Opcional)</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Seleccionar espacio" />
@@ -213,7 +236,7 @@ export default function IncidentReportDialog({
                 )}
               />
             </div>
-            
+
             <FormField
               control={form.control}
               name="description"
@@ -230,14 +253,16 @@ export default function IncidentReportDialog({
                 </FormItem>
               )}
             />
-            
+
             <div className="flex justify-end space-x-2">
-              <Button variant="outline" type="button" onClick={() => setIsOpen(false)}>
+              <Button
+                variant="outline"
+                type="button"
+                onClick={() => setIsOpen(false)}
+              >
                 Cancelar
               </Button>
-              <Button type="submit">
-                Reportar Incidencia
-              </Button>
+              <Button type="submit">Reportar Incidencia</Button>
             </div>
           </form>
         </Form>

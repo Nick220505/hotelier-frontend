@@ -81,8 +81,7 @@ const iconMap: Record<string, React.ComponentType<IconProps>> = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
-  const { user, isLoading, isAuthenticated } =
-    useAuthContext();
+  const { user, isLoading, isAuthenticated } = useAuthContext();
   const pathname = usePathname();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [_forceUpdate, setForceUpdate] = React.useState(0);
@@ -178,11 +177,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       userPermissions,
       userRoles,
     );
-  }, [
-    isAuthenticated,
-    user,
-    isLoading,
-  ]);
+  }, [isAuthenticated, user, isLoading]);
 
   // Show loading state if authentication is being processed
   if (isLoading) {
@@ -245,7 +240,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             {user?.roles?.map((role) => role.name).join(", ") || "cliente"}
           </div>
           <div className="hidden sm:block truncate">
-            Roles: {user?.roles?.map((role) => role.name).join(", ") || "cliente"}
+            Roles:{" "}
+            {user?.roles?.map((role) => role.name).join(", ") || "cliente"}
           </div>
         </div>
       </SidebarHeader>

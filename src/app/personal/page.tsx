@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +26,7 @@ export default function PersonalPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const today = new Date().toISOString().split('T')[0];
+        const today = new Date().toISOString().split("T")[0];
         const [staffData, attendanceData] = await Promise.all([
           employeesApi.getAll(),
           attendanceApi.getByDate(today),
@@ -35,7 +35,7 @@ export default function PersonalPage() {
         setStaff(staffData);
         setAttendance(attendanceData);
       } catch (error) {
-        console.error('Error fetching staff data:', error);
+        console.error("Error fetching staff data:", error);
         setStaff([]);
         setAttendance([]);
       } finally {
@@ -57,39 +57,52 @@ export default function PersonalPage() {
       </div>
     );
   }
-  
+
   const totalStaff = staff.length;
-  const activeStaff = staff.filter(s => s.status === 'ACTIVE' || !s.status).length;
-  const presentToday = attendance.filter(a => a.status === 'PRESENT').length;
-  const attendanceRate = totalStaff > 0 ? Math.round((presentToday / totalStaff) * 100) : 0;
+  const activeStaff = staff.filter(
+    (s) => s.status === "ACTIVE" || !s.status,
+  ).length;
+  const presentToday = attendance.filter((a) => a.status === "PRESENT").length;
+  const attendanceRate =
+    totalStaff > 0 ? Math.round((presentToday / totalStaff) * 100) : 0;
 
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6">
         <h1 className="text-3xl font-bold">Personal</h1>
-        <p className="text-muted-foreground">Gestión de personal y asistencia</p>
+        <p className="text-muted-foreground">
+          Gestión de personal y asistencia
+        </p>
       </div>
 
       {/* Overview Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Personal Total</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Personal Total
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalStaff}</div>
-            <p className="text-xs text-muted-foreground">Empleados registrados</p>
+            <p className="text-xs text-muted-foreground">
+              Empleados registrados
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Personal Activo</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Personal Activo
+            </CardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{activeStaff}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {activeStaff}
+            </div>
             <p className="text-xs text-muted-foreground">Empleados activos</p>
           </CardContent>
         </Card>
@@ -100,14 +113,18 @@ export default function PersonalPage() {
             <Calendar className="h-4 w-4 text-blue-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{presentToday}</div>
+            <div className="text-2xl font-bold text-blue-600">
+              {presentToday}
+            </div>
             <p className="text-xs text-muted-foreground">Asistencia del día</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tasa de Asistencia</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Tasa de Asistencia
+            </CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -124,15 +141,15 @@ export default function PersonalPage() {
           <TabsTrigger value="employees">Empleados</TabsTrigger>
           <TabsTrigger value="attendance">Asistencia</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="shifts" className="mt-6">
           <ShiftsTab />
         </TabsContent>
-        
+
         <TabsContent value="employees" className="mt-6">
           <EmployeesTab />
         </TabsContent>
-        
+
         <TabsContent value="attendance" className="mt-6">
           <AttendanceTab />
         </TabsContent>

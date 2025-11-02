@@ -1,5 +1,11 @@
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Search } from "lucide-react";
 import type { RecreationalFacility } from "@/lib/api/recreational";
 
@@ -35,7 +41,7 @@ export function BookingsFilters({
           />
         </div>
       </div>
-      
+
       <Select value={statusFilter} onValueChange={onStatusChange}>
         <SelectTrigger className="w-full sm:w-[180px]">
           <SelectValue placeholder="Estado" />
@@ -57,7 +63,7 @@ export function BookingsFilters({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Todas las instalaciones</SelectItem>
-          {facilities.map(facility => (
+          {facilities.map((facility) => (
             <SelectItem key={facility.id} value={facility.id.toString()}>
               {facility.name}
             </SelectItem>

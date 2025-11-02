@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -12,7 +12,7 @@ import {
   Edit2,
   Trash2,
   MoreHorizontal,
-  RefreshCw
+  RefreshCw,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -29,7 +29,7 @@ export default function InventarioPage() {
   const [items, setItems] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
-  
+
   // Dialog states
   const [editingItem, setEditingItem] = useState<InventoryItem | null>(null);
   const [deletingItem, setDeletingItem] = useState<InventoryItem | null>(null);
@@ -39,7 +39,7 @@ export default function InventarioPage() {
       const inventoryData = await inventoryApi.getInventoryItems();
       setItems(inventoryData);
     } catch (error) {
-      console.error('Error fetching inventory data:', error);
+      console.error("Error fetching inventory data:", error);
       setItems([]);
     }
   };
@@ -79,24 +79,30 @@ export default function InventarioPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold">Inventario</h1>
-          <p className="text-muted-foreground">Cargando datos de inventario...</p>
+          <p className="text-muted-foreground">
+            Cargando datos de inventario...
+          </p>
         </div>
         <div className="animate-pulse bg-gray-200 h-96 rounded-lg"></div>
       </div>
     );
   }
-  
+
   const totalItems = items.length;
-  const lowStockItems = items.filter(item => item.status === 'bajo_stock' || item.status === 'critico');
-  const sufficientItems = items.filter(item => item.status === 'disponible');
-  const criticalItems = items.filter(item => item.status === 'critico');
+  const lowStockItems = items.filter(
+    (item) => item.status === "bajo_stock" || item.status === "critico",
+  );
+  const sufficientItems = items.filter((item) => item.status === "disponible");
+  const criticalItems = items.filter((item) => item.status === "critico");
 
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6 flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-bold">Inventario</h1>
-          <p className="text-muted-foreground">Gestión de inventario y control de stock</p>
+          <p className="text-muted-foreground">
+            Gestión de inventario y control de stock
+          </p>
         </div>
         <div className="flex gap-2">
           <Button
@@ -104,7 +110,9 @@ export default function InventarioPage() {
             onClick={handleRefresh}
             disabled={refreshing}
           >
-            <RefreshCw className={`mr-2 h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} />
+            <RefreshCw
+              className={`mr-2 h-4 w-4 ${refreshing ? "animate-spin" : ""}`}
+            />
             Actualizar
           </Button>
           <CreateInventoryItemDialog onItemCreated={handleItemCreated} />
@@ -119,7 +127,9 @@ export default function InventarioPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{totalItems}</div>
-            <p className="text-xs text-muted-foreground">Productos en inventario</p>
+            <p className="text-xs text-muted-foreground">
+              Productos en inventario
+            </p>
           </CardContent>
         </Card>
 
@@ -129,8 +139,12 @@ export default function InventarioPage() {
             <AlertTriangle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-red-600">{criticalItems.length}</div>
-            <p className="text-xs text-muted-foreground">Requiere atención inmediata</p>
+            <div className="text-2xl font-bold text-red-600">
+              {criticalItems.length}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Requiere atención inmediata
+            </p>
           </CardContent>
         </Card>
 
@@ -140,18 +154,26 @@ export default function InventarioPage() {
             <TrendingDown className="h-4 w-4 text-yellow-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{lowStockItems.length}</div>
-            <p className="text-xs text-muted-foreground">Necesita reabastecimiento</p>
+            <div className="text-2xl font-bold text-yellow-600">
+              {lowStockItems.length}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Necesita reabastecimiento
+            </p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Stock Suficiente</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Stock Suficiente
+            </CardTitle>
             <CheckCircle className="h-4 w-4 text-green-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">{sufficientItems.length}</div>
+            <div className="text-2xl font-bold text-green-600">
+              {sufficientItems.length}
+            </div>
             <p className="text-xs text-muted-foreground">En buen estado</p>
           </CardContent>
         </Card>
@@ -171,32 +193,47 @@ export default function InventarioPage() {
               </div>
             ) : (
               items.map((item) => (
-                <div key={item.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent hover:shadow-sm transition-colors">
+                <div
+                  key={item.id}
+                  className="flex items-center justify-between p-4 border rounded-lg hover:bg-accent hover:shadow-sm transition-colors"
+                >
                   <div className="flex items-center space-x-4 flex-1">
                     <Package className="h-5 w-5 text-muted-foreground" />
                     <div className="flex-1">
                       <p className="font-medium">{item.name}</p>
-                      <p className="text-sm text-muted-foreground">{item.category}</p>
+                      <p className="text-sm text-muted-foreground">
+                        {item.category}
+                      </p>
                       {item.location && (
-                        <p className="text-xs text-muted-foreground">📍 {item.location}</p>
+                        <p className="text-xs text-muted-foreground">
+                          📍 {item.location}
+                        </p>
                       )}
                     </div>
                   </div>
                   <div className="flex items-center space-x-4">
                     <div className="text-right">
                       <p className="font-medium">Stock: {item.currentStock}</p>
-                      <p className="text-sm text-muted-foreground">Mín: {item.minimumStock}</p>
+                      <p className="text-sm text-muted-foreground">
+                        Mín: {item.minimumStock}
+                      </p>
                     </div>
-                    <Badge 
+                    <Badge
                       variant={
-                        item.status === 'critico' ? 'destructive' : 
-                        item.status === 'bajo_stock' ? 'secondary' : 
-                        'default'
+                        item.status === "critico"
+                          ? "destructive"
+                          : item.status === "bajo_stock"
+                            ? "secondary"
+                            : "default"
                       }
                     >
-                      {item.status === 'critico' ? 'Crítico' : 
-                       item.status === 'bajo_stock' ? 'Bajo' : 
-                       item.status === 'agotado' ? 'Agotado' : 'Disponible'}
+                      {item.status === "critico"
+                        ? "Crítico"
+                        : item.status === "bajo_stock"
+                          ? "Bajo"
+                          : item.status === "agotado"
+                            ? "Agotado"
+                            : "Disponible"}
                     </Badge>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -210,7 +247,7 @@ export default function InventarioPage() {
                           <Edit2 className="mr-2 h-4 w-4" />
                           Editar
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           onClick={() => setDeletingItem(item)}
                           className="text-red-600"
                         >

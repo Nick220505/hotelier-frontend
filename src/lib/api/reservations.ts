@@ -40,7 +40,6 @@ export interface Reservation extends BaseEntity {
   nights?: number;
 }
 
-
 // Create base CRUD operations
 const baseApi = createApiEndpoints<Reservation>("/reservations");
 
@@ -48,9 +47,8 @@ const baseApi = createApiEndpoints<Reservation>("/reservations");
 export const reservationsApi = {
   // Base CRUD operations
   ...baseApi,
-  getCurrentGuests: (): Promise<Reservation[]> => 
+  getCurrentGuests: (): Promise<Reservation[]> =>
     apiRequest("/reservations/current"),
-
 
   // Checkout endpoint (returns DTO)
   checkout: (
@@ -59,13 +57,21 @@ export const reservationsApi = {
     reservation: Reservation;
     assignmentId?: number | null;
     invoiceId?: number | null;
-  }> =>
-    apiRequest(`/reservations/${id}/checkout`, { method: "PATCH" }),
+  }> => apiRequest(`/reservations/${id}/checkout`, { method: "PATCH" }),
 
   // Self-service endpoints
   getMine: (): Promise<Reservation[]> => apiRequest(`/reservations/mine`),
   createSelf: (
-    data: Omit<Reservation, "id" | "createdAt" | "updatedAt" | "user" | "room" | "totalAmount" | "status">,
+    data: Omit<
+      Reservation,
+      | "id"
+      | "createdAt"
+      | "updatedAt"
+      | "user"
+      | "room"
+      | "totalAmount"
+      | "status"
+    >,
   ): Promise<Reservation> =>
     apiRequest(`/reservations/self`, {
       method: "POST",
@@ -80,19 +86,27 @@ export const reservationsApi = {
   ): Promise<Room[]> => {
     const params = new URLSearchParams({ startDate, endDate });
     if (opts?.type) params.set("type", opts.type);
-    if (typeof opts?.guests === "number") params.set("guests", String(opts.guests));
-    
+    if (typeof opts?.guests === "number")
+      params.set("guests", String(opts.guests));
+
     const url = `/reservations/availability?${params.toString()}`;
-    console.log('ReservationsApi - getAvailability called:', { startDate, endDate, opts, url });
-    
-    return apiRequest(url).then(response => {
-      const rooms = response as Room[];
-      console.log('ReservationsApi - getAvailability response:', rooms);
-      return rooms;
-    }).catch(error => {
-      console.error('ReservationsApi - getAvailability error:', error);
-      throw error;
+    console.log("ReservationsApi - getAvailability called:", {
+      startDate,
+      endDate,
+      opts,
+      url,
     });
+
+    return apiRequest(url)
+      .then((response) => {
+        const rooms = response as Room[];
+        console.log("ReservationsApi - getAvailability response:", rooms);
+        return rooms;
+      })
+      .catch((error) => {
+        console.error("ReservationsApi - getAvailability error:", error);
+        throw error;
+      });
   },
 
   // Billing details for invoicing

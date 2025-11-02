@@ -36,8 +36,12 @@ export function MenuItemDialog({
         name: data.name,
         price: data.price,
         available: data.available,
-        ...(data.description && data.description.trim() && { description: data.description.trim() }),
-        ...(data.preparationTime && data.preparationTime.trim() && { preparationTime: data.preparationTime.trim() }),
+        ...(data.description &&
+          data.description.trim() && { description: data.description.trim() }),
+        ...(data.preparationTime &&
+          data.preparationTime.trim() && {
+            preparationTime: data.preparationTime.trim(),
+          }),
         ...(data.ingredients?.length && { ingredients: data.ingredients }),
         ...(data.allergens?.length && { allergens: data.allergens }),
       };
@@ -58,20 +62,31 @@ export function MenuItemDialog({
       onSuccess?.();
     } catch (error) {
       console.error("Error saving menu item:", error);
-      let errorMessage = `No se pudo ${isEditing ? 'actualizar' : 'crear'} el item del menú`;
-      
+      let errorMessage = `No se pudo ${isEditing ? "actualizar" : "crear"} el item del menú`;
+
       if (error instanceof Error) {
-        if (error.message.includes("Access denied") || error.message.includes("403")) {
-          errorMessage = "No tienes permisos para realizar esta acción. Contacta al administrador.";
-        } else if (error.message.includes("Authentication required") || error.message.includes("401")) {
-          errorMessage = "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.";
-        } else if (error.message.includes("not found") || error.message.includes("404")) {
+        if (
+          error.message.includes("Access denied") ||
+          error.message.includes("403")
+        ) {
+          errorMessage =
+            "No tienes permisos para realizar esta acción. Contacta al administrador.";
+        } else if (
+          error.message.includes("Authentication required") ||
+          error.message.includes("401")
+        ) {
+          errorMessage =
+            "Tu sesión ha expirado. Por favor, inicia sesión nuevamente.";
+        } else if (
+          error.message.includes("not found") ||
+          error.message.includes("404")
+        ) {
           errorMessage = "El item del menú no fue encontrado.";
         } else if (error.message) {
           errorMessage = error.message;
         }
       }
-      
+
       toast("Error", {
         description: errorMessage,
       });
@@ -92,7 +107,7 @@ export function MenuItemDialog({
             {isEditing ? "Editar Item del Menú" : "Crear Nuevo Item del Menú"}
           </DialogTitle>
         </DialogHeader>
-        
+
         <MenuItemForm
           item={item}
           onSubmit={handleSubmit}

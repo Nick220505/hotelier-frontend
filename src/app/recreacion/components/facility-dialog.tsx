@@ -52,7 +52,9 @@ const facilitySchema = z.object({
   openingTime: z.string().min(1, "La hora de apertura es requerida"),
   closingTime: z.string().min(1, "La hora de cierre es requerida"),
   minimumBookingHours: z.coerce.number().min(1, "Mínimo 1 hora"),
-  maximumBookingHours: z.coerce.number().min(1, "Máximo debe ser al menos 1 hora"),
+  maximumBookingHours: z.coerce
+    .number()
+    .min(1, "Máximo debe ser al menos 1 hora"),
   advanceBookingHours: z.coerce.number().min(0, "Debe ser un número positivo"),
   isAvailable: z.boolean(),
   amenities: z.array(z.string()).optional(),
@@ -105,7 +107,9 @@ export function FacilityDialog({
   const [newRule, setNewRule] = useState("");
   const [amenities, setAmenities] = useState<string[]>([]);
   const [rules, setRules] = useState<string[]>([]);
-  const [availableDays, setAvailableDays] = useState<number[]>([1, 2, 3, 4, 5, 6, 0]); // All days by default
+  const [availableDays, setAvailableDays] = useState<number[]>([
+    1, 2, 3, 4, 5, 6, 0,
+  ]); // All days by default
 
   const form = useForm<FacilityFormValues>({
     resolver: zodResolver(facilitySchema),
@@ -184,7 +188,7 @@ export function FacilityDialog({
 
   const handleDayToggle = (day: number) => {
     if (availableDays.includes(day)) {
-      setAvailableDays(availableDays.filter(d => d !== day));
+      setAvailableDays(availableDays.filter((d) => d !== day));
     } else {
       setAvailableDays([...availableDays, day]);
     }
@@ -207,9 +211,12 @@ export function FacilityDialog({
       };
 
       let result: RecreationalFacility;
-      
+
       if (facility) {
-        result = await recreationalApi.updateFacility(facility.id, facilityData);
+        result = await recreationalApi.updateFacility(
+          facility.id,
+          facilityData,
+        );
         toast.success("Instalación actualizada correctamente");
       } else {
         result = await recreationalApi.createFacility(facilityData);
@@ -221,9 +228,9 @@ export function FacilityDialog({
     } catch (error) {
       console.error("Error saving facility:", error);
       toast.error(
-        facility 
-          ? "Error al actualizar la instalación" 
-          : "Error al crear la instalación"
+        facility
+          ? "Error al actualizar la instalación"
+          : "Error al crear la instalación",
       );
     } finally {
       setLoading(false);
@@ -238,8 +245,8 @@ export function FacilityDialog({
             {facility ? "Editar Instalación" : "Nueva Instalación"}
           </DialogTitle>
           <DialogDescription>
-            {facility 
-              ? "Modifica los detalles de la instalación recreativa" 
+            {facility
+              ? "Modifica los detalles de la instalación recreativa"
               : "Crea una nueva instalación recreativa para el hotel"}
           </DialogDescription>
         </DialogHeader>
@@ -268,7 +275,10 @@ export function FacilityDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Tipo *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value || ""}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ""}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Seleccionar tipo" />
@@ -295,7 +305,10 @@ export function FacilityDialog({
                 <FormItem>
                   <FormLabel>Ubicación *</FormLabel>
                   <FormControl>
-                    <Input placeholder="Centro de Bienestar - Planta Baja" {...field} />
+                    <Input
+                      placeholder="Centro de Bienestar - Planta Baja"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -309,10 +322,10 @@ export function FacilityDialog({
                 <FormItem>
                   <FormLabel>Descripción</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <Textarea
                       placeholder="Descripción detallada de la instalación..."
-                      className="min-h-[80px]" 
-                      {...field} 
+                      className="min-h-[80px]"
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -353,7 +366,6 @@ export function FacilityDialog({
 
             {/* Hours */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-
               <FormField
                 control={form.control}
                 name="openingTime"
@@ -438,7 +450,9 @@ export function FacilityDialog({
                 {daysOfWeek.map((day) => (
                   <Badge
                     key={day.value}
-                    variant={availableDays.includes(day.value) ? "default" : "outline"}
+                    variant={
+                      availableDays.includes(day.value) ? "default" : "outline"
+                    }
                     className="cursor-pointer"
                     onClick={() => handleDayToggle(day.value)}
                   >
@@ -457,16 +471,27 @@ export function FacilityDialog({
                     placeholder="Agregar amenidad..."
                     value={newAmenity}
                     onChange={(e) => setNewAmenity(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddAmenity())}
+                    onKeyPress={(e) =>
+                      e.key === "Enter" &&
+                      (e.preventDefault(), handleAddAmenity())
+                    }
                   />
-                  <Button type="button" variant="outline" onClick={handleAddAmenity}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddAmenity}
+                  >
                     Agregar
                   </Button>
                 </div>
                 {amenities.length > 0 && (
                   <div className="flex flex-wrap gap-2">
                     {amenities.map((amenity, index) => (
-                      <Badge key={index} variant="secondary" className="text-sm">
+                      <Badge
+                        key={index}
+                        variant="secondary"
+                        className="text-sm"
+                      >
                         {amenity}
                         <X
                           className="ml-2 h-3 w-3 cursor-pointer"
@@ -488,16 +513,25 @@ export function FacilityDialog({
                     placeholder="Agregar regla..."
                     value={newRule}
                     onChange={(e) => setNewRule(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), handleAddRule())}
+                    onKeyPress={(e) =>
+                      e.key === "Enter" && (e.preventDefault(), handleAddRule())
+                    }
                   />
-                  <Button type="button" variant="outline" onClick={handleAddRule}>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleAddRule}
+                  >
                     Agregar
                   </Button>
                 </div>
                 {rules.length > 0 && (
                   <div className="space-y-1">
                     {rules.map((rule, index) => (
-                      <div key={index} className="flex items-center justify-between p-2 bg-muted rounded text-sm">
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-2 bg-muted rounded text-sm"
+                      >
                         <span>{rule}</span>
                         <X
                           className="h-3 w-3 cursor-pointer"
@@ -517,9 +551,9 @@ export function FacilityDialog({
                 <FormItem>
                   <FormLabel>Notas de Mantenimiento</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <Textarea
                       placeholder="Notas sobre mantenimiento, limpieza, etc..."
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -560,10 +594,13 @@ export function FacilityDialog({
                 Cancelar
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading 
-                  ? (facility ? "Actualizando..." : "Creando...")
-                  : (facility ? "Actualizar" : "Crear")
-                }
+                {loading
+                  ? facility
+                    ? "Actualizando..."
+                    : "Creando..."
+                  : facility
+                    ? "Actualizar"
+                    : "Crear"}
               </Button>
             </DialogFooter>
           </form>

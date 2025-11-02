@@ -43,7 +43,8 @@ export type PaymentMethod =
   | "DEBIT_CARD"
   | "BANK_TRANSFER"
   | "CHECK"
-  | "GIFT_CARD";export interface Invoice {
+  | "GIFT_CARD";
+export interface Invoice {
   id: string | number;
   number: string;
   guest: string;

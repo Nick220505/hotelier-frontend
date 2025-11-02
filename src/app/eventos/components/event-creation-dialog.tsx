@@ -32,26 +32,34 @@ import {
 } from "@/components/ui/select";
 
 // Event creation schema
-const eventCreationSchema = z.object({
-  name: z.string().min(1, "El nombre del evento es requerido").min(3, "El nombre debe tener al menos 3 caracteres"),
-  client: z.string().min(1, "El nombre del cliente es requerido"),
-  clientEmail: z.string().email("Debe ser un email válido"),
-  clientPhone: z.string().optional(),
-  date: z.string().min(1, "La fecha es requerida"),
-  startTime: z.string().min(1, "La hora de inicio es requerida"),
-  endTime: z.string().min(1, "La hora de fin es requerida"),
-  venueId: z.string().min(1, "Debe seleccionar un salón"),
-  capacity: z.string().min(1, "La capacidad es requerida"),
-  description: z.string().optional(),
-}).refine((data) => {
-  if (data.startTime && data.endTime) {
-    return data.startTime < data.endTime;
-  }
-  return true;
-}, {
-  message: "La hora de inicio debe ser anterior a la hora de fin",
-  path: ["endTime"],
-});
+const eventCreationSchema = z
+  .object({
+    name: z
+      .string()
+      .min(1, "El nombre del evento es requerido")
+      .min(3, "El nombre debe tener al menos 3 caracteres"),
+    client: z.string().min(1, "El nombre del cliente es requerido"),
+    clientEmail: z.string().email("Debe ser un email válido"),
+    clientPhone: z.string().optional(),
+    date: z.string().min(1, "La fecha es requerida"),
+    startTime: z.string().min(1, "La hora de inicio es requerida"),
+    endTime: z.string().min(1, "La hora de fin es requerida"),
+    venueId: z.string().min(1, "Debe seleccionar un salón"),
+    capacity: z.string().min(1, "La capacidad es requerida"),
+    description: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.startTime && data.endTime) {
+        return data.startTime < data.endTime;
+      }
+      return true;
+    },
+    {
+      message: "La hora de inicio debe ser anterior a la hora de fin",
+      path: ["endTime"],
+    },
+  );
 
 type EventCreationFormData = z.infer<typeof eventCreationSchema>;
 
@@ -112,13 +120,17 @@ export function EventCreationDialog({
 
   // Calculate total price based on venue base price and duration
   const calculateTotalPrice = (): number => {
-    const selectedVenue = venues.find(v => v.id === parseInt(watchedValues.venueId));
-    if (!selectedVenue || !watchedValues.startTime || !watchedValues.endTime) return 0;
+    const selectedVenue = venues.find(
+      (v) => v.id === parseInt(watchedValues.venueId),
+    );
+    if (!selectedVenue || !watchedValues.startTime || !watchedValues.endTime)
+      return 0;
 
     const startTime = new Date(`2000-01-01T${watchedValues.startTime}`);
     const endTime = new Date(`2000-01-01T${watchedValues.endTime}`);
-    const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
-    
+    const durationHours =
+      (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
+
     return selectedVenue.basePrice * durationHours;
   };
 
@@ -196,7 +208,11 @@ export function EventCreationDialog({
                   <FormItem>
                     <FormLabel>Email del Cliente</FormLabel>
                     <FormControl>
-                      <Input type="email" placeholder="cliente@email.com" {...field} />
+                      <Input
+                        type="email"
+                        placeholder="cliente@email.com"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -211,7 +227,11 @@ export function EventCreationDialog({
                 <FormItem>
                   <FormLabel>Teléfono del Cliente (Opcional)</FormLabel>
                   <FormControl>
-                    <Input type="tel" placeholder="Número de teléfono" {...field} />
+                    <Input
+                      type="tel"
+                      placeholder="Número de teléfono"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -269,18 +289,27 @@ export function EventCreationDialog({
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Salón</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Seleccionar salón" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {venues.filter(venue => venue.available !== false).map((venue) => (
-                          <SelectItem key={venue.id} value={venue.id.toString()}>
-                            {venue.name} - Capacidad: {venue.capacity} personas
-                          </SelectItem>
-                        ))}
+                        {venues
+                          .filter((venue) => venue.available !== false)
+                          .map((venue) => (
+                            <SelectItem
+                              key={venue.id}
+                              value={venue.id.toString()}
+                            >
+                              {venue.name} - Capacidad: {venue.capacity}{" "}
+                              personas
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -295,11 +324,11 @@ export function EventCreationDialog({
                   <FormItem>
                     <FormLabel>Número de Invitados</FormLabel>
                     <FormControl>
-                      <Input 
-                        type="number" 
-                        placeholder="Ej: 50" 
+                      <Input
+                        type="number"
+                        placeholder="Ej: 50"
                         min="1"
-                        {...field} 
+                        {...field}
                       />
                     </FormControl>
                     <FormMessage />
@@ -315,10 +344,10 @@ export function EventCreationDialog({
                 <FormItem>
                   <FormLabel>Descripción Adicional (Opcional)</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <Textarea
                       placeholder="Detalles adicionales del evento..."
                       className="min-h-[80px]"
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -326,28 +355,38 @@ export function EventCreationDialog({
               )}
             />
 
-            {watchedValues.venueId && watchedValues.startTime && watchedValues.endTime && (
-              <div className="bg-gray-50 p-4 rounded-lg">
-                <div className="text-sm text-gray-600">
-                  <div className="flex justify-between">
-                    <span>Precio Base del Salón:</span>
-                    <span>${venues.find(v => v.id === parseInt(watchedValues.venueId))?.basePrice || 0}/hora</span>
-                  </div>
-                  <div className="flex justify-between font-semibold text-lg mt-2">
-                    <span>Total Estimado:</span>
-                    <span>${calculateTotalPrice()}</span>
+            {watchedValues.venueId &&
+              watchedValues.startTime &&
+              watchedValues.endTime && (
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="text-sm text-gray-600">
+                    <div className="flex justify-between">
+                      <span>Precio Base del Salón:</span>
+                      <span>
+                        $
+                        {venues.find(
+                          (v) => v.id === parseInt(watchedValues.venueId),
+                        )?.basePrice || 0}
+                        /hora
+                      </span>
+                    </div>
+                    <div className="flex justify-between font-semibold text-lg mt-2">
+                      <span>Total Estimado:</span>
+                      <span>${calculateTotalPrice()}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancelar
               </Button>
-              <Button type="submit">
-                Crear Evento
-              </Button>
+              <Button type="submit">Crear Evento</Button>
             </DialogFooter>
           </form>
         </Form>

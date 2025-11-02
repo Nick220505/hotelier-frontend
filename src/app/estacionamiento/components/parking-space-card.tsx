@@ -52,12 +52,10 @@ export function ParkingSpaceCard({ space, onClick }: ParkingSpaceCardProps) {
   };
 
   return (
-    <Card 
+    <Card
       className={`cursor-pointer transition-all hover:shadow-lg ${
         space.status === "available" ? "hover:border-green-300" : ""
-      } ${
-        space.status === "occupied" ? "hover:border-red-300" : ""
-      }`}
+      } ${space.status === "occupied" ? "hover:border-red-300" : ""}`}
       onClick={() => onClick(space)}
     >
       <CardHeader className="pb-2">
@@ -90,12 +88,15 @@ export function ParkingSpaceCard({ space, onClick }: ParkingSpaceCardProps) {
               </div>
             )}
             <div className="text-sm">
-              <strong>Entrada:</strong> {new Date(space.currentVehicle.entryTime).toLocaleString()}
+              <strong>Entrada:</strong>{" "}
+              {new Date(space.currentVehicle.entryTime).toLocaleString()}
             </div>
           </div>
         )}
         {space.status === "available" && (
-          <p className="text-sm text-muted-foreground">Haz clic para registrar entrada</p>
+          <p className="text-sm text-muted-foreground">
+            Haz clic para registrar entrada
+          </p>
         )}
       </CardContent>
     </Card>

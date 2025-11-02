@@ -1,41 +1,47 @@
-'use client';
+"use client";
 
-import { useEffect, useState, useCallback } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { 
+import { useEffect, useState, useCallback } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  PieChart, 
-  Pie, 
-  Cell, 
-  LineChart, 
+} from "@/components/ui/select";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
   Line,
-  ResponsiveContainer 
-} from 'recharts';
-import { 
-  Activity, 
-  TrendingUp, 
-  Users, 
-  Shield, 
+  ResponsiveContainer,
+} from "recharts";
+import {
+  Activity,
+  TrendingUp,
+  Users,
+  Shield,
   Calendar,
   RefreshCw,
-} from 'lucide-react';
-import { auditApi, type AuditStatistics } from '@/lib/api/audit';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
+} from "lucide-react";
+import { auditApi, type AuditStatistics } from "@/lib/api/audit";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
 
 export function AuditStatistics() {
   const [statistics, setStatistics] = useState<AuditStatistics | null>(null);
@@ -50,8 +56,10 @@ export function AuditStatistics() {
       const data = await auditApi.getStatistics(period);
       setStatistics(data);
     } catch (err: unknown) {
-      console.error('Error loading audit statistics:', err);
-      setError(err instanceof Error ? err.message : 'Error al cargar las estadísticas');
+      console.error("Error loading audit statistics:", err);
+      setError(
+        err instanceof Error ? err.message : "Error al cargar las estadísticas",
+      );
     } finally {
       setLoading(false);
     }
@@ -91,7 +99,9 @@ export function AuditStatistics() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-red-600 mb-4">{error || 'No se pudieron cargar las estadísticas'}</p>
+          <p className="text-red-600 mb-4">
+            {error || "No se pudieron cargar las estadísticas"}
+          </p>
           <Button onClick={loadStatistics} variant="outline">
             <RefreshCw className="h-4 w-4 mr-2" />
             Reintentar
@@ -103,8 +113,16 @@ export function AuditStatistics() {
 
   // Chart colors
   const COLORS = [
-    '#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', 
-    '#82CA9D', '#FFC658', '#FF7300', '#0040FF', '#FF0040'
+    "#0088FE",
+    "#00C49F",
+    "#FFBB28",
+    "#FF8042",
+    "#8884D8",
+    "#82CA9D",
+    "#FFC658",
+    "#FF7300",
+    "#0040FF",
+    "#FF0040",
   ];
 
   return (
@@ -123,7 +141,10 @@ export function AuditStatistics() {
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Select value={period.toString()} onValueChange={(v) => setPeriod(parseInt(v))}>
+              <Select
+                value={period.toString()}
+                onValueChange={(v) => setPeriod(parseInt(v))}
+              >
                 <SelectTrigger className="w-32">
                   <SelectValue />
                 </SelectTrigger>
@@ -146,11 +167,15 @@ export function AuditStatistics() {
       <div className="grid gap-4 md:grid-cols-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total de Registros</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Total de Registros
+            </CardTitle>
             <Activity className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{statistics.totalLogs.toLocaleString()}</div>
+            <div className="text-2xl font-bold">
+              {statistics.totalLogs.toLocaleString()}
+            </div>
             <p className="text-xs text-muted-foreground">
               En los últimos {period} días
             </p>
@@ -159,11 +184,15 @@ export function AuditStatistics() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Usuarios Activos</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Usuarios Activos
+            </CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{statistics.userStats.length}</div>
+            <div className="text-2xl font-bold">
+              {statistics.userStats.length}
+            </div>
             <p className="text-xs text-muted-foreground">
               Usuarios con actividad
             </p>
@@ -172,29 +201,31 @@ export function AuditStatistics() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Promedio Diario</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Promedio Diario
+            </CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">
               {Math.round(statistics.totalLogs / period).toLocaleString()}
             </div>
-            <p className="text-xs text-muted-foreground">
-              Registros por día
-            </p>
+            <p className="text-xs text-muted-foreground">Registros por día</p>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Tipos de Acción</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Tipos de Acción
+            </CardTitle>
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{statistics.actionStats.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Acciones diferentes
-            </p>
+            <div className="text-2xl font-bold">
+              {statistics.actionStats.length}
+            </div>
+            <p className="text-xs text-muted-foreground">Acciones diferentes</p>
           </CardContent>
         </Card>
       </div>
@@ -215,21 +246,25 @@ export function AuditStatistics() {
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={statistics.dailyActivity}>
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis 
-                  dataKey="date" 
-                  tickFormatter={(value) => format(new Date(value), "dd/MM", { locale: es })}
+                <XAxis
+                  dataKey="date"
+                  tickFormatter={(value) =>
+                    format(new Date(value), "dd/MM", { locale: es })
+                  }
                 />
                 <YAxis />
-                <Tooltip 
-                  labelFormatter={(value) => format(new Date(value), "PPP", { locale: es })}
+                <Tooltip
+                  labelFormatter={(value) =>
+                    format(new Date(value), "PPP", { locale: es })
+                  }
                   formatter={(value) => [value, "Registros"]}
                 />
-                <Line 
-                  type="monotone" 
-                  dataKey="count" 
-                  stroke="#8884d8" 
+                <Line
+                  type="monotone"
+                  dataKey="count"
+                  stroke="#8884d8"
                   strokeWidth={2}
-                  dot={{ fill: '#8884d8' }}
+                  dot={{ fill: "#8884d8" }}
                 />
               </LineChart>
             </ResponsiveContainer>
@@ -252,8 +287,8 @@ export function AuditStatistics() {
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={statistics.actionStats.slice(0, 10)}>
                   <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis 
-                    dataKey="action" 
+                  <XAxis
+                    dataKey="action"
                     angle={-45}
                     textAnchor="end"
                     height={80}
@@ -284,14 +319,21 @@ export function AuditStatistics() {
                     cx="50%"
                     cy="50%"
                     labelLine={false}
-                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                    label={({ name, percent }) =>
+                      `${name} ${(percent * 100).toFixed(0)}%`
+                    }
                     outerRadius={80}
                     fill="#8884d8"
                     dataKey="count"
                   >
-                    {statistics.resourceStats.slice(0, 8).map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
+                    {statistics.resourceStats
+                      .slice(0, 8)
+                      .map((entry, index) => (
+                        <Cell
+                          key={`cell-${index}`}
+                          fill={COLORS[index % COLORS.length]}
+                        />
+                      ))}
                   </Pie>
                   <Tooltip />
                 </PieChart>
@@ -315,14 +357,22 @@ export function AuditStatistics() {
         <CardContent>
           <div className="space-y-3">
             {statistics.userStats.slice(0, 10).map((user, index) => (
-              <div key={user.userId} className="flex items-center justify-between p-3 rounded-lg bg-gray-50">
+              <div
+                key={user.userId}
+                className="flex items-center justify-between p-3 rounded-lg bg-gray-50"
+              >
                 <div className="flex items-center gap-3">
-                  <Badge variant="outline" className="w-8 h-8 rounded-full flex items-center justify-center p-0">
+                  <Badge
+                    variant="outline"
+                    className="w-8 h-8 rounded-full flex items-center justify-center p-0"
+                  >
                     {index + 1}
                   </Badge>
                   <div>
                     <p className="font-medium">{user.userName}</p>
-                    <p className="text-sm text-muted-foreground">ID: {user.userId}</p>
+                    <p className="text-sm text-muted-foreground">
+                      ID: {user.userId}
+                    </p>
                   </div>
                 </div>
                 <div className="text-right">

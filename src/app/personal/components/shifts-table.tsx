@@ -61,9 +61,7 @@ const getShiftStatusBadge = (status: string) => {
     case "SCHEDULED":
     case "PROGRAMADO":
       return (
-        <Badge className="bg-blue-100 text-blue-800">
-          {translatedStatus}
-        </Badge>
+        <Badge className="bg-blue-100 text-blue-800">{translatedStatus}</Badge>
       );
     case "ACTIVE":
     case "EN_CURSO":
@@ -112,9 +110,7 @@ const getDepartmentBadge = (department: string) => {
     case "recepción":
     case "front_desk":
       return (
-        <Badge className="bg-green-100 text-green-800">
-          {translatedDept}
-        </Badge>
+        <Badge className="bg-green-100 text-green-800">{translatedDept}</Badge>
       );
     case "mantenimiento":
     case "maintenance":
@@ -162,7 +158,10 @@ export function ShiftsTable({ shifts }: ShiftsTableProps) {
         <TableBody>
           {shifts.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={6} className="text-center text-muted-foreground">
+              <TableCell
+                colSpan={6}
+                className="text-center text-muted-foreground"
+              >
                 No hay turnos programados
               </TableCell>
             </TableRow>
@@ -181,15 +180,11 @@ export function ShiftsTable({ shifts }: ShiftsTableProps) {
                 <TableCell>
                   {new Date(shift.date).toLocaleDateString()}
                 </TableCell>
-                <TableCell>
-                  {getShiftTypeLabel(shift.type)}
-                </TableCell>
+                <TableCell>{getShiftTypeLabel(shift.type)}</TableCell>
                 <TableCell>
                   {shift.startTime} - {shift.endTime}
                 </TableCell>
-                <TableCell>
-                  {getShiftStatusBadge(shift.status)}
-                </TableCell>
+                <TableCell>{getShiftStatusBadge(shift.status)}</TableCell>
               </TableRow>
             ))
           )}

@@ -9,7 +9,6 @@ import { HotelierLogo } from "@/components/hotelier-logo";
 import { LoginForm } from "./components/login-form";
 
 export default function LoginPage() {
-
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1 text-center">
@@ -23,7 +22,7 @@ export default function LoginPage() {
       </CardHeader>
       <CardContent>
         <LoginForm />
-        
+
         <div className="mt-4 p-4 bg-muted rounded-lg">
           <p className="text-sm text-muted-foreground text-center mb-2">
             Credenciales de prueba:

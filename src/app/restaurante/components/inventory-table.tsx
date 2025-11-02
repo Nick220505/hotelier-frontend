@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -22,8 +28,13 @@ interface InventoryTableProps {
   onRefresh?: () => void;
 }
 
-export function InventoryTable({ items, /* onRestock, */ onRefresh }: InventoryTableProps) {
-  const [selectedItem, setSelectedItem] = useState<BeverageInventoryItem | undefined>();
+export function InventoryTable({
+  items,
+  /* onRestock, */ onRefresh,
+}: InventoryTableProps) {
+  const [selectedItem, setSelectedItem] = useState<
+    BeverageInventoryItem | undefined
+  >();
   const [restockDialogOpen, setRestockDialogOpen] = useState(false);
 
   const handleRestockClick = (item: BeverageInventoryItem) => {

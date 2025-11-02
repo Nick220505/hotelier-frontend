@@ -36,7 +36,7 @@ export default function Loading() {
                 <Skeleton key={i} className="h-4 w-20" />
               ))}
             </div>
-            
+
             {/* Table Rows */}
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="grid grid-cols-4 gap-4 py-3">

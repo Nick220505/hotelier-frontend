@@ -63,7 +63,9 @@ export const venuesApi = {
   },
 
   // Create new venue
-  create: async (data: Omit<Venue, "id" | "createdAt" | "updatedAt">): Promise<Venue> => {
+  create: async (
+    data: Omit<Venue, "id" | "createdAt" | "updatedAt">,
+  ): Promise<Venue> => {
     const backendVenue = await apiRequest("/venues", {
       method: "POST",
       body: JSON.stringify(data),
@@ -72,7 +74,10 @@ export const venuesApi = {
   },
 
   // Update existing venue
-  update: async (id: number, data: Partial<Omit<Venue, "id" | "createdAt" | "updatedAt">>): Promise<Venue> => {
+  update: async (
+    id: number,
+    data: Partial<Omit<Venue, "id" | "createdAt" | "updatedAt">>,
+  ): Promise<Venue> => {
     const backendVenue = await apiRequest(`/venues/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),

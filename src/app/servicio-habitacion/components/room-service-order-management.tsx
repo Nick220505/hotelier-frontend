@@ -18,32 +18,37 @@ interface RoomServiceOrderManagementProps {
   initialMenuItems: MenuItem[];
 }
 
-export function RoomServiceOrderManagement({ 
-  initialOrders, 
-  initialMenuItems 
+export function RoomServiceOrderManagement({
+  initialOrders,
+  initialMenuItems,
 }: RoomServiceOrderManagementProps) {
   const [orders, setOrders] = useState<RoomServiceOrder[]>(initialOrders);
   const [menuItems] = useState<MenuItem[]>(initialMenuItems);
-  const [selectedOrder, setSelectedOrder] = useState<RoomServiceOrder | null>(null);
+  const [selectedOrder, setSelectedOrder] = useState<RoomServiceOrder | null>(
+    null,
+  );
   const [showNewOrderDialog, setShowNewOrderDialog] = useState(false);
   const [showOrderDetailsDialog, setShowOrderDetailsDialog] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
-
   const filteredOrders = orders.filter((order) => {
-    const matchesSearch = 
+    const matchesSearch =
       order.room.toLowerCase().includes(searchTerm.toLowerCase()) ||
       order.guest.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = statusFilter === "all" || order.status === statusFilter;
+    const matchesStatus =
+      statusFilter === "all" || order.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
 
-  const handleStatusUpdate = (orderId: string, newStatus: RoomServiceOrder["status"]) => {
-    setOrders(prevOrders =>
-      prevOrders.map(order => 
-        order.id === orderId ? { ...order, status: newStatus } : order
-      )
+  const handleStatusUpdate = (
+    orderId: string,
+    newStatus: RoomServiceOrder["status"],
+  ) => {
+    setOrders((prevOrders) =>
+      prevOrders.map((order) =>
+        order.id === orderId ? { ...order, status: newStatus } : order,
+      ),
     );
     toast.success("Estado de la orden actualizado");
   };
@@ -57,21 +62,33 @@ export function RoomServiceOrderManagement({
     roomNumber: string;
     guestName: string;
     specialInstructions: string;
-    selectedItems: Array<{ menuItemId: string; quantity: number; specialRequests?: string }>;
+    selectedItems: Array<{
+      menuItemId: string;
+      quantity: number;
+      specialRequests?: string;
+    }>;
   }) => {
-    if (!orderData.roomNumber || !orderData.guestName || orderData.selectedItems.length === 0) {
+    if (
+      !orderData.roomNumber ||
+      !orderData.guestName ||
+      orderData.selectedItems.length === 0
+    ) {
       toast.error("Por favor complete todos los campos requeridos");
       return;
     }
 
-    const orderItems: string[] = orderData.selectedItems.map(selectedItem => {
-      const menuItem = menuItems.find(item => item.id === selectedItem.menuItemId);
+    const orderItems: string[] = orderData.selectedItems.map((selectedItem) => {
+      const menuItem = menuItems.find(
+        (item) => item.id === selectedItem.menuItemId,
+      );
       return `${menuItem?.name || ""} (x${selectedItem.quantity})`;
     });
 
     const total = orderData.selectedItems.reduce((sum, selectedItem) => {
-      const menuItem = menuItems.find(item => item.id === selectedItem.menuItemId);
-      return sum + ((menuItem?.price || 0) * selectedItem.quantity);
+      const menuItem = menuItems.find(
+        (item) => item.id === selectedItem.menuItemId,
+      );
+      return sum + (menuItem?.price || 0) * selectedItem.quantity;
     }, 0);
 
     const newOrder: RoomServiceOrder = {
@@ -83,10 +100,10 @@ export function RoomServiceOrderManagement({
       orderTime: new Date().toISOString(),
       estimatedTime: "",
       total: total,
-      waiter: ""
+      waiter: "",
     };
 
-    setOrders(prevOrders => [newOrder, ...prevOrders]);
+    setOrders((prevOrders) => [newOrder, ...prevOrders]);
     setShowNewOrderDialog(false);
     toast.success("Nueva orden creada exitosamente");
   };
@@ -96,7 +113,9 @@ export function RoomServiceOrderManagement({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Servicio a la Habitación</h1>
-          <p className="text-muted-foreground">Gestión de órdenes de room service</p>
+          <p className="text-muted-foreground">
+            Gestión de órdenes de room service
+          </p>
         </div>
         <Button onClick={() => setShowNewOrderDialog(true)}>
           <Plus className="h-4 w-4 mr-2" />
@@ -106,7 +125,7 @@ export function RoomServiceOrderManagement({
 
       <OrderStatusCards orders={orders} />
 
-      <OrderFilters 
+      <OrderFilters
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
         statusFilter={statusFilter}
@@ -122,15 +141,15 @@ export function RoomServiceOrderManagement({
             onStatusUpdate={handleStatusUpdate}
           />
         ))}
-        
+
         {filteredOrders.length === 0 && (
           <Card>
             <CardContent className="text-center py-8">
               <Coffee className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium mb-2">No hay órdenes</h3>
               <p className="text-muted-foreground">
-                {searchTerm || statusFilter !== "all" 
-                  ? "No se encontraron órdenes que coincidan con los filtros" 
+                {searchTerm || statusFilter !== "all"
+                  ? "No se encontraron órdenes que coincidan con los filtros"
                   : "Crea tu primera orden de room service"}
               </p>
             </CardContent>
@@ -138,14 +157,14 @@ export function RoomServiceOrderManagement({
         )}
       </div>
 
-      <NewOrderDialog 
+      <NewOrderDialog
         open={showNewOrderDialog}
         onOpenChange={setShowNewOrderDialog}
         menuItems={menuItems}
         onCreateOrder={handleCreateOrder}
       />
 
-      <OrderDetailsDialog 
+      <OrderDetailsDialog
         open={showOrderDetailsDialog}
         onOpenChange={setShowOrderDetailsDialog}
         order={selectedOrder}

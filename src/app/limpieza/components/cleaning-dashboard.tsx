@@ -120,9 +120,7 @@ export default function CleaningDashboard({
             Control del estado de habitaciones y mantenimiento
           </p>
         </div>
-        <IncidentReportDialog
-          onReportIncident={handleReportIncident}
-        />
+        <IncidentReportDialog onReportIncident={handleReportIncident} />
       </div>
 
       {/* Quick Stats */}
@@ -182,9 +180,7 @@ export default function CleaningDashboard({
       </div>
 
       <div className="flex justify-end mb-4">
-        <IncidentReportDialog
-          onReportIncident={handleReportIncident}
-        />
+        <IncidentReportDialog onReportIncident={handleReportIncident} />
       </div>
 
       <Tabs defaultValue="rooms" className="space-y-4">

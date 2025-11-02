@@ -104,7 +104,9 @@ export function GuestFormDialog({
       }
     } catch (e: unknown) {
       console.error("Error saving guest:", e);
-      toast.error("Error", { description: e instanceof Error ? e.message : "No se pudo guardar" });
+      toast.error("Error", {
+        description: e instanceof Error ? e.message : "No se pudo guardar",
+      });
     }
   };
 
@@ -112,52 +114,69 @@ export function GuestFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-lg">
         <DialogHeader>
-          <DialogTitle>{editingGuest ? "Editar Huésped" : "Nuevo Huésped"}</DialogTitle>
-          <DialogDescription>Completa la información del huésped</DialogDescription>
+          <DialogTitle>
+            {editingGuest ? "Editar Huésped" : "Nuevo Huésped"}
+          </DialogTitle>
+          <DialogDescription>
+            Completa la información del huésped
+          </DialogDescription>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-2">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid gap-4 py-2"
+        >
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Nombre</Label>
-              <Input 
+              <Input
                 {...form.register("name")}
                 className={form.formState.errors.name ? "border-red-500" : ""}
               />
               {form.formState.errors.name && (
-                <p className="text-sm text-red-600">{form.formState.errors.name.message}</p>
+                <p className="text-sm text-red-600">
+                  {form.formState.errors.name.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label>Email</Label>
-              <Input 
-                type="email" 
+              <Input
+                type="email"
                 {...form.register("email")}
                 className={form.formState.errors.email ? "border-red-500" : ""}
               />
               {form.formState.errors.email && (
-                <p className="text-sm text-red-600">{form.formState.errors.email.message}</p>
+                <p className="text-sm text-red-600">
+                  {form.formState.errors.email.message}
+                </p>
               )}
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label>Teléfono</Label>
-              <Input 
+              <Input
                 {...form.register("phone")}
                 className={form.formState.errors.phone ? "border-red-500" : ""}
               />
               {form.formState.errors.phone && (
-                <p className="text-sm text-red-600">{form.formState.errors.phone.message}</p>
+                <p className="text-sm text-red-600">
+                  {form.formState.errors.phone.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label>Documento</Label>
-              <Input 
+              <Input
                 {...form.register("document")}
-                className={form.formState.errors.document ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.document ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.document && (
-                <p className="text-sm text-red-600">{form.formState.errors.document.message}</p>
+                <p className="text-sm text-red-600">
+                  {form.formState.errors.document.message}
+                </p>
               )}
             </div>
           </div>
@@ -172,17 +191,27 @@ export function GuestFormDialog({
             </div>
           </div>
           <div className="flex items-center gap-2 pt-2">
-            <Checkbox 
-              id="vip" 
-              checked={form.watch("vip")} 
-              onCheckedChange={(v) => form.setValue("vip", !!v)} 
+            <Checkbox
+              id="vip"
+              checked={form.watch("vip")}
+              onCheckedChange={(v) => form.setValue("vip", !!v)}
             />
             <Label htmlFor="vip">VIP</Label>
           </div>
           <div className="flex justify-end gap-2 pt-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
+              Cancelar
+            </Button>
             <Button type="submit" disabled={form.formState.isSubmitting}>
-              {form.formState.isSubmitting ? "Guardando..." : (editingGuest ? "Guardar" : "Crear")}
+              {form.formState.isSubmitting
+                ? "Guardando..."
+                : editingGuest
+                  ? "Guardar"
+                  : "Crear"}
             </Button>
           </div>
         </form>

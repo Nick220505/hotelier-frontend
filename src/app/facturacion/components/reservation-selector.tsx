@@ -32,7 +32,9 @@ export function ReservationSelector({
           <SelectTrigger>
             <SelectValue
               placeholder={
-                loading ? "Cargando reservaciones..." : "Seleccionar reservación"
+                loading
+                  ? "Cargando reservaciones..."
+                  : "Seleccionar reservación"
               }
             />
           </SelectTrigger>
@@ -71,13 +73,16 @@ export function ReservationSelector({
                         <span
                           className={`text-xs ${statusColors[billingData.reservationStatus || ""] || "text-gray-600"}`}
                         >
-                          ({statusLabels[billingData.reservationStatus || ""] || "N/A"})
+                          (
+                          {statusLabels[billingData.reservationStatus || ""] ||
+                            "N/A"}
+                          )
                         </span>
                       </div>
                       <span className="text-sm text-muted-foreground">
-                        Hab. {billingData.reservation.room?.number} | 
-                        {billingData.reservation.nights || 0} noche(s) | 
-                        Total: ${billingData.grandTotal.toFixed(2)}
+                        Hab. {billingData.reservation.room?.number} |
+                        {billingData.reservation.nights || 0} noche(s) | Total:
+                        ${billingData.grandTotal.toFixed(2)}
                       </span>
                     </div>
                   </SelectItem>

@@ -22,7 +22,10 @@ interface UsersManagementProps {
   initialRoles: SystemRole[];
 }
 
-export function UsersManagement({ initialUsers, initialRoles }: UsersManagementProps) {
+export function UsersManagement({
+  initialUsers,
+  initialRoles,
+}: UsersManagementProps) {
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [roles, setRoles] = useState<SystemRole[]>(initialRoles);
   const [loading, setLoading] = useState(false);
@@ -52,41 +55,44 @@ export function UsersManagement({ initialUsers, initialRoles }: UsersManagementP
   const handleAssignRoles = async (userId: number, roleIds: number[]) => {
     try {
       // Log for debugging
-      console.log('Assigning roles:', { userId, roleIds });
-      
+      console.log("Assigning roles:", { userId, roleIds });
+
       // Validate input
       if (!userId || !Number.isInteger(userId)) {
-        throw new Error('Invalid user ID');
+        throw new Error("Invalid user ID");
       }
-      
+
       if (!Array.isArray(roleIds)) {
-        throw new Error('Role IDs must be an array');
+        throw new Error("Role IDs must be an array");
       }
-      
+
       // Filter out any invalid role IDs
       const validRoleIds = roleIds.filter(
-        (id) => id != null && Number.isInteger(id) && id > 0
+        (id) => id != null && Number.isInteger(id) && id > 0,
       );
-      
+
       if (validRoleIds.length !== roleIds.length) {
-        console.warn('Some invalid role IDs were filtered out:', {
+        console.warn("Some invalid role IDs were filtered out:", {
           original: roleIds,
           valid: validRoleIds,
         });
       }
-      
+
       await rolesApi.assignRolesToUser(userId, { roleIds: validRoleIds });
       await refreshData();
       toast("Éxito", { description: "Roles asignados correctamente" });
-      
+
       // Close dialog and clear state
       setRoleAssignDialogOpen(false);
       setSelectedUser(null);
       setSelectedUserRoles([]);
     } catch (error) {
-      console.error('Failed to assign roles:', error);
+      console.error("Failed to assign roles:", error);
       toast.error("Error", {
-        description: error instanceof Error ? error.message : "No se pudieron asignar los roles",
+        description:
+          error instanceof Error
+            ? error.message
+            : "No se pudieron asignar los roles",
       });
     }
   };
@@ -95,11 +101,11 @@ export function UsersManagement({ initialUsers, initialRoles }: UsersManagementP
     try {
       setSelectedUser(user);
       const userRoles = await rolesApi.getUserRoles(Number(user.id));
-      console.log('Fetched user roles:', userRoles);
+      console.log("Fetched user roles:", userRoles);
       setSelectedUserRoles(userRoles);
       setRoleAssignDialogOpen(true);
     } catch (error) {
-      console.error('Failed to fetch user roles:', error);
+      console.error("Failed to fetch user roles:", error);
       toast.error("Error", {
         description: "No se pudieron cargar los roles del usuario",
       });
@@ -138,10 +144,7 @@ export function UsersManagement({ initialUsers, initialRoles }: UsersManagementP
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <UserSearch
-            searchTerm={searchTerm}
-            onSearchChange={setSearchTerm}
-          />
+          <UserSearch searchTerm={searchTerm} onSearchChange={setSearchTerm} />
           <UsersTable
             users={filteredUsers}
             onAssignRoles={openRoleAssignDialog}

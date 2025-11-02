@@ -9,14 +9,14 @@ export default function Loading() {
         <div className="flex items-center justify-center mb-6">
           <Skeleton className="h-16 w-48 animate-pulse" />
         </div>
-        
+
         {/* Title skeleton */}
         <Skeleton className="h-8 w-32 mx-auto animate-pulse" />
-        
+
         {/* Description skeleton */}
         <Skeleton className="h-5 w-60 mx-auto animate-pulse" />
       </CardHeader>
-      
+
       <CardContent className="space-y-4">
         {/* Email Field */}
         <div className="space-y-2">
@@ -55,11 +55,11 @@ export default function Loading() {
             <Skeleton className="h-3 w-full animate-pulse" />
           </div>
         </div>
-        
+
         {/* Footer Links */}
         <div className="mt-6 text-center space-y-3">
           <Skeleton className="h-4 w-44 mx-auto animate-pulse" />
-          
+
           <div className="border-t pt-3">
             <Skeleton className="h-4 w-52 mx-auto animate-pulse" />
           </div>

@@ -103,7 +103,7 @@ export default function ShiftManagement({
   onShiftsChange,
 }: ShiftManagementProps) {
   const [selectedDate, setSelectedDate] = useState<Date>();
-  
+
   const shiftForm = useForm<ShiftFormData>({
     resolver: zodResolver(shiftSchema),
     defaultValues: {
@@ -329,7 +329,10 @@ export default function ShiftManagement({
                           selected={selectedDate}
                           onSelect={(date) => {
                             setSelectedDate(date);
-                            shiftForm.setValue("date", date ? date.toISOString().split("T")[0] : "");
+                            shiftForm.setValue(
+                              "date",
+                              date ? date.toISOString().split("T")[0] : "",
+                            );
                           }}
                           initialFocus
                         />
@@ -398,7 +401,9 @@ export default function ShiftManagement({
                   </div>
                 </div>
                 <div className="flex justify-end space-x-2">
-                  <Button type="button" variant="outline">Cancelar</Button>
+                  <Button type="button" variant="outline">
+                    Cancelar
+                  </Button>
                   <Button type="submit">Programar Turno</Button>
                 </div>
               </div>

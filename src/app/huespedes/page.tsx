@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { guestsApi, type Guest } from "@/lib/api/guests";
@@ -14,7 +14,7 @@ export default function GuestsPage() {
         const guestsData = await guestsApi.getAll();
         setGuests(guestsData);
       } catch (error) {
-        console.error('Error fetching guests:', error);
+        console.error("Error fetching guests:", error);
       } finally {
         setLoading(false);
       }
@@ -28,7 +28,9 @@ export default function GuestsPage() {
       <div className="space-y-6">
         <div>
           <h1 className="text-2xl font-bold">Huéspedes</h1>
-          <p className="text-muted-foreground">Cargando datos de huéspedes...</p>
+          <p className="text-muted-foreground">
+            Cargando datos de huéspedes...
+          </p>
         </div>
         <div className="animate-pulse bg-gray-200 h-96 rounded-lg"></div>
       </div>

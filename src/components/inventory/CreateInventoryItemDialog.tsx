@@ -1,6 +1,6 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,18 +8,23 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Plus } from 'lucide-react';
-import { InventoryItemForm, type InventoryItemFormData } from './InventoryItemForm';
-import { inventoryApi } from '@/lib/api/inventory';
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import {
+  InventoryItemForm,
+  type InventoryItemFormData,
+} from "./InventoryItemForm";
+import { inventoryApi } from "@/lib/api/inventory";
 import { toast } from "sonner";
 
 interface CreateInventoryItemDialogProps {
   onItemCreated?: () => void;
 }
 
-export function CreateInventoryItemDialog({ onItemCreated }: CreateInventoryItemDialogProps) {
+export function CreateInventoryItemDialog({
+  onItemCreated,
+}: CreateInventoryItemDialogProps) {
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -27,14 +32,14 @@ export function CreateInventoryItemDialog({ onItemCreated }: CreateInventoryItem
     setIsSubmitting(true);
     try {
       await inventoryApi.createInventoryItem(data);
-      
-      toast.success('Producto creado exitosamente');
-      
+
+      toast.success("Producto creado exitosamente");
+
       setOpen(false);
       onItemCreated?.();
     } catch (error) {
-      console.error('Error creating inventory item:', error);
-      toast.error('No se pudo crear el producto. Por favor intenta de nuevo.');
+      console.error("Error creating inventory item:", error);
+      toast.error("No se pudo crear el producto. Por favor intenta de nuevo.");
     } finally {
       setIsSubmitting(false);
     }
@@ -58,10 +63,11 @@ export function CreateInventoryItemDialog({ onItemCreated }: CreateInventoryItem
         <DialogHeader>
           <DialogTitle>Agregar Nuevo Producto al Inventario</DialogTitle>
           <DialogDescription>
-            Completa la información del nuevo producto. Los campos marcados son obligatorios.
+            Completa la información del nuevo producto. Los campos marcados son
+            obligatorios.
           </DialogDescription>
         </DialogHeader>
-        
+
         <InventoryItemForm
           onSubmit={handleSubmit}
           onCancel={handleCancel}

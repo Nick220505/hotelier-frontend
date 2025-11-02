@@ -35,16 +35,16 @@ import { housekeepingApi, Room } from "@/lib/api/housekeeping";
 
 // Zod schema for form validation
 const incidentReportSchema = z.object({
-  room: z.string()
+  room: z
+    .string()
     .min(1, "Debe seleccionar una habitación")
     .refine((value) => value !== "loading" && value !== "no-rooms", {
-      message: "Debe seleccionar una habitación válida"
+      message: "Debe seleccionar una habitación válida",
     }),
-  type: z.string()
-    .min(1, "Debe seleccionar un tipo de incidencia"),
-  priority: z.string()
-    .min(1, "Debe seleccionar una prioridad"),
-  description: z.string()
+  type: z.string().min(1, "Debe seleccionar un tipo de incidencia"),
+  priority: z.string().min(1, "Debe seleccionar una prioridad"),
+  description: z
+    .string()
     .min(10, "La descripción debe tener al menos 10 caracteres")
     .max(500, "La descripción no puede exceder 500 caracteres"),
 });
@@ -66,7 +66,7 @@ export default function IncidentReportDialog({
   const [isOpen, setIsOpen] = useState(false);
   const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(false);
-  
+
   const form = useForm<IncidentReportFormData>({
     resolver: zodResolver(incidentReportSchema),
     defaultValues: {
@@ -90,7 +90,7 @@ export default function IncidentReportDialog({
       const availableRooms = await housekeepingApi.getRoomsForIncidentReports();
       setRooms(availableRooms);
     } catch (error) {
-      console.error('Error loading rooms:', error);
+      console.error("Error loading rooms:", error);
       setRooms([]);
     } finally {
       setLoading(false);
@@ -100,7 +100,7 @@ export default function IncidentReportDialog({
   const onSubmit = async (data: IncidentReportFormData) => {
     try {
       setLoading(true);
-      
+
       // Create incident report through API
       await housekeepingApi.createIncidentReport({
         roomNumber: data.room,
@@ -112,19 +112,19 @@ export default function IncidentReportDialog({
 
       // Call parent callback for UI updates
       onReportIncident(data);
-      
+
       // Show success toast
       toast.success("Incidencia reportada exitosamente", {
-        description: `La habitación ${data.room} ha sido marcada en mantenimiento`
+        description: `La habitación ${data.room} ha sido marcada en mantenimiento`,
       });
-      
+
       // Reset form
       form.reset();
       setIsOpen(false);
     } catch (error) {
-      console.error('Error creating incident report:', error);
+      console.error("Error creating incident report:", error);
       toast.error("Error al reportar la incidencia", {
-        description: "Por favor, intenta nuevamente"
+        description: "Por favor, intenta nuevamente",
       });
     } finally {
       setLoading(false);
@@ -147,7 +147,10 @@ export default function IncidentReportDialog({
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="grid gap-4 py-4"
+          >
             <div className="grid grid-cols-2 gap-4">
               <FormField
                 control={form.control}
@@ -163,9 +166,13 @@ export default function IncidentReportDialog({
                       </FormControl>
                       <SelectContent>
                         {loading ? (
-                          <SelectItem value="loading" disabled>Cargando habitaciones...</SelectItem>
+                          <SelectItem value="loading" disabled>
+                            Cargando habitaciones...
+                          </SelectItem>
                         ) : rooms.length === 0 ? (
-                          <SelectItem value="no-rooms" disabled>No hay habitaciones disponibles</SelectItem>
+                          <SelectItem value="no-rooms" disabled>
+                            No hay habitaciones disponibles
+                          </SelectItem>
                         ) : (
                           rooms.map((room) => (
                             <SelectItem key={room.number} value={room.number}>
@@ -179,7 +186,7 @@ export default function IncidentReportDialog({
                   </FormItem>
                 )}
               />
-              
+
               <FormField
                 control={form.control}
                 name="type"
@@ -194,10 +201,16 @@ export default function IncidentReportDialog({
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="Plomería">Plomería</SelectItem>
-                        <SelectItem value="Electricidad">Electricidad</SelectItem>
-                        <SelectItem value="Aire Acondicionado">Aire Acondicionado</SelectItem>
+                        <SelectItem value="Electricidad">
+                          Electricidad
+                        </SelectItem>
+                        <SelectItem value="Aire Acondicionado">
+                          Aire Acondicionado
+                        </SelectItem>
                         <SelectItem value="Mobiliario">Mobiliario</SelectItem>
-                        <SelectItem value="Electrodomésticos">Electrodomésticos</SelectItem>
+                        <SelectItem value="Electrodomésticos">
+                          Electrodomésticos
+                        </SelectItem>
                         <SelectItem value="Estructural">Estructural</SelectItem>
                         <SelectItem value="Estético">Estético</SelectItem>
                         <SelectItem value="General">General</SelectItem>
@@ -208,7 +221,7 @@ export default function IncidentReportDialog({
                 )}
               />
             </div>
-            
+
             <FormField
               control={form.control}
               name="priority"
@@ -231,7 +244,7 @@ export default function IncidentReportDialog({
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="description"
@@ -248,11 +261,11 @@ export default function IncidentReportDialog({
                 </FormItem>
               )}
             />
-            
+
             <div className="flex justify-end space-x-2">
-              <Button 
+              <Button
                 type="button"
-                variant="outline" 
+                variant="outline"
                 onClick={() => {
                   setIsOpen(false);
                   form.reset();
@@ -261,7 +274,7 @@ export default function IncidentReportDialog({
               >
                 Cancelar
               </Button>
-              <Button 
+              <Button
                 type="submit"
                 disabled={loading || !form.formState.isValid}
               >

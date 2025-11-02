@@ -13,29 +13,31 @@ import { useRouter } from "next/navigation";
 import { authApi } from "@/lib/api/auth";
 import { toast } from "sonner";
 
-const registerSchema = z.object({
-  name: z
-    .string({ message: "Este campo es obligatorio" })
-    .min(2, "Debe tener al menos 2 caracteres")
-    .max(100, "Debe tener máximo 100 caracteres"),
-  email: z
-    .string({ message: "Este campo es obligatorio" })
-    .email("Ingresa un email válido"),
-  phone: z
-    .string({ message: "Este campo es obligatorio" })
-    .regex(/^(\+\d{1,3}[- ]?)?\d{10}$/, "Ingresa un teléfono válido"),
-  password: z
-    .string({ message: "Este campo es obligatorio" })
-    .min(8, "Debe tener al menos 8 caracteres")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/,
-      "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número"
-    ),
-  confirmPassword: z.string({ message: "Este campo es obligatorio" }),
-}).refine((data) => data.password === data.confirmPassword, {
-  message: "Las contraseñas no coinciden",
-  path: ["confirmPassword"],
-});
+const registerSchema = z
+  .object({
+    name: z
+      .string({ message: "Este campo es obligatorio" })
+      .min(2, "Debe tener al menos 2 caracteres")
+      .max(100, "Debe tener máximo 100 caracteres"),
+    email: z
+      .string({ message: "Este campo es obligatorio" })
+      .email("Ingresa un email válido"),
+    phone: z
+      .string({ message: "Este campo es obligatorio" })
+      .regex(/^(\+\d{1,3}[- ]?)?\d{10}$/, "Ingresa un teléfono válido"),
+    password: z
+      .string({ message: "Este campo es obligatorio" })
+      .min(8, "Debe tener al menos 8 caracteres")
+      .regex(
+        /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/,
+        "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número",
+      ),
+    confirmPassword: z.string({ message: "Este campo es obligatorio" }),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Las contraseñas no coinciden",
+    path: ["confirmPassword"],
+  });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
@@ -71,7 +73,8 @@ export function RegisterForm() {
       router.push("/login");
     } catch (error: unknown) {
       console.error("Error en registro:", error);
-      const errorMessage = error instanceof Error ? error.message : "Inténtalo de nuevo";
+      const errorMessage =
+        error instanceof Error ? error.message : "Inténtalo de nuevo";
       toast.error("Error al registrar usuario", {
         description: errorMessage,
       });
@@ -91,7 +94,9 @@ export function RegisterForm() {
           className={form.formState.errors.name ? "border-red-500" : ""}
         />
         {form.formState.errors.name && (
-          <p className="text-sm text-red-500">{form.formState.errors.name.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.name.message}
+          </p>
         )}
       </div>
 
@@ -106,7 +111,9 @@ export function RegisterForm() {
           className={form.formState.errors.email ? "border-red-500" : ""}
         />
         {form.formState.errors.email && (
-          <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.email.message}
+          </p>
         )}
       </div>
 
@@ -121,7 +128,9 @@ export function RegisterForm() {
           className={form.formState.errors.phone ? "border-red-500" : ""}
         />
         {form.formState.errors.phone && (
-          <p className="text-sm text-red-500">{form.formState.errors.phone.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.phone.message}
+          </p>
         )}
       </div>
 
@@ -152,7 +161,9 @@ export function RegisterForm() {
           </Button>
         </div>
         {form.formState.errors.password && (
-          <p className="text-sm text-red-500">{form.formState.errors.password.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.password.message}
+          </p>
         )}
       </div>
 
@@ -165,7 +176,9 @@ export function RegisterForm() {
             placeholder="Repetir contraseña"
             {...form.register("confirmPassword")}
             disabled={form.formState.isSubmitting}
-            className={form.formState.errors.confirmPassword ? "border-red-500" : ""}
+            className={
+              form.formState.errors.confirmPassword ? "border-red-500" : ""
+            }
           />
           <Button
             type="button"
@@ -183,11 +196,17 @@ export function RegisterForm() {
           </Button>
         </div>
         {form.formState.errors.confirmPassword && (
-          <p className="text-sm text-red-500">{form.formState.errors.confirmPassword.message}</p>
+          <p className="text-sm text-red-500">
+            {form.formState.errors.confirmPassword.message}
+          </p>
         )}
       </div>
 
-      <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
+      <Button
+        type="submit"
+        className="w-full"
+        disabled={form.formState.isSubmitting}
+      >
         {form.formState.isSubmitting ? (
           <>
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />

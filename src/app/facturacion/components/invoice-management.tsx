@@ -10,7 +10,10 @@ import {
 } from "@/components/ui/card";
 import { useAuthenticatedUser } from "@/hooks/use-authenticated-user";
 import { Invoice } from "@/lib/types";
-import { reservationsApi, ReservationBillingDetails } from "@/lib/api/reservations";
+import {
+  reservationsApi,
+  ReservationBillingDetails,
+} from "@/lib/api/reservations";
 import { InvoiceDetailsDialog } from "./invoice-details-dialog";
 import { InvoiceFilters } from "./invoice-filters";
 import { InvoiceTable } from "./invoice-table";
@@ -52,7 +55,7 @@ export default function InvoiceManagement({
           await reservationsApi.getReservationsWithBillingDetails();
         // Show ALL reservations without paid invoices (pending payment)
         setReservationsBillingData(
-          billingData.filter((bd) => !bd.hasInvoice && bd.grandTotal > 0)
+          billingData.filter((bd) => !bd.hasInvoice && bd.grandTotal > 0),
         );
       } catch (error) {
         console.error("Error fetching reservations billing data:", error);
@@ -80,7 +83,7 @@ export default function InvoiceManagement({
 
   const handleProcessPayment = (invoiceId: string | number) => {
     // Encontrar la factura actual
-    const invoice = invoices.find(inv => inv.id === invoiceId);
+    const invoice = invoices.find((inv) => inv.id === invoiceId);
     if (!invoice) return;
 
     // Usar el método de pago original de la factura o CASH como respaldo
@@ -99,11 +102,12 @@ export default function InvoiceManagement({
           </p>
           {reservationsBillingData.length > 0 && (
             <p className="text-sm font-medium text-orange-600 mt-1">
-              {reservationsBillingData.length} reservación(es) con pago pendiente
+              {reservationsBillingData.length} reservación(es) con pago
+              pendiente
             </p>
           )}
         </div>
-        {!hasRole('cliente') && (
+        {!hasRole("cliente") && (
           <NewInvoiceDialog
             reservationsBillingData={reservationsBillingData}
             loadingReservations={loadingReservations}

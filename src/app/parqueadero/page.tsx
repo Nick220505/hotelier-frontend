@@ -1,8 +1,13 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useAuthContext } from "@/contexts/auth-context";
-import { parkingApi, type Vehicle, type ParkingSpace, type ParkingIncident } from "@/lib/api/parking";
+import {
+  parkingApi,
+  type Vehicle,
+  type ParkingSpace,
+  type ParkingIncident,
+} from "@/lib/api/parking";
 import { toast } from "sonner";
 import ParkingDashboard from "./components/parking-dashboard";
 
@@ -29,9 +34,9 @@ export default function ParqueaderoPage() {
         parkingApi.getIncidents().catch((err) => {
           console.warn("Failed to fetch incidents:", err);
           return [];
-        })
+        }),
       ]);
-      
+
       setVehicles(vehiclesData);
       setSpaces(spacesData);
       setIncidents(incidentsData);
@@ -47,7 +52,7 @@ export default function ParqueaderoPage() {
 
   useEffect(() => {
     if (authLoading) return;
-    
+
     if (!user) {
       setError("Authentication required");
       setLoading(false);
@@ -85,18 +90,20 @@ export default function ParqueaderoPage() {
       });
 
       // Actualizar el estado local
-      setVehicles(prev => [...prev, createdVehicle]);
-      
+      setVehicles((prev) => [...prev, createdVehicle]);
+
       // Actualizar el estado del espacio ocupado
-      setSpaces(prev => prev.map(space => 
-        space.code === newVehicleData.assignedSpace
-          ? { 
-              ...space, 
-              status: "ocupado", 
-              currentVehicle: newVehicleData.licensePlate.toUpperCase() 
-            }
-          : space
-      ));
+      setSpaces((prev) =>
+        prev.map((space) =>
+          space.code === newVehicleData.assignedSpace
+            ? {
+                ...space,
+                status: "ocupado",
+                currentVehicle: newVehicleData.licensePlate.toUpperCase(),
+              }
+            : space,
+        ),
+      );
 
       toast.success("Vehículo registrado exitosamente");
     } catch (error) {
@@ -108,26 +115,33 @@ export default function ParqueaderoPage() {
   const handleVehicleExit = async (vehicleId: string) => {
     try {
       await parkingApi.checkOutVehicle(vehicleId);
-      
+
       // Actualizar el estado local
-      setVehicles(prev => prev.map(vehicle => 
-        vehicle.id === vehicleId
-          ? { 
-              ...vehicle, 
-              status: "salido", 
-              exitTime: new Date().toISOString().slice(0, 16).replace("T", " ") 
-            }
-          : vehicle
-      ));
+      setVehicles((prev) =>
+        prev.map((vehicle) =>
+          vehicle.id === vehicleId
+            ? {
+                ...vehicle,
+                status: "salido",
+                exitTime: new Date()
+                  .toISOString()
+                  .slice(0, 16)
+                  .replace("T", " "),
+              }
+            : vehicle,
+        ),
+      );
 
       // Liberar el espacio
-      const vehicle = vehicles.find(v => v.id === vehicleId);
+      const vehicle = vehicles.find((v) => v.id === vehicleId);
       if (vehicle?.assignedSpace) {
-        setSpaces(prev => prev.map(space => 
-          space.code === vehicle.assignedSpace
-            ? { ...space, status: "disponible", currentVehicle: undefined }
-            : space
-        ));
+        setSpaces((prev) =>
+          prev.map((space) =>
+            space.code === vehicle.assignedSpace
+              ? { ...space, status: "disponible", currentVehicle: undefined }
+              : space,
+          ),
+        );
       }
 
       toast.success("Salida del vehículo registrada");
@@ -154,7 +168,7 @@ export default function ParqueaderoPage() {
         responsible: user?.name || "Usuario Actual",
       });
 
-      setIncidents(prev => [...prev, createdIncident]);
+      setIncidents((prev) => [...prev, createdIncident]);
       toast.success("Incidente reportado exitosamente");
     } catch (error) {
       console.error("Error creating incident:", error);
@@ -178,7 +192,7 @@ export default function ParqueaderoPage() {
       <div className="flex items-center justify-center min-h-screen">
         <div className="text-center">
           <p className="text-red-500 text-lg">{error}</p>
-          <button 
+          <button
             onClick={fetchData}
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
           >

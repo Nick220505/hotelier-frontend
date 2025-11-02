@@ -39,7 +39,6 @@ export function useAuth() {
   });
   const [isHydrated, setIsHydrated] = useState(false);
   const router = useRouter();
-  
 
   // Handle client-side hydration
   useEffect(() => {
@@ -113,27 +112,30 @@ export function useAuth() {
     if (!isHydrated || !authState.isAuthenticated) return;
 
     // Refresh token every 4 minutes (240 seconds)
-    const refreshInterval = setInterval(async () => {
-      try {
-        const refreshToken = authCookies.getRefreshToken();
-        if (refreshToken) {
-          const response = await authApi.refreshToken();
-          
-          // Update stored tokens
-          authCookies.setTokens(response.accessToken, response.refreshToken);
-          
-          // Update auth state with new tokens
-          setAuthState(prev => ({
-            ...prev,
-            accessToken: response.accessToken,
-            refreshToken: response.refreshToken,
-          }));
+    const refreshInterval = setInterval(
+      async () => {
+        try {
+          const refreshToken = authCookies.getRefreshToken();
+          if (refreshToken) {
+            const response = await authApi.refreshToken();
+
+            // Update stored tokens
+            authCookies.setTokens(response.accessToken, response.refreshToken);
+
+            // Update auth state with new tokens
+            setAuthState((prev) => ({
+              ...prev,
+              accessToken: response.accessToken,
+              refreshToken: response.refreshToken,
+            }));
+          }
+        } catch (error) {
+          console.error("Periodic token refresh failed:", error);
+          // Don't immediately logout on refresh failure - let the API request handler deal with it
         }
-      } catch (error) {
-        console.error("Periodic token refresh failed:", error);
-        // Don't immediately logout on refresh failure - let the API request handler deal with it
-      }
-    }, 4 * 60 * 1000); // 4 minutes
+      },
+      4 * 60 * 1000,
+    ); // 4 minutes
 
     return () => clearInterval(refreshInterval);
   }, [isHydrated, authState.isAuthenticated]);
@@ -200,7 +202,10 @@ export function useAuth() {
       console.error("Login error:", error);
       setAuthState((prev) => ({ ...prev, isLoading: false }));
       toast.error("Error de autenticación", {
-        description: error instanceof Error ? error.message : "Credenciales incorrectas. Intenta nuevamente.",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Credenciales incorrectas. Intenta nuevamente.",
       });
     }
   };

@@ -1,25 +1,44 @@
 "use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 import { TrendingUp } from "lucide-react";
 
 interface InventoryStockLevelsChartProps {
-  categoryStats: Record<string, { count: number; value: number; lowStock: number }>;
+  categoryStats: Record<
+    string,
+    { count: number; value: number; lowStock: number }
+  >;
 }
 
 const CATEGORY_NAMES: Record<string, string> = {
-  LINENS: 'Lencería',
-  AMENITIES: 'Amenidades',
-  CLEANING_SUPPLIES: 'Suministros',
-  ELECTRONICS: 'Electrónicos',
-  FOOD_BEVERAGE: 'Alimentos',
-  FURNITURE: 'Mobiliario',
-  MAINTENANCE: 'Mantenimiento',
-  OTHER: 'Otros',
+  LINENS: "Lencería",
+  AMENITIES: "Amenidades",
+  CLEANING_SUPPLIES: "Suministros",
+  ELECTRONICS: "Electrónicos",
+  FOOD_BEVERAGE: "Alimentos",
+  FURNITURE: "Mobiliario",
+  MAINTENANCE: "Mantenimiento",
+  OTHER: "Otros",
 };
 
-export function InventoryStockLevelsChart({ categoryStats }: InventoryStockLevelsChartProps) {
+export function InventoryStockLevelsChart({
+  categoryStats,
+}: InventoryStockLevelsChartProps) {
   // Calculate stock levels for each category
   const chartData = Object.entries(categoryStats).map(([category, stats]) => {
     const lowStock = stats.lowStock;
@@ -27,10 +46,10 @@ export function InventoryStockLevelsChart({ categoryStats }: InventoryStockLevel
     const sufficientStock = stats.count - stats.lowStock - normalStock; // rest is sufficient
 
     return {
-      category: CATEGORY_NAMES[category] || category.replace(/_/g, ' '),
-      'Bajo Stock': lowStock,
-      'Stock Normal': normalStock,
-      'Stock Suficiente': sufficientStock,
+      category: CATEGORY_NAMES[category] || category.replace(/_/g, " "),
+      "Bajo Stock": lowStock,
+      "Stock Normal": normalStock,
+      "Stock Suficiente": sufficientStock,
       total: stats.count,
     };
   });
@@ -48,13 +67,23 @@ export function InventoryStockLevelsChart({ categoryStats }: InventoryStockLevel
           </CardDescription>
         </CardHeader>
         <CardContent className="flex items-center justify-center h-[350px]">
-          <p className="text-muted-foreground">No hay datos de inventario disponibles</p>
+          <p className="text-muted-foreground">
+            No hay datos de inventario disponibles
+          </p>
         </CardContent>
       </Card>
     );
   }
 
-  const CustomTooltip = ({ active, payload, label }: { active?: boolean; payload?: Array<{ value: number; name: string; color: string }>; label?: string }) => {
+  const CustomTooltip = ({
+    active,
+    payload,
+    label,
+  }: {
+    active?: boolean;
+    payload?: Array<{ value: number; name: string; color: string }>;
+    label?: string;
+  }) => {
     if (active && payload && payload.length) {
       const total = payload.reduce((sum: number, item) => sum + item.value, 0);
       return (
@@ -63,8 +92,8 @@ export function InventoryStockLevelsChart({ categoryStats }: InventoryStockLevel
           <p className="text-xs text-gray-600 mb-2">Total: {total} productos</p>
           {payload.map((item, index: number) => (
             <p key={index} className="text-sm" style={{ color: item.color }}>
-              {item.name}: <span className="font-medium">{item.value}</span>{' '}
-              ({((item.value / total) * 100).toFixed(0)}%)
+              {item.name}: <span className="font-medium">{item.value}</span> (
+              {((item.value / total) * 100).toFixed(0)}%)
             </p>
           ))}
         </div>
@@ -91,21 +120,41 @@ export function InventoryStockLevelsChart({ categoryStats }: InventoryStockLevel
             margin={{ top: 20, right: 30, left: 20, bottom: 60 }}
           >
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis 
-              dataKey="category" 
+            <XAxis
+              dataKey="category"
               angle={-45}
               textAnchor="end"
               height={100}
               tick={{ fontSize: 12 }}
             />
-            <YAxis 
-              label={{ value: 'Cantidad de Productos', angle: -90, position: 'insideLeft', style: { fontSize: 12 } }}
+            <YAxis
+              label={{
+                value: "Cantidad de Productos",
+                angle: -90,
+                position: "insideLeft",
+                style: { fontSize: 12 },
+              }}
               tick={{ fontSize: 12 }}
             />
             <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="Bajo Stock" stackId="a" fill="#ef4444" radius={[0, 0, 0, 0]} />
-            <Bar dataKey="Stock Normal" stackId="a" fill="#f59e0b" radius={[0, 0, 0, 0]} />
-            <Bar dataKey="Stock Suficiente" stackId="a" fill="#10b981" radius={[4, 4, 0, 0]} />
+            <Bar
+              dataKey="Bajo Stock"
+              stackId="a"
+              fill="#ef4444"
+              radius={[0, 0, 0, 0]}
+            />
+            <Bar
+              dataKey="Stock Normal"
+              stackId="a"
+              fill="#f59e0b"
+              radius={[0, 0, 0, 0]}
+            />
+            <Bar
+              dataKey="Stock Suficiente"
+              stackId="a"
+              fill="#10b981"
+              radius={[4, 4, 0, 0]}
+            />
           </BarChart>
         </ResponsiveContainer>
         <div className="flex justify-center gap-6 mt-6 text-sm">
@@ -126,4 +175,3 @@ export function InventoryStockLevelsChart({ categoryStats }: InventoryStockLevel
     </Card>
   );
 }
-

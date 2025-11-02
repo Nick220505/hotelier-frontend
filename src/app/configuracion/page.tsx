@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import Configuration from "./components/configuration";
@@ -14,8 +14,8 @@ export default function ConfigurationPage() {
         const config = await configurationApi.getHotelConfig();
         setHotelConfig(config);
       } catch (err) {
-        console.error('Error fetching hotel config:', err);
-        setError('Error loading configuration');
+        console.error("Error fetching hotel config:", err);
+        setError("Error loading configuration");
       }
     };
 
@@ -30,9 +30,5 @@ export default function ConfigurationPage() {
     return null; // Loading.tsx will show
   }
 
-  return (
-    <Configuration
-      initialHotelConfig={hotelConfig}
-    />
-  );
+  return <Configuration initialHotelConfig={hotelConfig} />;
 }

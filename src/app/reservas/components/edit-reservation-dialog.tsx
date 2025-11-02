@@ -25,68 +25,76 @@ import { Loader2 } from "lucide-react";
 import { type Room } from "@/lib/api/rooms";
 import { type Reservation, reservationsApi } from "@/lib/api/reservations";
 
-const editReservationFormSchema = z.object({
-  guestName: z
-    .string({ message: "El nombre del huésped es obligatorio" })
-    .min(2, "El nombre debe tener al menos 2 caracteres")
-    .max(100, "El nombre debe tener máximo 100 caracteres"),
-  guestEmail: z
-    .string({ message: "El email es obligatorio" })
-    .email("Ingresa un email válido"),
-  guestPhone: z
-    .string()
-    .optional()
-    .refine((val) => {
-      if (!val || val.trim() === "") return true;
-      return /^(\+\d{1,3}[- ]?)?\d{10}$/.test(val);
-    }, "Ingresa un teléfono válido"),
-  guests: z
-    .string({ message: "El número de huéspedes es obligatorio" })
-    .min(1, "Selecciona el número de huéspedes")
-    .refine((val) => {
-      const num = parseInt(val);
-      return !isNaN(num) && num >= 1 && num <= 10;
-    }, "Debe ser un número entre 1 y 10"),
-  checkInDate: z
-    .string({ message: "La fecha de entrada es obligatoria" })
-    .min(1, "La fecha de entrada es obligatoria"),
-  checkOutDate: z
-    .string({ message: "La fecha de salida es obligatoria" })
-    .min(1, "La fecha de salida es obligatoria"),
-  roomId: z
-    .string({ message: "La habitación es obligatoria" })
-    .min(1, "Selecciona una habitación")
-    .refine((val) => {
-      const num = parseInt(val);
-      return !isNaN(num) && num > 0;
-    }, "Selecciona una habitación válida"),
-  status: z.enum(["PENDING", "CONFIRMED", "CHECKED_IN", "CHECKED_OUT", "CANCELLED"], {
-    message: "Selecciona un estado válido",
-  }),
-  discountPercent: z
-    .string()
-    .optional()
-    .refine((val) => {
-      if (!val || val.trim() === "") return true;
-      const num = parseFloat(val);
-      return !isNaN(num) && num >= 0 && num <= 100;
-    }, "El descuento debe estar entre 0 y 100%"),
-  discountAmount: z
-    .string()
-    .optional()
-    .refine((val) => {
-      if (!val || val.trim() === "") return true;
-      const num = parseFloat(val);
-      return !isNaN(num) && num >= 0;
-    }, "El descuento debe ser mayor o igual a 0"),
-}).refine((data) => {
-  const checkIn = new Date(data.checkInDate);
-  const checkOut = new Date(data.checkOutDate);
-  return checkOut > checkIn;
-}, {
-  message: "La fecha de salida debe ser posterior a la fecha de entrada",
-  path: ["checkOutDate"],
-});
+const editReservationFormSchema = z
+  .object({
+    guestName: z
+      .string({ message: "El nombre del huésped es obligatorio" })
+      .min(2, "El nombre debe tener al menos 2 caracteres")
+      .max(100, "El nombre debe tener máximo 100 caracteres"),
+    guestEmail: z
+      .string({ message: "El email es obligatorio" })
+      .email("Ingresa un email válido"),
+    guestPhone: z
+      .string()
+      .optional()
+      .refine((val) => {
+        if (!val || val.trim() === "") return true;
+        return /^(\+\d{1,3}[- ]?)?\d{10}$/.test(val);
+      }, "Ingresa un teléfono válido"),
+    guests: z
+      .string({ message: "El número de huéspedes es obligatorio" })
+      .min(1, "Selecciona el número de huéspedes")
+      .refine((val) => {
+        const num = parseInt(val);
+        return !isNaN(num) && num >= 1 && num <= 10;
+      }, "Debe ser un número entre 1 y 10"),
+    checkInDate: z
+      .string({ message: "La fecha de entrada es obligatoria" })
+      .min(1, "La fecha de entrada es obligatoria"),
+    checkOutDate: z
+      .string({ message: "La fecha de salida es obligatoria" })
+      .min(1, "La fecha de salida es obligatoria"),
+    roomId: z
+      .string({ message: "La habitación es obligatoria" })
+      .min(1, "Selecciona una habitación")
+      .refine((val) => {
+        const num = parseInt(val);
+        return !isNaN(num) && num > 0;
+      }, "Selecciona una habitación válida"),
+    status: z.enum(
+      ["PENDING", "CONFIRMED", "CHECKED_IN", "CHECKED_OUT", "CANCELLED"],
+      {
+        message: "Selecciona un estado válido",
+      },
+    ),
+    discountPercent: z
+      .string()
+      .optional()
+      .refine((val) => {
+        if (!val || val.trim() === "") return true;
+        const num = parseFloat(val);
+        return !isNaN(num) && num >= 0 && num <= 100;
+      }, "El descuento debe estar entre 0 y 100%"),
+    discountAmount: z
+      .string()
+      .optional()
+      .refine((val) => {
+        if (!val || val.trim() === "") return true;
+        const num = parseFloat(val);
+        return !isNaN(num) && num >= 0;
+      }, "El descuento debe ser mayor o igual a 0"),
+  })
+  .refine(
+    (data) => {
+      const checkIn = new Date(data.checkInDate);
+      const checkOut = new Date(data.checkOutDate);
+      return checkOut > checkIn;
+    },
+    {
+      message: "La fecha de salida debe ser posterior a la fecha de entrada",
+      path: ["checkOutDate"],
+    },
+  );
 
 type EditReservationFormData = z.infer<typeof editReservationFormSchema>;
 
@@ -128,14 +136,14 @@ export function EditReservationDialog({
   // Availability search (rooms based on selected dates and guests)
   const [availableRooms, setAvailableRooms] = useState<Room[] | null>(null);
   const [availabilityLoading, setAvailabilityLoading] = useState(false);
-  
+
   const formValues = form.watch();
   const totalGuests = parseInt(formValues.guests) || 0;
 
   useEffect(() => {
     const start = formValues.checkInDate;
     const end = formValues.checkOutDate;
-    
+
     if (!start || !end) {
       setAvailableRooms(null);
       return;
@@ -245,7 +253,12 @@ export function EditReservationDialog({
         : undefined,
     };
 
-    onUpdateReservation(typeof reservation.id === 'number' ? reservation.id : parseInt(reservation.id.toString()), updateData);
+    onUpdateReservation(
+      typeof reservation.id === "number"
+        ? reservation.id
+        : parseInt(reservation.id.toString()),
+      updateData,
+    );
   };
 
   if (!reservation) return null;
@@ -259,7 +272,10 @@ export function EditReservationDialog({
             Modificar los detalles de la reserva
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-4 py-4">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid gap-4 py-4"
+        >
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-2">
               <Label htmlFor="guestName">Nombre del Huésped</Label>
@@ -268,10 +284,14 @@ export function EditReservationDialog({
                 placeholder="Nombre completo"
                 {...form.register("guestName")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.guestName ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.guestName ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.guestName && (
-                <p className="text-sm text-red-500">{form.formState.errors.guestName.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guestName.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
@@ -282,10 +302,14 @@ export function EditReservationDialog({
                 placeholder="email@ejemplo.com"
                 {...form.register("guestEmail")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.guestEmail ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.guestEmail ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.guestEmail && (
-                <p className="text-sm text-red-500">{form.formState.errors.guestEmail.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guestEmail.message}
+                </p>
               )}
             </div>
           </div>
@@ -297,10 +321,14 @@ export function EditReservationDialog({
                 placeholder="+57 300 123 4567"
                 {...form.register("guestPhone")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.guestPhone ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.guestPhone ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.guestPhone && (
-                <p className="text-sm text-red-500">{form.formState.errors.guestPhone.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guestPhone.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
@@ -326,7 +354,9 @@ export function EditReservationDialog({
                 </SelectContent>
               </Select>
               {form.formState.errors.guests && (
-                <p className="text-sm text-red-500">{form.formState.errors.guests.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.guests.message}
+                </p>
               )}
             </div>
           </div>
@@ -338,10 +368,14 @@ export function EditReservationDialog({
                 type="date"
                 {...form.register("checkInDate")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.checkInDate ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.checkInDate ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.checkInDate && (
-                <p className="text-sm text-red-500">{form.formState.errors.checkInDate.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.checkInDate.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
@@ -351,10 +385,14 @@ export function EditReservationDialog({
                 type="date"
                 {...form.register("checkOutDate")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.checkOutDate ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.checkOutDate ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.checkOutDate && (
-                <p className="text-sm text-red-500">{form.formState.errors.checkOutDate.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.checkOutDate.message}
+                </p>
               )}
             </div>
           </div>
@@ -362,7 +400,9 @@ export function EditReservationDialog({
             <div className="space-y-2">
               <Label htmlFor="roomId">Habitación</Label>
               {availabilityLoading && (
-                <div className="text-xs text-muted-foreground">Buscando disponibilidad...</div>
+                <div className="text-xs text-muted-foreground">
+                  Buscando disponibilidad...
+                </div>
               )}
               <Select
                 value={form.watch("roomId")}
@@ -376,54 +416,69 @@ export function EditReservationDialog({
                     <div className="p-2 text-center text-sm text-muted-foreground">
                       Buscando habitaciones disponibles...
                     </div>
-                  ) : (() => {
-                    // Solo mostrar habitaciones si tenemos fechas seleccionadas y la búsqueda de disponibilidad ha completado
-                    if (!formValues.checkInDate || !formValues.checkOutDate) {
-                      return (
-                        <div className="p-2 text-center text-sm text-muted-foreground">
-                          Selecciona fechas de check-in y check-out para ver habitaciones disponibles
-                        </div>
-                      );
-                    }
-                    
-                    // Si ya tenemos fechas pero no hay resultado de disponibilidad, mostrar mensaje de búsqueda
-                    if (availableRooms === null) {
-                      return (
-                        <div className="p-2 text-center text-sm text-muted-foreground">
-                          Verificando disponibilidad...
-                        </div>
-                      );
-                    }
-                    
-                    const roomsToShow = availableRooms;
-                    
-                    if (roomsToShow.length === 0) {
-                      return (
-                        <div className="p-2 text-center text-sm text-muted-foreground">
-                          No hay habitaciones disponibles para las fechas seleccionadas
-                        </div>
-                      );
-                    }
+                  ) : (
+                    (() => {
+                      // Solo mostrar habitaciones si tenemos fechas seleccionadas y la búsqueda de disponibilidad ha completado
+                      if (!formValues.checkInDate || !formValues.checkOutDate) {
+                        return (
+                          <div className="p-2 text-center text-sm text-muted-foreground">
+                            Selecciona fechas de check-in y check-out para ver
+                            habitaciones disponibles
+                          </div>
+                        );
+                      }
 
-                    return roomsToShow.map((room) => (
-                      <SelectItem key={room.id} value={room.id.toString()}>
-                        {room.number} - {getRoomTypeDisplayName(room.type)} (
-                        {formatCurrency(Number(room.price))}/noche)
-                      </SelectItem>
-                    ));
-                  })()
-                  }
+                      // Si ya tenemos fechas pero no hay resultado de disponibilidad, mostrar mensaje de búsqueda
+                      if (availableRooms === null) {
+                        return (
+                          <div className="p-2 text-center text-sm text-muted-foreground">
+                            Verificando disponibilidad...
+                          </div>
+                        );
+                      }
+
+                      const roomsToShow = availableRooms;
+
+                      if (roomsToShow.length === 0) {
+                        return (
+                          <div className="p-2 text-center text-sm text-muted-foreground">
+                            No hay habitaciones disponibles para las fechas
+                            seleccionadas
+                          </div>
+                        );
+                      }
+
+                      return roomsToShow.map((room) => (
+                        <SelectItem key={room.id} value={room.id.toString()}>
+                          {room.number} - {getRoomTypeDisplayName(room.type)} (
+                          {formatCurrency(Number(room.price))}/noche)
+                        </SelectItem>
+                      ));
+                    })()
+                  )}
                 </SelectContent>
               </Select>
               {form.formState.errors.roomId && (
-                <p className="text-sm text-red-500">{form.formState.errors.roomId.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.roomId.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="status">Estado</Label>
               <Select
                 value={form.watch("status")}
-                onValueChange={(value) => form.setValue("status", value as "PENDING" | "CONFIRMED" | "CHECKED_IN" | "CHECKED_OUT" | "CANCELLED")}
+                onValueChange={(value) =>
+                  form.setValue(
+                    "status",
+                    value as
+                      | "PENDING"
+                      | "CONFIRMED"
+                      | "CHECKED_IN"
+                      | "CHECKED_OUT"
+                      | "CANCELLED",
+                  )
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar estado" />
@@ -437,7 +492,9 @@ export function EditReservationDialog({
                 </SelectContent>
               </Select>
               {form.formState.errors.status && (
-                <p className="text-sm text-red-500">{form.formState.errors.status.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.status.message}
+                </p>
               )}
             </div>
           </div>
@@ -455,10 +512,14 @@ export function EditReservationDialog({
                 placeholder="0"
                 {...form.register("discountPercent")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.discountPercent ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.discountPercent ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.discountPercent && (
-                <p className="text-sm text-red-500">{form.formState.errors.discountPercent.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.discountPercent.message}
+                </p>
               )}
             </div>
             <div className="space-y-2">
@@ -471,18 +532,30 @@ export function EditReservationDialog({
                 placeholder="0"
                 {...form.register("discountAmount")}
                 disabled={form.formState.isSubmitting}
-                className={form.formState.errors.discountAmount ? "border-red-500" : ""}
+                className={
+                  form.formState.errors.discountAmount ? "border-red-500" : ""
+                }
               />
               {form.formState.errors.discountAmount && (
-                <p className="text-sm text-red-500">{form.formState.errors.discountAmount.message}</p>
+                <p className="text-sm text-red-500">
+                  {form.formState.errors.discountAmount.message}
+                </p>
               )}
             </div>
           </div>
           <div className="flex flex-col sm:flex-row justify-end gap-2 sm:space-x-2 pt-4">
-            <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
+            <Button
+              variant="outline"
+              onClick={onClose}
+              className="w-full sm:w-auto"
+            >
               Cancelar
             </Button>
-            <Button type="submit" disabled={loading || form.formState.isSubmitting} className="w-full sm:w-auto">
+            <Button
+              type="submit"
+              disabled={loading || form.formState.isSubmitting}
+              className="w-full sm:w-auto"
+            >
               {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Guardar Cambios
             </Button>

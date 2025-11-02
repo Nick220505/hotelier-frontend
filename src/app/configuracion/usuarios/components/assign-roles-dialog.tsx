@@ -38,16 +38,16 @@ export function AssignRolesDialog({
   useEffect(() => {
     if (open && userRoles && userRoles.length > 0) {
       const currentRoles = userRoles.map((role) => role.id);
-      console.log('Setting selected roles from user roles:', currentRoles);
+      console.log("Setting selected roles from user roles:", currentRoles);
       setSelectedRoles(currentRoles);
     } else if (open && (!userRoles || userRoles.length === 0)) {
-      console.log('No user roles found, clearing selection');
+      console.log("No user roles found, clearing selection");
       setSelectedRoles([]);
     }
   }, [open, userRoles]);
 
   useEffect(() => {
-    console.log('Selected roles updated:', selectedRoles);
+    console.log("Selected roles updated:", selectedRoles);
   }, [selectedRoles]);
 
   const handleSubmit = () => {
@@ -58,12 +58,12 @@ export function AssignRolesDialog({
 
   const toggleRole = (roleId: number) => {
     const validRoleId = Number.isInteger(roleId) ? roleId : Number(roleId);
-    
+
     if (!Number.isInteger(validRoleId) || validRoleId <= 0) {
-      console.error('Invalid role ID:', roleId);
+      console.error("Invalid role ID:", roleId);
       return;
     }
-    
+
     setSelectedRoles((prev) =>
       prev.includes(validRoleId)
         ? prev.filter((id) => id !== validRoleId)
@@ -84,7 +84,7 @@ export function AssignRolesDialog({
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 py-2">
             {roles.map((role) => {
               const isChecked = selectedRoles.includes(role.id);
-              
+
               return (
                 <div
                   key={role.id}
@@ -125,7 +125,10 @@ export function AssignRolesDialog({
         <DialogFooter className="border-t pt-4 mt-2">
           <div className="flex items-center justify-between w-full">
             <p className="text-sm text-muted-foreground">
-              {selectedRoles.length} {selectedRoles.length === 1 ? 'rol seleccionado' : 'roles seleccionados'}
+              {selectedRoles.length}{" "}
+              {selectedRoles.length === 1
+                ? "rol seleccionado"
+                : "roles seleccionados"}
             </p>
             <div className="flex gap-2">
               <Button variant="outline" onClick={() => onOpenChange(false)}>

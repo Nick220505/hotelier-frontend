@@ -16,9 +16,11 @@ interface RestaurantStatsProps {
 
 export function RestaurantStats({ stats }: RestaurantStatsProps) {
   const { hasRole } = useAuthenticatedUser();
-  
+
   return (
-    <div className={`grid gap-4 md:grid-cols-2 ${!hasRole('cliente') ? 'lg:grid-cols-4' : 'lg:grid-cols-3'}`}>
+    <div
+      className={`grid gap-4 md:grid-cols-2 ${!hasRole("cliente") ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}
+    >
       <Card>
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
           <CardTitle className="text-sm font-medium">Pedidos Activos</CardTitle>
@@ -43,10 +45,12 @@ export function RestaurantStats({ stats }: RestaurantStatsProps) {
         </CardContent>
       </Card>
 
-      {!hasRole('cliente') && (
+      {!hasRole("cliente") && (
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Ventas del Día</CardTitle>
+            <CardTitle className="text-sm font-medium">
+              Ventas del Día
+            </CardTitle>
             <CheckCircle className="h-4 w-4 text-purple-600" />
           </CardHeader>
           <CardContent>

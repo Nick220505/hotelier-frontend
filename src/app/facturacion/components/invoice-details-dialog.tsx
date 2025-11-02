@@ -32,29 +32,38 @@ export function InvoiceDetailsDialog({
         <div className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground">Huésped</h4>
+              <h4 className="font-medium text-sm text-muted-foreground">
+                Huésped
+              </h4>
               <p>{invoice.guest}</p>
             </div>
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground">Habitación</h4>
+              <h4 className="font-medium text-sm text-muted-foreground">
+                Habitación
+              </h4>
               <p>{invoice.room}</p>
             </div>
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground">Fecha</h4>
+              <h4 className="font-medium text-sm text-muted-foreground">
+                Fecha
+              </h4>
               <p>{new Date(invoice.issueDate).toLocaleDateString()}</p>
             </div>
             <div>
-              <h4 className="font-medium text-sm text-muted-foreground">Estado</h4>
+              <h4 className="font-medium text-sm text-muted-foreground">
+                Estado
+              </h4>
               <Badge
                 className={
                   invoice.status === "pagada"
                     ? "bg-green-100 text-green-800"
                     : invoice.status === "pendiente"
-                    ? "bg-yellow-100 text-yellow-800"
-                    : "bg-red-100 text-red-800"
+                      ? "bg-yellow-100 text-yellow-800"
+                      : "bg-red-100 text-red-800"
                 }
               >
-                {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                {invoice.status.charAt(0).toUpperCase() +
+                  invoice.status.slice(1)}
               </Badge>
             </div>
             {invoice.paymentMethod && (
@@ -72,7 +81,10 @@ export function InvoiceDetailsDialog({
             <h4 className="font-medium">Detalle de Cargos</h4>
             <div className="space-y-2 border rounded-lg p-4">
               {invoice.items?.map((item, index) => (
-                <div key={index} className="flex justify-between items-start py-2 border-b last:border-0">
+                <div
+                  key={index}
+                  className="flex justify-between items-start py-2 border-b last:border-0"
+                >
                   <div>
                     <p className="font-medium">{item.description}</p>
                     {item.quantity > 1 && (
@@ -81,7 +93,9 @@ export function InvoiceDetailsDialog({
                       </p>
                     )}
                   </div>
-                  <p className="font-medium">{formatCurrency(item.price * item.quantity)}</p>
+                  <p className="font-medium">
+                    {formatCurrency(item.price * item.quantity)}
+                  </p>
                 </div>
               ))}
             </div>

@@ -1,35 +1,33 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
-import { 
-  CalendarIcon, 
-  Search, 
-  Filter, 
-  X, 
-  RefreshCw,
-} from 'lucide-react';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { Calendar } from '@/components/ui/calendar';
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { CalendarIcon, Search, Filter, X, RefreshCw } from "lucide-react";
+import { format } from "date-fns";
+import { es } from "date-fns/locale";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { type AuditLogQuery, AuditAction, AuditResource } from '@/lib/api/audit';
-import { cn } from '@/lib/utils';
+} from "@/components/ui/popover";
+import {
+  type AuditLogQuery,
+  AuditAction,
+  AuditResource,
+} from "@/lib/api/audit";
+import { cn } from "@/lib/utils";
 
 interface AuditFiltersProps {
   query: AuditLogQuery;
@@ -37,20 +35,24 @@ interface AuditFiltersProps {
   loading?: boolean;
 }
 
-export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProps) {
+export function AuditFilters({
+  query,
+  onQueryChange,
+  loading,
+}: AuditFiltersProps) {
   const [startDate, setStartDate] = useState<Date | undefined>(
-    query.startDate ? new Date(query.startDate) : undefined
+    query.startDate ? new Date(query.startDate) : undefined,
   );
   const [endDate, setEndDate] = useState<Date | undefined>(
-    query.endDate ? new Date(query.endDate) : undefined
+    query.endDate ? new Date(query.endDate) : undefined,
   );
-  const [searchTerm, setSearchTerm] = useState(query.search || '');
+  const [searchTerm, setSearchTerm] = useState(query.search || "");
 
   // Update local state when query changes externally
   useEffect(() => {
     setStartDate(query.startDate ? new Date(query.startDate) : undefined);
     setEndDate(query.endDate ? new Date(query.endDate) : undefined);
-    setSearchTerm(query.search || '');
+    setSearchTerm(query.search || "");
   }, [query]);
 
   const handleSearch = () => {
@@ -64,7 +66,7 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
   const handleClearFilters = () => {
     setStartDate(undefined);
     setEndDate(undefined);
-    setSearchTerm('');
+    setSearchTerm("");
     onQueryChange({
       userId: undefined,
       action: undefined,
@@ -79,14 +81,14 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
 
   const handleActionChange = (value: string) => {
     onQueryChange({
-      action: value === 'all' ? undefined : (value as AuditAction),
+      action: value === "all" ? undefined : (value as AuditAction),
       skip: 0,
     });
   };
 
   const handleResourceChange = (value: string) => {
     onQueryChange({
-      resource: value === 'all' ? undefined : (value as AuditResource),
+      resource: value === "all" ? undefined : (value as AuditResource),
       skip: 0,
     });
   };
@@ -121,14 +123,15 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
             Filtros de Búsqueda
             {activeFiltersCount > 0 && (
               <Badge variant="secondary">
-                {activeFiltersCount} filtro{activeFiltersCount !== 1 ? 's' : ''} activo{activeFiltersCount !== 1 ? 's' : ''}
+                {activeFiltersCount} filtro{activeFiltersCount !== 1 ? "s" : ""}{" "}
+                activo{activeFiltersCount !== 1 ? "s" : ""}
               </Badge>
             )}
           </div>
           {activeFiltersCount > 0 && (
-            <Button 
-              variant="outline" 
-              size="sm" 
+            <Button
+              variant="outline"
+              size="sm"
               onClick={handleClearFilters}
               disabled={loading}
             >
@@ -149,14 +152,10 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
                 placeholder="Buscar en descripción..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onKeyPress={(e) => e.key === "Enter" && handleSearch()}
                 disabled={loading}
               />
-              <Button 
-                size="icon" 
-                onClick={handleSearch}
-                disabled={loading}
-              >
+              <Button size="icon" onClick={handleSearch} disabled={loading}>
                 <Search className="h-4 w-4" />
               </Button>
             </div>
@@ -166,7 +165,7 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
           <div className="space-y-2">
             <Label htmlFor="action">Acción</Label>
             <Select
-              value={query.action || 'all'}
+              value={query.action || "all"}
               onValueChange={handleActionChange}
               disabled={loading}
             >
@@ -179,15 +178,29 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
                 <SelectItem value={AuditAction.READ}>Leer</SelectItem>
                 <SelectItem value={AuditAction.UPDATE}>Actualizar</SelectItem>
                 <SelectItem value={AuditAction.DELETE}>Eliminar</SelectItem>
-                <SelectItem value={AuditAction.LOGIN}>Iniciar Sesión</SelectItem>
-                <SelectItem value={AuditAction.LOGOUT}>Cerrar Sesión</SelectItem>
-                <SelectItem value={AuditAction.LOGIN_FAILED}>Login Fallido</SelectItem>
+                <SelectItem value={AuditAction.LOGIN}>
+                  Iniciar Sesión
+                </SelectItem>
+                <SelectItem value={AuditAction.LOGOUT}>
+                  Cerrar Sesión
+                </SelectItem>
+                <SelectItem value={AuditAction.LOGIN_FAILED}>
+                  Login Fallido
+                </SelectItem>
                 <SelectItem value={AuditAction.CHECK_IN}>Check In</SelectItem>
                 <SelectItem value={AuditAction.CHECK_OUT}>Check Out</SelectItem>
-                <SelectItem value={AuditAction.PAYMENT_PROCESSED}>Pago Procesado</SelectItem>
-                <SelectItem value={AuditAction.INVOICE_GENERATED}>Factura Generada</SelectItem>
-                <SelectItem value={AuditAction.STATUS_CHANGE}>Cambio de Estado</SelectItem>
-                <SelectItem value={AuditAction.SYSTEM_CONFIG_CHANGE}>Config. Sistema</SelectItem>
+                <SelectItem value={AuditAction.PAYMENT_PROCESSED}>
+                  Pago Procesado
+                </SelectItem>
+                <SelectItem value={AuditAction.INVOICE_GENERATED}>
+                  Factura Generada
+                </SelectItem>
+                <SelectItem value={AuditAction.STATUS_CHANGE}>
+                  Cambio de Estado
+                </SelectItem>
+                <SelectItem value={AuditAction.SYSTEM_CONFIG_CHANGE}>
+                  Config. Sistema
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -196,7 +209,7 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
           <div className="space-y-2">
             <Label htmlFor="resource">Recurso</Label>
             <Select
-              value={query.resource || 'all'}
+              value={query.resource || "all"}
               onValueChange={handleResourceChange}
               disabled={loading}
             >
@@ -206,18 +219,28 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
               <SelectContent>
                 <SelectItem value="all">Todos los recursos</SelectItem>
                 <SelectItem value={AuditResource.USER}>Usuario</SelectItem>
-                <SelectItem value={AuditResource.RESERVATION}>Reserva</SelectItem>
+                <SelectItem value={AuditResource.RESERVATION}>
+                  Reserva
+                </SelectItem>
                 <SelectItem value={AuditResource.ROOM}>Habitación</SelectItem>
                 <SelectItem value={AuditResource.GUEST}>Huésped</SelectItem>
                 <SelectItem value={AuditResource.INVOICE}>Factura</SelectItem>
                 <SelectItem value={AuditResource.PAYMENT}>Pago</SelectItem>
                 <SelectItem value={AuditResource.EMPLOYEE}>Empleado</SelectItem>
                 <SelectItem value={AuditResource.SHIFT}>Turno</SelectItem>
-                <SelectItem value={AuditResource.ATTENDANCE}>Asistencia</SelectItem>
-                <SelectItem value={AuditResource.RESTAURANT}>Restaurante</SelectItem>
+                <SelectItem value={AuditResource.ATTENDANCE}>
+                  Asistencia
+                </SelectItem>
+                <SelectItem value={AuditResource.RESTAURANT}>
+                  Restaurante
+                </SelectItem>
                 <SelectItem value={AuditResource.EVENT}>Evento</SelectItem>
-                <SelectItem value={AuditResource.RECREATIONAL}>Recreación</SelectItem>
-                <SelectItem value={AuditResource.PARKING}>Parqueadero</SelectItem>
+                <SelectItem value={AuditResource.RECREATIONAL}>
+                  Recreación
+                </SelectItem>
+                <SelectItem value={AuditResource.PARKING}>
+                  Parqueadero
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -228,7 +251,7 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
             <Input
               id="resourceId"
               placeholder="123"
-              value={query.resourceId || ''}
+              value={query.resourceId || ""}
               onChange={(e) => handleResourceIdChange(e.target.value)}
               disabled={loading}
             />
@@ -245,12 +268,14 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
                   variant="outline"
                   className={cn(
                     "w-full justify-start text-left font-normal",
-                    !startDate && "text-muted-foreground"
+                    !startDate && "text-muted-foreground",
                   )}
                   disabled={loading}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {startDate ? format(startDate, "PPP", { locale: es }) : "Seleccionar fecha"}
+                  {startDate
+                    ? format(startDate, "PPP", { locale: es })
+                    : "Seleccionar fecha"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
@@ -272,12 +297,14 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
                   variant="outline"
                   className={cn(
                     "w-full justify-start text-left font-normal",
-                    !endDate && "text-muted-foreground"
+                    !endDate && "text-muted-foreground",
                   )}
                   disabled={loading}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
-                  {endDate ? format(endDate, "PPP", { locale: es }) : "Seleccionar fecha"}
+                  {endDate
+                    ? format(endDate, "PPP", { locale: es })
+                    : "Seleccionar fecha"}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0">
@@ -294,8 +321,8 @@ export function AuditFilters({ query, onQueryChange, loading }: AuditFiltersProp
 
         {/* Apply Filters Button */}
         <div className="flex justify-end mt-4 pt-4 border-t">
-          <Button 
-            onClick={handleSearch} 
+          <Button
+            onClick={handleSearch}
             disabled={loading}
             className="flex items-center gap-2"
           >

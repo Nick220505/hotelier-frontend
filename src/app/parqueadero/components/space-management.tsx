@@ -70,7 +70,7 @@ export default function SpaceManagement({
               <TableHead>Ubicación</TableHead>
               <TableHead>Vehículo Actual</TableHead>
               <TableHead>Estado</TableHead>
-              {!hasRole('cliente') && <TableHead>Acciones</TableHead>}
+              {!hasRole("cliente") && <TableHead>Acciones</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -90,7 +90,7 @@ export default function SpaceManagement({
                   )}
                 </TableCell>
                 <TableCell>{getSpaceStatusBadge(space.status)}</TableCell>
-                {!hasRole('cliente') && (
+                {!hasRole("cliente") && (
                   <TableCell>
                     <div className="flex space-x-2">
                       {space.status === "mantenimiento" && (

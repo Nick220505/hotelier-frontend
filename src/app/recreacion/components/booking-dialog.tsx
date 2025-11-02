@@ -84,8 +84,11 @@ export function BookingDialog({
   onBookingCreated,
 }: BookingDialogProps) {
   const [loading, setLoading] = useState(false);
-  const [selectedFacility, setSelectedFacility] = useState<RecreationalFacility | null>(null);
-  const [availability, setAvailability] = useState<FacilityAvailability | null>(null);
+  const [selectedFacility, setSelectedFacility] =
+    useState<RecreationalFacility | null>(null);
+  const [availability, setAvailability] = useState<FacilityAvailability | null>(
+    null,
+  );
   const [loadingAvailability, setLoadingAvailability] = useState(false);
   const [calculatedCost, setCalculatedCost] = useState(0);
 
@@ -123,7 +126,7 @@ export function BookingDialog({
       setLoadingAvailability(true);
       const availabilityData = await recreationalApi.getFacilityAvailability(
         selectedFacility.id,
-        bookingDate
+        bookingDate,
       );
       setAvailability(availabilityData);
     } catch (error) {
@@ -141,14 +144,14 @@ export function BookingDialog({
       const start = new Date(`2000-01-01T${startTime}:00`);
       const end = new Date(`2000-01-01T${endTime}:00`);
       const duration = (end.getTime() - start.getTime()) / (1000 * 60 * 60);
-      
+
       if (duration <= 0) {
         setCalculatedCost(0);
         return;
       }
 
       let cost = 0; // Todas las instalaciones son gratuitas
-      
+
       // Apply discounts
       if (discountPercent > 0) {
         cost = cost * (1 - discountPercent / 100);
@@ -166,7 +169,7 @@ export function BookingDialog({
 
   // Update selected facility when facilityId changes
   useEffect(() => {
-    const facility = facilities.find(f => f.id === facilityId);
+    const facility = facilities.find((f) => f.id === facilityId);
     setSelectedFacility(facility || null);
   }, [facilityId, facilities]);
 
@@ -182,7 +185,14 @@ export function BookingDialog({
     if (selectedFacility && startTime && endTime) {
       calculateCost();
     }
-  }, [selectedFacility, startTime, endTime, discountPercent, discountAmount, calculateCost]);
+  }, [
+    selectedFacility,
+    startTime,
+    endTime,
+    discountPercent,
+    discountAmount,
+    calculateCost,
+  ]);
 
   // Initialize form when booking changes
   useEffect(() => {
@@ -211,7 +221,7 @@ export function BookingDialog({
 
   const getAvailableTimeSlots = (): TimeSlot[] => {
     if (!availability) return [];
-    return availability.availableSlots.filter(slot => slot.isAvailable);
+    return availability.availableSlots.filter((slot) => slot.isAvailable);
   };
 
   const onSubmit = async (values: BookingFormValues) => {
@@ -230,15 +240,21 @@ export function BookingDialog({
 
       if (selectedFacility) {
         if (duration < selectedFacility.minimumBookingHours) {
-          toast.error(`La duración mínima es ${selectedFacility.minimumBookingHours} horas`);
+          toast.error(
+            `La duración mínima es ${selectedFacility.minimumBookingHours} horas`,
+          );
           return;
         }
         if (duration > selectedFacility.maximumBookingHours) {
-          toast.error(`La duración máxima es ${selectedFacility.maximumBookingHours} horas`);
+          toast.error(
+            `La duración máxima es ${selectedFacility.maximumBookingHours} horas`,
+          );
           return;
         }
         if (values.participants > selectedFacility.capacity) {
-          toast.error(`La capacidad máxima es ${selectedFacility.capacity} personas`);
+          toast.error(
+            `La capacidad máxima es ${selectedFacility.capacity} personas`,
+          );
           return;
         }
       }
@@ -257,7 +273,7 @@ export function BookingDialog({
       };
 
       let result: RecreationalBooking;
-      
+
       if (booking) {
         result = await recreationalApi.updateBooking(booking.id, bookingData);
         toast.success("Reserva actualizada correctamente");
@@ -271,9 +287,9 @@ export function BookingDialog({
     } catch (error) {
       console.error("Error saving booking:", error);
       toast.error(
-        booking 
-          ? "Error al actualizar la reserva" 
-          : "Error al crear la reserva"
+        booking
+          ? "Error al actualizar la reserva"
+          : "Error al crear la reserva",
       );
     } finally {
       setLoading(false);
@@ -288,8 +304,8 @@ export function BookingDialog({
             {booking ? "Editar Reserva" : "Nueva Reserva"}
           </DialogTitle>
           <DialogDescription>
-            {booking 
-              ? "Modifica los detalles de la reserva recreativa" 
+            {booking
+              ? "Modifica los detalles de la reserva recreativa"
               : "Crea una nueva reserva para instalaciones recreativas"}
           </DialogDescription>
         </DialogHeader>
@@ -307,7 +323,10 @@ export function BookingDialog({
                     <FormItem>
                       <FormLabel>Nombre del Huésped *</FormLabel>
                       <FormControl>
-                        <Input placeholder="María Alejandra Rodríguez" {...field} />
+                        <Input
+                          placeholder="María Alejandra Rodríguez"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -321,7 +340,11 @@ export function BookingDialog({
                     <FormItem>
                       <FormLabel>Email *</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="maria@email.com" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="maria@email.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -361,31 +384,41 @@ export function BookingDialog({
             {/* Booking Details */}
             <div className="space-y-4">
               <h4 className="font-semibold">Detalles de la Reserva</h4>
-              
+
               <FormField
                 control={form.control}
                 name="facilityId"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Instalación *</FormLabel>
-                    <Select onValueChange={(value) => field.onChange(parseInt(value))} 
-                            value={field.value?.toString() || ""}>
+                    <Select
+                      onValueChange={(value) => field.onChange(parseInt(value))}
+                      value={field.value?.toString() || ""}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Seleccionar instalación" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {facilities.filter(f => f.status === "AVAILABLE" || f.id === field.value).map((facility) => (
-                          <SelectItem key={facility.id} value={facility.id.toString()}>
-                            <div className="flex items-center justify-between w-full">
-                              <span>{facility.name}</span>
-                              <Badge variant="outline" className="ml-2">
-                                Gratuito
-                              </Badge>
-                            </div>
-                          </SelectItem>
-                        ))}
+                        {facilities
+                          .filter(
+                            (f) =>
+                              f.status === "AVAILABLE" || f.id === field.value,
+                          )
+                          .map((facility) => (
+                            <SelectItem
+                              key={facility.id}
+                              value={facility.id.toString()}
+                            >
+                              <div className="flex items-center justify-between w-full">
+                                <span>{facility.name}</span>
+                                <Badge variant="outline" className="ml-2">
+                                  Gratuito
+                                </Badge>
+                              </div>
+                            </SelectItem>
+                          ))}
                       </SelectContent>
                     </Select>
                     <FormMessage />
@@ -397,25 +430,32 @@ export function BookingDialog({
               {selectedFacility && (
                 <Card className="bg-muted/50">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-sm">{selectedFacility.name}</CardTitle>
+                    <CardTitle className="text-sm">
+                      {selectedFacility.name}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-2">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
                       <div>
-                        <span className="font-medium">Capacidad:</span> {selectedFacility.capacity}
+                        <span className="font-medium">Capacidad:</span>{" "}
+                        {selectedFacility.capacity}
                       </div>
                       <div>
                         <span className="font-medium">Tarifa:</span> Gratuito
                       </div>
                       <div>
-                        <span className="font-medium">Min:</span> {selectedFacility.minimumBookingHours}h
+                        <span className="font-medium">Min:</span>{" "}
+                        {selectedFacility.minimumBookingHours}h
                       </div>
                       <div>
-                        <span className="font-medium">Max:</span> {selectedFacility.maximumBookingHours}h
+                        <span className="font-medium">Max:</span>{" "}
+                        {selectedFacility.maximumBookingHours}h
                       </div>
                     </div>
                     <div className="text-xs">
-                      <span className="font-medium">Horario:</span> {selectedFacility.openingTime} - {selectedFacility.closingTime}
+                      <span className="font-medium">Horario:</span>{" "}
+                      {selectedFacility.openingTime} -{" "}
+                      {selectedFacility.closingTime}
                     </div>
                   </CardContent>
                 </Card>
@@ -486,7 +526,10 @@ export function BookingDialog({
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Prioridad</FormLabel>
-                      <Select onValueChange={field.onChange} value={field.value || ""}>
+                      <Select
+                        onValueChange={field.onChange}
+                        value={field.value || ""}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue />
@@ -494,7 +537,10 @@ export function BookingDialog({
                         </FormControl>
                         <SelectContent>
                           {priorityOptions.map((priority) => (
-                            <SelectItem key={priority.value} value={priority.value}>
+                            <SelectItem
+                              key={priority.value}
+                              value={priority.value}
+                            >
                               {priority.label}
                             </SelectItem>
                           ))}
@@ -513,27 +559,39 @@ export function BookingDialog({
                 <CardHeader className="pb-2">
                   <CardTitle className="text-sm flex items-center">
                     <CalendarDays className="h-4 w-4 mr-2" />
-                    Disponibilidad - {new Date(bookingDate).toLocaleDateString()}
+                    Disponibilidad -{" "}
+                    {new Date(bookingDate).toLocaleDateString()}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
                   {loadingAvailability ? (
-                    <div className="text-sm text-muted-foreground">Verificando disponibilidad...</div>
+                    <div className="text-sm text-muted-foreground">
+                      Verificando disponibilidad...
+                    </div>
                   ) : (
                     <div className="space-y-2">
                       <div className="text-xs text-muted-foreground">
-                        Capacidad: {availability.totalCapacity} • {availability.isFullyBooked ? "Completamente reservada" : "Disponible"}
+                        Capacidad: {availability.totalCapacity} •{" "}
+                        {availability.isFullyBooked
+                          ? "Completamente reservada"
+                          : "Disponible"}
                       </div>
                       {getAvailableTimeSlots().length > 0 ? (
                         <div className="flex flex-wrap gap-1">
                           {getAvailableTimeSlots().map((slot, index) => (
-                            <Badge key={index} variant="outline" className="text-xs">
+                            <Badge
+                              key={index}
+                              variant="outline"
+                              className="text-xs"
+                            >
                               {slot.startTime}-{slot.endTime}
                             </Badge>
                           ))}
                         </div>
                       ) : (
-                        <div className="text-sm text-red-600">No hay horarios disponibles</div>
+                        <div className="text-sm text-red-600">
+                          No hay horarios disponibles
+                        </div>
                       )}
                     </div>
                   )}
@@ -569,7 +627,13 @@ export function BookingDialog({
                     <FormItem>
                       <FormLabel>Descuento (%)</FormLabel>
                       <FormControl>
-                        <Input type="number" min="0" max="100" step="0.1" {...field} />
+                        <Input
+                          type="number"
+                          min="0"
+                          max="100"
+                          step="0.1"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -599,9 +663,9 @@ export function BookingDialog({
                 <FormItem>
                   <FormLabel>Solicitudes Especiales</FormLabel>
                   <FormControl>
-                    <Textarea 
+                    <Textarea
                       placeholder="Notas adicionales o solicitudes especiales..."
-                      {...field} 
+                      {...field}
                     />
                   </FormControl>
                   <FormMessage />
@@ -619,10 +683,13 @@ export function BookingDialog({
                 Cancelar
               </Button>
               <Button type="submit" disabled={loading}>
-                {loading 
-                  ? (booking ? "Actualizando..." : "Creando...")
-                  : (booking ? "Actualizar" : "Crear Reserva")
-                }
+                {loading
+                  ? booking
+                    ? "Actualizando..."
+                    : "Creando..."
+                  : booking
+                    ? "Actualizar"
+                    : "Crear Reserva"}
               </Button>
             </DialogFooter>
           </form>

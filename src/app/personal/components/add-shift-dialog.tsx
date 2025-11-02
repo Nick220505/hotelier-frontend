@@ -76,7 +76,10 @@ export function AddShiftDialog({
             Completa los datos para programar un nuevo turno.
           </DialogDescription>
         </DialogHeader>
-        <form onSubmit={shiftForm.handleSubmit(handleSubmit)} className="space-y-4">
+        <form
+          onSubmit={shiftForm.handleSubmit(handleSubmit)}
+          className="space-y-4"
+        >
           <div className="space-y-2">
             <Label htmlFor="employeeId">Empleado</Label>
             <Controller
@@ -109,12 +112,7 @@ export function AddShiftDialog({
             <Controller
               name="date"
               control={shiftForm.control}
-              render={({ field }) => (
-                <Input
-                  type="date"
-                  {...field}
-                />
-              )}
+              render={({ field }) => <Input type="date" {...field} />}
             />
             {shiftForm.formState.errors.date && (
               <p className="text-sm text-red-500">
@@ -154,12 +152,7 @@ export function AddShiftDialog({
               <Controller
                 name="startTime"
                 control={shiftForm.control}
-                render={({ field }) => (
-                  <Input
-                    type="time"
-                    {...field}
-                  />
-                )}
+                render={({ field }) => <Input type="time" {...field} />}
               />
               {shiftForm.formState.errors.startTime && (
                 <p className="text-sm text-red-500">
@@ -173,12 +166,7 @@ export function AddShiftDialog({
               <Controller
                 name="endTime"
                 control={shiftForm.control}
-                render={({ field }) => (
-                  <Input
-                    type="time"
-                    {...field}
-                  />
-                )}
+                render={({ field }) => <Input type="time" {...field} />}
               />
               {shiftForm.formState.errors.endTime && (
                 <p className="text-sm text-red-500">
@@ -189,7 +177,11 @@ export function AddShiftDialog({
           </div>
 
           <div className="flex justify-end gap-2">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => onOpenChange(false)}
+            >
               Cancelar
             </Button>
             <Button type="submit">Agregar Turno</Button>

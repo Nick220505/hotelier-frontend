@@ -1,8 +1,13 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import BillingDashboard from "./components/billing-dashboard";
-import { billingApi, Invoice, Payment, FinancialReport } from "@/lib/api/billing";
+import {
+  billingApi,
+  Invoice,
+  Payment,
+  FinancialReport,
+} from "@/lib/api/billing";
 
 interface BillingData {
   invoices: Invoice[];

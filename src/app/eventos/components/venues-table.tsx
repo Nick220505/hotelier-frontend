@@ -42,7 +42,10 @@ export function VenuesTable({ venues, onEdit }: VenuesTableProps) {
         <TableBody>
           {venues.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={7} className="text-center text-muted-foreground">
+              <TableCell
+                colSpan={7}
+                className="text-center text-muted-foreground"
+              >
                 No hay salones registrados
               </TableCell>
             </TableRow>
@@ -66,9 +69,7 @@ export function VenuesTable({ venues, onEdit }: VenuesTableProps) {
                 <TableCell>{venue.capacity} personas</TableCell>
                 <TableCell>{venue.area} m²</TableCell>
                 <TableCell>${venue.hourlyRate}</TableCell>
-                <TableCell>
-                  {getAvailabilityBadge(venue.available)}
-                </TableCell>
+                <TableCell>{getAvailabilityBadge(venue.available)}</TableCell>
                 <TableCell>
                   <Button
                     variant="ghost"

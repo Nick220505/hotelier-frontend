@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
+import { useState, useEffect, useCallback } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import {
   Table,
   TableBody,
@@ -12,7 +12,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
+} from "@/components/ui/table";
 import {
   Dialog,
   DialogContent,
@@ -20,30 +20,41 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Label } from '@/components/ui/label';
-import { shiftsApi, type Shift } from '@/lib/api/shifts';
-import { employeesApi, type Employee } from '@/lib/api/employees';
-import { Clock, Plus, Pencil, Trash2 } from 'lucide-react';
-import { toast } from 'sonner';
-import { format } from 'date-fns';
+} from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
+import { shiftsApi, type Shift } from "@/lib/api/shifts";
+import { employeesApi, type Employee } from "@/lib/api/employees";
+import { Clock, Plus, Pencil, Trash2 } from "lucide-react";
+import { toast } from "sonner";
+import { format } from "date-fns";
 
 const getStatusBadge = (status: string) => {
   switch (status) {
-    case 'SCHEDULED':
-      return <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-300">Programado</Badge>;
-    case 'IN_PROGRESS':
-      return <Badge variant="default" className="bg-green-500">En Progreso</Badge>;
-    case 'COMPLETED':
+    case "SCHEDULED":
+      return (
+        <Badge
+          variant="outline"
+          className="bg-blue-50 text-blue-700 border-blue-300"
+        >
+          Programado
+        </Badge>
+      );
+    case "IN_PROGRESS":
+      return (
+        <Badge variant="default" className="bg-green-500">
+          En Progreso
+        </Badge>
+      );
+    case "COMPLETED":
       return <Badge variant="secondary">Completado</Badge>;
-    case 'CANCELLED':
+    case "CANCELLED":
       return <Badge variant="destructive">Cancelado</Badge>;
     default:
       return <Badge>{status}</Badge>;
@@ -52,10 +63,10 @@ const getStatusBadge = (status: string) => {
 
 const getShiftTypeName = (type: string) => {
   const types: Record<string, string> = {
-    'MORNING': 'Mañana',
-    'AFTERNOON': 'Tarde',
-    'NIGHT': 'Noche',
-    'DOUBLE': 'Doble'
+    MORNING: "Mañana",
+    AFTERNOON: "Tarde",
+    NIGHT: "Noche",
+    DOUBLE: "Doble",
   };
   return types[type] || type;
 };
@@ -68,17 +79,19 @@ export function ShiftsTab() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [editingShift, setEditingShift] = useState<Shift | null>(null);
   const [deletingShift, setDeletingShift] = useState<Shift | null>(null);
-  const [selectedDate, setSelectedDate] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [selectedDate, setSelectedDate] = useState(
+    format(new Date(), "yyyy-MM-dd"),
+  );
   const [formData, setFormData] = useState({
-    employeeId: '',
-    date: format(new Date(), 'yyyy-MM-dd'),
-    startTime: '08:00',
-    endTime: '16:00',
-    type: 'MORNING',
-    status: 'SCHEDULED',
-    position: '',
-    department: '',
-    notes: '',
+    employeeId: "",
+    date: format(new Date(), "yyyy-MM-dd"),
+    startTime: "08:00",
+    endTime: "16:00",
+    type: "MORNING",
+    status: "SCHEDULED",
+    position: "",
+    department: "",
+    notes: "",
   });
 
   const fetchData = useCallback(async () => {
@@ -91,8 +104,8 @@ export function ShiftsTab() {
       setShifts(shiftsData);
       setEmployees(employeesData);
     } catch (error) {
-      console.error('Error fetching data:', error);
-      toast.error('Error al cargar turnos');
+      console.error("Error fetching data:", error);
+      toast.error("Error al cargar turnos");
     } finally {
       setLoading(false);
     }
@@ -114,27 +127,27 @@ export function ShiftsTab() {
         status: shift.status,
         position: shift.position,
         department: shift.department,
-        notes: shift.notes || '',
+        notes: shift.notes || "",
       });
     } else {
       setEditingShift(null);
       setFormData({
-        employeeId: '',
+        employeeId: "",
         date: selectedDate,
-        startTime: '08:00',
-        endTime: '16:00',
-        type: 'MORNING',
-        status: 'SCHEDULED',
-        position: '',
-        department: '',
-        notes: '',
+        startTime: "08:00",
+        endTime: "16:00",
+        type: "MORNING",
+        status: "SCHEDULED",
+        position: "",
+        department: "",
+        notes: "",
       });
     }
     setDialogOpen(true);
   };
 
   const handleEmployeeChange = (employeeId: string) => {
-    const employee = employees.find(e => e.id === parseInt(employeeId));
+    const employee = employees.find((e) => e.id === parseInt(employeeId));
     if (employee) {
       setFormData({
         ...formData,
@@ -154,37 +167,37 @@ export function ShiftsTab() {
 
       if (editingShift) {
         await shiftsApi.update(editingShift.id, data);
-        toast.success('Turno actualizado exitosamente');
+        toast.success("Turno actualizado exitosamente");
       } else {
         await shiftsApi.create(data);
-        toast.success('Turno creado exitosamente');
+        toast.success("Turno creado exitosamente");
       }
       setDialogOpen(false);
       fetchData();
     } catch (error) {
-      console.error('Error saving shift:', error);
-      toast.error('Error al guardar turno');
+      console.error("Error saving shift:", error);
+      toast.error("Error al guardar turno");
     }
   };
 
   const handleDeleteShift = async () => {
     if (!deletingShift) return;
-    
+
     try {
       await shiftsApi.delete(deletingShift.id);
-      toast.success('Turno eliminado exitosamente');
+      toast.success("Turno eliminado exitosamente");
       setDeleteDialogOpen(false);
       setDeletingShift(null);
       fetchData();
     } catch (error) {
-      console.error('Error deleting shift:', error);
-      toast.error('Error al eliminar turno');
+      console.error("Error deleting shift:", error);
+      toast.error("Error al eliminar turno");
     }
   };
 
   const getEmployeeName = (employeeId: number) => {
-    const employee = employees.find(e => e.id === employeeId);
-    return employee?.name || 'Desconocido';
+    const employee = employees.find((e) => e.id === employeeId);
+    return employee?.name || "Desconocido";
   };
 
   return (
@@ -288,12 +301,12 @@ export function ShiftsTab() {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
-              {editingShift ? 'Editar Turno' : 'Nuevo Turno'}
+              {editingShift ? "Editar Turno" : "Nuevo Turno"}
             </DialogTitle>
             <DialogDescription>
               {editingShift
-                ? 'Actualiza la información del turno'
-                : 'Completa los datos del nuevo turno'}
+                ? "Actualiza la información del turno"
+                : "Completa los datos del nuevo turno"}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -308,7 +321,10 @@ export function ShiftsTab() {
                 </SelectTrigger>
                 <SelectContent>
                   {employees.map((employee) => (
-                    <SelectItem key={employee.id} value={employee.id.toString()}>
+                    <SelectItem
+                      key={employee.id}
+                      value={employee.id.toString()}
+                    >
                       {employee.name} - {employee.position}
                     </SelectItem>
                   ))}
@@ -321,7 +337,9 @@ export function ShiftsTab() {
                 id="date"
                 type="date"
                 value={formData.date}
-                onChange={(e) => setFormData({ ...formData, date: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, date: e.target.value })
+                }
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -331,7 +349,9 @@ export function ShiftsTab() {
                   id="startTime"
                   type="time"
                   value={formData.startTime}
-                  onChange={(e) => setFormData({ ...formData, startTime: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startTime: e.target.value })
+                  }
                 />
               </div>
               <div className="grid gap-2">
@@ -340,7 +360,9 @@ export function ShiftsTab() {
                   id="endTime"
                   type="time"
                   value={formData.endTime}
-                  onChange={(e) => setFormData({ ...formData, endTime: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, endTime: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -348,7 +370,9 @@ export function ShiftsTab() {
               <Label htmlFor="type">Tipo de Turno</Label>
               <Select
                 value={formData.type}
-                onValueChange={(value) => setFormData({ ...formData, type: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, type: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -365,7 +389,9 @@ export function ShiftsTab() {
               <Label htmlFor="status">Estado</Label>
               <Select
                 value={formData.status}
-                onValueChange={(value) => setFormData({ ...formData, status: value })}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, status: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue />
@@ -383,7 +409,9 @@ export function ShiftsTab() {
               <Input
                 id="notes"
                 value={formData.notes}
-                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, notes: e.target.value })
+                }
                 placeholder="Notas adicionales (opcional)"
               />
             </div>
@@ -393,7 +421,7 @@ export function ShiftsTab() {
               Cancelar
             </Button>
             <Button onClick={handleSaveShift}>
-              {editingShift ? 'Actualizar' : 'Crear'}
+              {editingShift ? "Actualizar" : "Crear"}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -405,11 +433,15 @@ export function ShiftsTab() {
           <DialogHeader>
             <DialogTitle>Confirmar Eliminación</DialogTitle>
             <DialogDescription>
-              ¿Estás seguro de que deseas eliminar este turno? Esta acción no se puede deshacer.
+              ¿Estás seguro de que deseas eliminar este turno? Esta acción no se
+              puede deshacer.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
               Cancelar
             </Button>
             <Button variant="destructive" onClick={handleDeleteShift}>
@@ -421,4 +453,3 @@ export function ShiftsTab() {
     </div>
   );
 }
-

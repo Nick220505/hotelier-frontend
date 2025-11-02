@@ -4,7 +4,13 @@ import { useState } from "react";
 import { MoreHorizontal, Edit, Trash2, Eye, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,11 +27,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { 
-  recreationalApi, 
-  type RecreationalFacility, 
-  type FacilityType, 
-  type FacilityStatus 
+import {
+  recreationalApi,
+  type RecreationalFacility,
+  type FacilityType,
+  type FacilityStatus,
 } from "@/lib/api/recreational";
 import { FacilityDialog } from "./facility-dialog";
 import { FacilityDetailsDialog } from "./facility-details-dialog";
@@ -36,9 +42,14 @@ interface FacilitiesManagementProps {
   onFacilitiesChange: (facilities: RecreationalFacility[]) => void;
 }
 
-export function FacilitiesManagement({ facilities, onFacilitiesChange }: FacilitiesManagementProps) {
-  const [editingFacility, setEditingFacility] = useState<RecreationalFacility | null>(null);
-  const [viewingFacility, setViewingFacility] = useState<RecreationalFacility | null>(null);
+export function FacilitiesManagement({
+  facilities,
+  onFacilitiesChange,
+}: FacilitiesManagementProps) {
+  const [editingFacility, setEditingFacility] =
+    useState<RecreationalFacility | null>(null);
+  const [viewingFacility, setViewingFacility] =
+    useState<RecreationalFacility | null>(null);
   const [showFacilityDialog, setShowFacilityDialog] = useState(false);
   const [deletingId, setDeletingId] = useState<number | null>(null);
 
@@ -52,14 +63,18 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
   };
 
   const handleDelete = async (facility: RecreationalFacility) => {
-    if (!confirm(`¿Estás seguro de que deseas eliminar la instalación "${facility.name}"?`)) {
+    if (
+      !confirm(
+        `¿Estás seguro de que deseas eliminar la instalación "${facility.name}"?`,
+      )
+    ) {
       return;
     }
 
     try {
       setDeletingId(Number(facility.id));
       await recreationalApi.deleteFacility(Number(facility.id));
-      onFacilitiesChange(facilities.filter(f => f.id !== facility.id));
+      onFacilitiesChange(facilities.filter((f) => f.id !== facility.id));
       toast.success("Instalación eliminada correctamente");
     } catch (error) {
       console.error("Error deleting facility:", error);
@@ -71,18 +86,23 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
 
   const handleStatusToggle = async (facility: RecreationalFacility) => {
     try {
-      const newStatus: FacilityStatus = facility.isAvailable ? "OUT_OF_ORDER" : "AVAILABLE";
-      const updatedFacility = await recreationalApi.updateFacility(Number(facility.id), {
-        status: newStatus,
-        isAvailable: !facility.isAvailable,
-      });
+      const newStatus: FacilityStatus = facility.isAvailable
+        ? "OUT_OF_ORDER"
+        : "AVAILABLE";
+      const updatedFacility = await recreationalApi.updateFacility(
+        Number(facility.id),
+        {
+          status: newStatus,
+          isAvailable: !facility.isAvailable,
+        },
+      );
 
       onFacilitiesChange(
-        facilities.map(f => f.id === facility.id ? updatedFacility : f)
+        facilities.map((f) => (f.id === facility.id ? updatedFacility : f)),
       );
-      
+
       toast.success(
-        `Instalación ${updatedFacility.isAvailable ? 'activada' : 'desactivada'} correctamente`
+        `Instalación ${updatedFacility.isAvailable ? "activada" : "desactivada"} correctamente`,
       );
     } catch (error) {
       console.error("Error updating facility status:", error);
@@ -93,7 +113,7 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
   const getFacilityTypeLabel = (type: FacilityType) => {
     const typeLabels: Record<FacilityType, string> = {
       SWIMMING_POOL: "Piscina",
-      GYM: "Gimnasio", 
+      GYM: "Gimnasio",
       TENNIS_COURT: "Cancha de Tenis",
       SPA: "Spa",
       SAUNA: "Sauna",
@@ -114,15 +134,35 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
 
     switch (status) {
       case "AVAILABLE":
-        return <Badge variant="default" className="bg-green-500">Disponible</Badge>;
+        return (
+          <Badge variant="default" className="bg-green-500">
+            Disponible
+          </Badge>
+        );
       case "OCCUPIED":
-        return <Badge variant="secondary" className="bg-blue-500">Ocupada</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-blue-500">
+            Ocupada
+          </Badge>
+        );
       case "MAINTENANCE":
-        return <Badge variant="secondary" className="bg-yellow-500">Mantenimiento</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-500">
+            Mantenimiento
+          </Badge>
+        );
       case "RESERVED":
-        return <Badge variant="secondary" className="bg-purple-500">Reservada</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-purple-500">
+            Reservada
+          </Badge>
+        );
       case "CLEANING":
-        return <Badge variant="secondary" className="bg-orange-500">Limpieza</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-orange-500">
+            Limpieza
+          </Badge>
+        );
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
@@ -144,10 +184,12 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
           <Card>
             <CardContent className="flex flex-col items-center justify-center py-12">
               <Settings className="h-12 w-12 text-muted-foreground mb-4" />
-              <CardTitle className="text-xl mb-2">No hay instalaciones</CardTitle>
+              <CardTitle className="text-xl mb-2">
+                No hay instalaciones
+              </CardTitle>
               <CardDescription className="text-center mb-4">
-                No se han registrado instalaciones recreativas aún.
-                Crea la primera instalación para comenzar.
+                No se han registrado instalaciones recreativas aún. Crea la
+                primera instalación para comenzar.
               </CardDescription>
               <Button onClick={() => setShowFacilityDialog(true)}>
                 Crear Primera Instalación
@@ -157,7 +199,9 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
         ) : (
           <Card>
             <CardHeader>
-              <CardTitle>Instalaciones Recreativas ({facilities.length})</CardTitle>
+              <CardTitle>
+                Instalaciones Recreativas ({facilities.length})
+              </CardTitle>
               <CardDescription>
                 Lista de todas las instalaciones disponibles en el hotel
               </CardDescription>
@@ -191,16 +235,21 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
                             {getFacilityTypeLabel(facility.type)}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-sm">{facility.location}</TableCell>
+                        <TableCell className="text-sm">
+                          {facility.location}
+                        </TableCell>
                         <TableCell>{facility.capacity} personas</TableCell>
                         <TableCell>
-                          {getStatusBadge(facility.status, facility.isAvailable)}
+                          {getStatusBadge(
+                            facility.status,
+                            facility.isAvailable,
+                          )}
                         </TableCell>
                         <TableCell>
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button 
-                                variant="ghost" 
+                              <Button
+                                variant="ghost"
                                 className="h-8 w-8 p-0"
                                 disabled={deletingId === facility.id}
                               >
@@ -210,26 +259,36 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                              <DropdownMenuItem onClick={() => handleView(facility)}>
+                              <DropdownMenuItem
+                                onClick={() => handleView(facility)}
+                              >
                                 <Eye className="mr-2 h-4 w-4" />
                                 Ver detalles
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleEdit(facility)}>
+                              <DropdownMenuItem
+                                onClick={() => handleEdit(facility)}
+                              >
                                 <Edit className="mr-2 h-4 w-4" />
                                 Editar
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => handleStatusToggle(facility)}>
+                              <DropdownMenuItem
+                                onClick={() => handleStatusToggle(facility)}
+                              >
                                 <Settings className="mr-2 h-4 w-4" />
-                                {facility.isAvailable ? "Desactivar" : "Activar"}
+                                {facility.isAvailable
+                                  ? "Desactivar"
+                                  : "Activar"}
                               </DropdownMenuItem>
                               <DropdownMenuSeparator />
-                              <DropdownMenuItem 
+                              <DropdownMenuItem
                                 className="text-red-600"
                                 onClick={() => handleDelete(facility)}
                                 disabled={deletingId === facility.id}
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
-                                {deletingId === facility.id ? "Eliminando..." : "Eliminar"}
+                                {deletingId === facility.id
+                                  ? "Eliminando..."
+                                  : "Eliminar"}
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
@@ -257,7 +316,7 @@ export function FacilitiesManagement({ facilities, onFacilitiesChange }: Facilit
         onFacilityCreated={(facility) => {
           if (editingFacility) {
             onFacilitiesChange(
-              facilities.map(f => f.id === facility.id ? facility : f)
+              facilities.map((f) => (f.id === facility.id ? facility : f)),
             );
           } else {
             onFacilitiesChange([...facilities, facility]);

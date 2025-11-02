@@ -309,18 +309,18 @@ export const parkingApi = {
   createVehicle: async (vehicleData: Partial<Vehicle>): Promise<Vehicle> => {
     // Mapear tipos de frontend a backend
     const typeMap: Record<string, string> = {
-      "Automóvil": "CAR",
-      "Motocicleta": "MOTORCYCLE",
-      "Camioneta": "VAN",
-      "Camión": "TRUCK",
-      "Otro": "OTHER"
+      Automóvil: "CAR",
+      Motocicleta: "MOTORCYCLE",
+      Camioneta: "VAN",
+      Camión: "TRUCK",
+      Otro: "OTHER",
     };
 
     const guestTypeMap: Record<string, string> = {
-      "guest": "GUEST",
-      "visitante": "VISITOR",
-      "employee": "EMPLOYEE",
-      "empleado": "EMPLOYEE"
+      guest: "GUEST",
+      visitante: "VISITOR",
+      employee: "EMPLOYEE",
+      empleado: "EMPLOYEE",
     };
 
     const backendData = {
@@ -395,7 +395,7 @@ export const parkingApi = {
 
   updateParkingSpace: async (
     id: string,
-    updates: { status?: string }
+    updates: { status?: string },
   ): Promise<ParkingSpace> => {
     const statusMap: Record<string, string> = {
       disponible: "AVAILABLE",
@@ -407,7 +407,8 @@ export const parkingApi = {
 
     const backendData: { status?: string } = {};
     if (updates.status) {
-      backendData.status = statusMap[updates.status] || updates.status.toUpperCase();
+      backendData.status =
+        statusMap[updates.status] || updates.status.toUpperCase();
     }
 
     const backendSpace = (await apiRequest(`/parking/spaces/${id}`, {
@@ -440,33 +441,35 @@ export const parkingApi = {
     return backendIncidents.map(transformParkingIncident);
   },
 
-  createIncident: async (
-    incidentData: {
-      type: string;
-      description: string;
-      vehicle?: string;
-      space?: string;
-      priority: string;
-      responsible: string;
-    },
-  ): Promise<ParkingIncident> => {
+  createIncident: async (incidentData: {
+    type: string;
+    description: string;
+    vehicle?: string;
+    space?: string;
+    priority: string;
+    responsible: string;
+  }): Promise<ParkingIncident> => {
     // Mapear tipos de frontend a backend
     const typeMap: Record<string, string> = {
       "Daño Vehículo": "VEHICLE_DAMAGE",
-      "Infraestructura": "INFRASTRUCTURE",
-      "Seguridad": "SECURITY",
-      "Accidente": "ACCIDENT",
-      "Robo": "THEFT",
-      "Limpieza": "OTHER",
-      "Otro": "OTHER"
+      Infraestructura: "INFRASTRUCTURE",
+      Seguridad: "SECURITY",
+      Accidente: "ACCIDENT",
+      Robo: "THEFT",
+      Limpieza: "OTHER",
+      Otro: "OTHER",
     };
 
     // Buscar vehículo por placa si se especifica
     let vehicleId: number | undefined;
     if (incidentData.vehicle) {
       try {
-        const vehicles = await apiRequest("/parking/vehicles") as BackendVehicle[];
-        const vehicle = vehicles.find(v => v.licensePlate === incidentData.vehicle);
+        const vehicles = (await apiRequest(
+          "/parking/vehicles",
+        )) as BackendVehicle[];
+        const vehicle = vehicles.find(
+          (v) => v.licensePlate === incidentData.vehicle,
+        );
         vehicleId = vehicle?.id;
       } catch (error) {
         console.warn("No se pudo encontrar el vehículo:", error);
@@ -477,8 +480,10 @@ export const parkingApi = {
     let spaceId: number | undefined;
     if (incidentData.space) {
       try {
-        const spaces = await apiRequest("/parking/spaces") as BackendParkingSpace[];
-        const space = spaces.find(s => s.code === incidentData.space);
+        const spaces = (await apiRequest(
+          "/parking/spaces",
+        )) as BackendParkingSpace[];
+        const space = spaces.find((s) => s.code === incidentData.space);
         spaceId = space?.id;
       } catch (error) {
         console.warn("No se pudo encontrar el espacio:", error);

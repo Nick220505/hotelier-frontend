@@ -30,11 +30,7 @@ export function UsersTable({ users, onAssignRoles }: UsersTableProps) {
       </TableHeader>
       <TableBody>
         {users.map((user) => (
-          <UserRow
-            key={user.id}
-            user={user}
-            onAssignRoles={onAssignRoles}
-          />
+          <UserRow key={user.id} user={user} onAssignRoles={onAssignRoles} />
         ))}
       </TableBody>
     </Table>

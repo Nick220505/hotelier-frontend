@@ -4,7 +4,7 @@ import { BaseEntity } from "../types";
 // Employee types
 export type Department =
   | "FRONT_DESK"
-  | "HOUSEKEEPING" 
+  | "HOUSEKEEPING"
   | "MAINTENANCE"
   | "RESTAURANT"
   | "MANAGEMENT"

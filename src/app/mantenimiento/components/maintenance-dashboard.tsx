@@ -26,7 +26,8 @@ export default function MaintenanceDashboard({
 }: MaintenanceDashboardProps) {
   const [requests, setRequests] =
     useState<GeneralMaintenanceRequest[]>(initialRequests);
-  const [reports, setReports] = useState<MaintenanceReport[]>(housekeepingReports);
+  const [reports, setReports] =
+    useState<MaintenanceReport[]>(housekeepingReports);
   const [stats, setStats] = useState<MaintenanceStats | null>(null);
   const [loading, setLoading] = useState(false);
   const [, setIsCreateDialogOpen] = useState(false);
@@ -109,7 +110,7 @@ export default function MaintenanceDashboard({
     setSelectedRequest(request);
     setIsEditDialogOpen(true);
     // selectedRequest is used for future edit dialog functionality
-    console.log('Editing request:', selectedRequest?.id || request.id);
+    console.log("Editing request:", selectedRequest?.id || request.id);
   };
 
   const handleStatusUpdate = async (id: number, status: string) => {
@@ -151,7 +152,6 @@ export default function MaintenanceDashboard({
             Gestiona las solicitudes de mantenimiento del hotel
           </p>
         </div>
-        
       </div>
 
       {stats && <MaintenanceStatsCards stats={stats} />}
@@ -216,31 +216,48 @@ export default function MaintenanceDashboard({
                         <div className="flex justify-between items-start">
                           <div className="space-y-2">
                             <div className="flex items-center space-x-2">
-                              <h3 className="font-semibold">Habitación {report.roomNumber}</h3>
-                              <span className={`px-2 py-1 text-xs rounded-full ${
-                                report.priority === 'alta' ? 'bg-red-100 text-red-800' :
-                                report.priority === 'media' ? 'bg-yellow-100 text-yellow-800' :
-                                'bg-green-100 text-green-800'
-                              }`}>
+                              <h3 className="font-semibold">
+                                Habitación {report.roomNumber}
+                              </h3>
+                              <span
+                                className={`px-2 py-1 text-xs rounded-full ${
+                                  report.priority === "alta"
+                                    ? "bg-red-100 text-red-800"
+                                    : report.priority === "media"
+                                      ? "bg-yellow-100 text-yellow-800"
+                                      : "bg-green-100 text-green-800"
+                                }`}
+                              >
                                 {report.priority}
                               </span>
-                              <span className={`px-2 py-1 text-xs rounded-full ${
-                                report.status === 'pendiente' ? 'bg-orange-100 text-orange-800' :
-                                report.status === 'en_proceso' ? 'bg-blue-100 text-blue-800' :
-                                report.status === 'completado' ? 'bg-green-100 text-green-800' :
-                                'bg-gray-100 text-gray-800'
-                              }`}>
-                                {report.status === 'pendiente' ? 'Pendiente' :
-                                 report.status === 'en_proceso' ? 'En Proceso' :
-                                 report.status === 'completado' ? 'Completado' :
-                                 report.status}
+                              <span
+                                className={`px-2 py-1 text-xs rounded-full ${
+                                  report.status === "pendiente"
+                                    ? "bg-orange-100 text-orange-800"
+                                    : report.status === "en_proceso"
+                                      ? "bg-blue-100 text-blue-800"
+                                      : report.status === "completado"
+                                        ? "bg-green-100 text-green-800"
+                                        : "bg-gray-100 text-gray-800"
+                                }`}
+                              >
+                                {report.status === "pendiente"
+                                  ? "Pendiente"
+                                  : report.status === "en_proceso"
+                                    ? "En Proceso"
+                                    : report.status === "completado"
+                                      ? "Completado"
+                                      : report.status}
                               </span>
                             </div>
                             <p className="text-sm font-medium">{report.type}</p>
-                            <p className="text-sm text-muted-foreground">{report.description}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {report.description}
+                            </p>
                             <div className="text-xs text-muted-foreground">
-                              Reportado por: {report.reportedBy} 
-                              {report.createdAt && ` • ${new Date(report.createdAt).toLocaleString()}`}
+                              Reportado por: {report.reportedBy}
+                              {report.createdAt &&
+                                ` • ${new Date(report.createdAt).toLocaleString()}`}
                             </div>
                           </div>
                           <div className="text-right">
@@ -328,8 +345,6 @@ export default function MaintenanceDashboard({
           </Card>
         </TabsContent>
       </Tabs>
-
-      
     </div>
   );
 }

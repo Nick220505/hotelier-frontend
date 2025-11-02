@@ -1,11 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  recreationalApi, 
-  type RecreationalBooking, 
-  type RecreationalFacility 
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  recreationalApi,
+  type RecreationalBooking,
+  type RecreationalFacility,
 } from "@/lib/api/recreational";
 import { BookingDialog } from "./booking-dialog";
 import { BookingDetailsDialog } from "./booking-details-dialog";
@@ -19,13 +25,15 @@ interface BookingsManagementProps {
   onBookingsChange: (bookings: RecreationalBooking[]) => void;
 }
 
-export function BookingsManagement({ 
-  bookings, 
-  facilities, 
-  onBookingsChange 
+export function BookingsManagement({
+  bookings,
+  facilities,
+  onBookingsChange,
 }: BookingsManagementProps) {
-  const [editingBooking, setEditingBooking] = useState<RecreationalBooking | null>(null);
-  const [viewingBooking, setViewingBooking] = useState<RecreationalBooking | null>(null);
+  const [editingBooking, setEditingBooking] =
+    useState<RecreationalBooking | null>(null);
+  const [viewingBooking, setViewingBooking] =
+    useState<RecreationalBooking | null>(null);
   const [showBookingDialog, setShowBookingDialog] = useState(false);
   const [actioningId, setActioningId] = useState<string | number | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -33,16 +41,22 @@ export function BookingsManagement({
   const [facilityFilter, setFacilityFilter] = useState<string>("all");
 
   // Filter bookings
-  const filteredBookings = bookings.filter(booking => {
-    const matchesSearch = 
+  const filteredBookings = bookings.filter((booking) => {
+    const matchesSearch =
       booking.guestName.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.guestEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
       booking.roomNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      facilities.find(f => f.id === booking.facilityId)?.name.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = statusFilter === "all" || booking.status === statusFilter;
-    const matchesFacility = facilityFilter === "all" || booking.facilityId.toString() === facilityFilter;
-    
+      facilities
+        .find((f) => f.id === booking.facilityId)
+        ?.name.toLowerCase()
+        .includes(searchTerm.toLowerCase());
+
+    const matchesStatus =
+      statusFilter === "all" || booking.status === statusFilter;
+    const matchesFacility =
+      facilityFilter === "all" ||
+      booking.facilityId.toString() === facilityFilter;
+
     return matchesSearch && matchesStatus && matchesFacility;
   });
 
@@ -58,15 +72,16 @@ export function BookingsManagement({
   const handleConfirm = async (booking: RecreationalBooking) => {
     try {
       setActioningId(booking.id);
-      const bookingId = typeof booking.id === 'string' ? parseInt(booking.id) : booking.id;
+      const bookingId =
+        typeof booking.id === "string" ? parseInt(booking.id) : booking.id;
       const updatedBooking = await recreationalApi.updateBooking(bookingId, {
         status: "CONFIRMED",
       });
-      
+
       onBookingsChange(
-        bookings.map(b => b.id === booking.id ? updatedBooking : b)
+        bookings.map((b) => (b.id === booking.id ? updatedBooking : b)),
       );
-      
+
       toast.success("Reserva confirmada correctamente");
     } catch (error) {
       console.error("Error confirming booking:", error);
@@ -77,22 +92,27 @@ export function BookingsManagement({
   };
 
   const handleCancel = async (booking: RecreationalBooking) => {
-    if (!confirm(`¿Estás seguro de que deseas cancelar la reserva de ${booking.guestName}?`)) {
+    if (
+      !confirm(
+        `¿Estás seguro de que deseas cancelar la reserva de ${booking.guestName}?`,
+      )
+    ) {
       return;
     }
 
     try {
       setActioningId(booking.id);
-      const bookingId = typeof booking.id === 'string' ? parseInt(booking.id) : booking.id;
+      const bookingId =
+        typeof booking.id === "string" ? parseInt(booking.id) : booking.id;
       const updatedBooking = await recreationalApi.cancelBooking(
         bookingId,
-        "Cancelada por el personal del hotel"
+        "Cancelada por el personal del hotel",
       );
-      
+
       onBookingsChange(
-        bookings.map(b => b.id === booking.id ? updatedBooking : b)
+        bookings.map((b) => (b.id === booking.id ? updatedBooking : b)),
       );
-      
+
       toast.success("Reserva cancelada correctamente");
     } catch (error) {
       console.error("Error cancelling booking:", error);
@@ -105,13 +125,14 @@ export function BookingsManagement({
   const handleCheckIn = async (booking: RecreationalBooking) => {
     try {
       setActioningId(booking.id);
-      const bookingId = typeof booking.id === 'string' ? parseInt(booking.id) : booking.id;
+      const bookingId =
+        typeof booking.id === "string" ? parseInt(booking.id) : booking.id;
       const updatedBooking = await recreationalApi.checkInBooking(bookingId);
-      
+
       onBookingsChange(
-        bookings.map(b => b.id === booking.id ? updatedBooking : b)
+        bookings.map((b) => (b.id === booking.id ? updatedBooking : b)),
       );
-      
+
       toast.success("Check-in realizado correctamente");
     } catch (error) {
       console.error("Error checking in:", error);
@@ -124,13 +145,14 @@ export function BookingsManagement({
   const handleCheckOut = async (booking: RecreationalBooking) => {
     try {
       setActioningId(booking.id);
-      const bookingId = typeof booking.id === 'string' ? parseInt(booking.id) : booking.id;
+      const bookingId =
+        typeof booking.id === "string" ? parseInt(booking.id) : booking.id;
       const updatedBooking = await recreationalApi.checkOutBooking(bookingId);
-      
+
       onBookingsChange(
-        bookings.map(b => b.id === booking.id ? updatedBooking : b)
+        bookings.map((b) => (b.id === booking.id ? updatedBooking : b)),
       );
-      
+
       toast.success("Check-out realizado correctamente");
     } catch (error) {
       console.error("Error checking out:", error);
@@ -190,7 +212,7 @@ export function BookingsManagement({
         onBookingCreated={(booking) => {
           if (editingBooking) {
             onBookingsChange(
-              bookings.map(b => b.id === booking.id ? booking : b)
+              bookings.map((b) => (b.id === booking.id ? booking : b)),
             );
           } else {
             onBookingsChange([...bookings, booking]);
@@ -203,7 +225,11 @@ export function BookingsManagement({
       {/* View Details Dialog */}
       <BookingDetailsDialog
         booking={viewingBooking}
-        facility={viewingBooking ? facilities.find(f => f.id === viewingBooking.facilityId) || null : null}
+        facility={
+          viewingBooking
+            ? facilities.find((f) => f.id === viewingBooking.facilityId) || null
+            : null
+        }
         open={!!viewingBooking}
         onOpenChange={(open) => {
           if (!open) {

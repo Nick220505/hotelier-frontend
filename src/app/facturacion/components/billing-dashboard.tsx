@@ -55,11 +55,15 @@ export default function BillingDashboard({
   const [invoices, setInvoices] = useState(initialInvoices);
   const [payments, setPayments] = useState(initialPayments);
   const [reports] = useState(initialReports);
-  
-  const isClient = hasRole('cliente');
-  const clientInvoices = isClient ? invoices.filter(invoice => 
-    invoice.guest === user?.name || invoice.guest.toLowerCase().includes(user?.name?.toLowerCase() || "")
-  ) : invoices;
+
+  const isClient = hasRole("cliente");
+  const clientInvoices = isClient
+    ? invoices.filter(
+        (invoice) =>
+          invoice.guest === user?.name ||
+          invoice.guest.toLowerCase().includes(user?.name?.toLowerCase() || ""),
+      )
+    : invoices;
 
   const handleProcessPayment = async (
     invoiceId: string,
@@ -108,7 +112,7 @@ export default function BillingDashboard({
     try {
       await billingApi.downloadInvoice(invoiceId);
     } catch (error) {
-      console.error('Error downloading invoice:', error);
+      console.error("Error downloading invoice:", error);
       // Aquí podrías mostrar una notificación de error al usuario
     }
   };
@@ -203,7 +207,9 @@ export default function BillingDashboard({
 
       <Tabs defaultValue="invoices" className="space-y-4">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="invoices">{isClient ? 'Mis Facturas' : 'Facturas'}</TabsTrigger>
+          <TabsTrigger value="invoices">
+            {isClient ? "Mis Facturas" : "Facturas"}
+          </TabsTrigger>
           {!isClient && <TabsTrigger value="payments">Pagos</TabsTrigger>}
           {!isClient && <TabsTrigger value="reportes">Reportes</TabsTrigger>}
         </TabsList>
@@ -242,15 +248,21 @@ export default function BillingDashboard({
                 {clientInvoices.length === 0 ? (
                   <div className="text-center py-8">
                     <Receipt className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-                    <p className="text-lg text-muted-foreground">No tienes facturas pendientes</p>
+                    <p className="text-lg text-muted-foreground">
+                      No tienes facturas pendientes
+                    </p>
                     <p className="text-sm text-muted-foreground/70">
-                      Las facturas aparecerán aquí cuando el personal del hotel te las asigne
+                      Las facturas aparecerán aquí cuando el personal del hotel
+                      te las asigne
                     </p>
                   </div>
                 ) : (
                   <div className="space-y-4">
                     {clientInvoices.map((invoice) => (
-                      <div key={invoice.id} className="border rounded-lg p-4 space-y-3">
+                      <div
+                        key={invoice.id}
+                        className="border rounded-lg p-4 space-y-3"
+                      >
                         <div className="flex items-center justify-between">
                           <div>
                             <h4 className="font-semibold">{invoice.number}</h4>
@@ -275,31 +287,45 @@ export default function BillingDashboard({
                             </div>
                           </div>
                         </div>
-                        
+
                         {invoice.status === "pendiente" && (
                           <div className="flex gap-2">
-                            <button 
-                              onClick={() => handleProcessPayment(invoice.id, "CASH", "")}
+                            <button
+                              onClick={() =>
+                                handleProcessPayment(invoice.id, "CASH", "")
+                              }
                               className="flex-1 bg-primary text-primary-foreground px-4 py-2 rounded text-sm font-medium hover:bg-primary/90"
                             >
                               Pagar en Efectivo
                             </button>
-                            <button 
-                              onClick={() => handleProcessPayment(invoice.id, "CREDIT_CARD", "")}
+                            <button
+                              onClick={() =>
+                                handleProcessPayment(
+                                  invoice.id,
+                                  "CREDIT_CARD",
+                                  "",
+                                )
+                              }
                               className="flex-1 border border-input px-4 py-2 rounded text-sm font-medium hover:bg-accent"
                             >
                               Pagar con Tarjeta
                             </button>
                           </div>
                         )}
-                        
+
                         <div className="border-t pt-3">
                           <h5 className="font-medium mb-2">Detalles:</h5>
                           <div className="space-y-1 text-sm">
                             {invoice.concepts?.map((concept, index) => (
                               <div key={index} className="flex justify-between">
                                 <span>{concept.description}</span>
-                                <span>${((concept.quantity || 1) * (concept.unitPrice || 0)).toLocaleString()}</span>
+                                <span>
+                                  $
+                                  {(
+                                    (concept.quantity || 1) *
+                                    (concept.unitPrice || 0)
+                                  ).toLocaleString()}
+                                </span>
                               </div>
                             ))}
                           </div>

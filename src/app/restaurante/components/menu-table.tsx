@@ -41,12 +41,12 @@ interface MenuTableProps {
   onRefresh?: () => void;
 }
 
-export function MenuTable({ 
-  menuItems, 
-  // onEditItem, 
-  onDeleteItem, 
+export function MenuTable({
+  menuItems,
+  // onEditItem,
+  onDeleteItem,
   // onCreateItem,
-  onRefresh 
+  onRefresh,
 }: MenuTableProps) {
   const { hasRole } = useAuthenticatedUser();
   const [editingItem, setEditingItem] = useState<MenuItem | undefined>();
@@ -89,10 +89,12 @@ export function MenuTable({
             <div>
               <CardTitle>Menú del Restaurante</CardTitle>
               <CardDescription>
-                {!hasRole('cliente') ? 'Gestión de items del menú y disponibilidad' : 'Lista de items disponibles'}
+                {!hasRole("cliente")
+                  ? "Gestión de items del menú y disponibilidad"
+                  : "Lista de items disponibles"}
               </CardDescription>
             </div>
-            {!hasRole('cliente') && (
+            {!hasRole("cliente") && (
               <Button onClick={handleCreateNew}>
                 <Plus className="mr-2 h-4 w-4" />
                 Nuevo Item
@@ -110,7 +112,7 @@ export function MenuTable({
                 <TableHead>Precio</TableHead>
                 <TableHead>Tiempo Prep.</TableHead>
                 <TableHead>Disponible</TableHead>
-                {!hasRole('cliente') && <TableHead>Acciones</TableHead>}
+                {!hasRole("cliente") && <TableHead>Acciones</TableHead>}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -136,7 +138,7 @@ export function MenuTable({
                       {item.available ? "Disponible" : "No Disponible"}
                     </Badge>
                   </TableCell>
-                  {!hasRole('cliente') && (
+                  {!hasRole("cliente") && (
                     <TableCell>
                       <div className="flex space-x-2">
                         <Button
@@ -161,7 +163,10 @@ export function MenuTable({
               ))}
               {menuItems.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={hasRole('cliente') ? 6 : 7} className="text-center text-muted-foreground">
+                  <TableCell
+                    colSpan={hasRole("cliente") ? 6 : 7}
+                    className="text-center text-muted-foreground"
+                  >
                     No hay items en el menú
                   </TableCell>
                 </TableRow>
@@ -172,7 +177,7 @@ export function MenuTable({
       </Card>
 
       {/* Menu Item Dialog */}
-      {!hasRole('cliente') && (
+      {!hasRole("cliente") && (
         <MenuItemDialog
           open={dialogOpen}
           onOpenChange={setDialogOpen}
@@ -182,14 +187,15 @@ export function MenuTable({
       )}
 
       {/* Delete Confirmation Dialog */}
-      {!hasRole('cliente') && (
+      {!hasRole("cliente") && (
         <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
           <AlertDialogContent>
             <AlertDialogHeader>
               <AlertDialogTitle>¿Eliminar item del menú?</AlertDialogTitle>
               <AlertDialogDescription>
-                Esta acción no se puede deshacer. El item &quot;{itemToDelete?.name}&quot; será
-                eliminado permanentemente del menú.
+                Esta acción no se puede deshacer. El item &quot;
+                {itemToDelete?.name}&quot; será eliminado permanentemente del
+                menú.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>

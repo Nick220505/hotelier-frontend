@@ -31,11 +31,7 @@ export type BookingStatus =
   | "CANCELLED"
   | "NO_SHOW";
 
-export type BookingPriority =
-  | "NORMAL"
-  | "HIGH"
-  | "VIP"
-  | "MAINTENANCE";
+export type BookingPriority = "NORMAL" | "HIGH" | "VIP" | "MAINTENANCE";
 
 // Interface definitions
 export interface RecreationalFacility extends BaseEntity {
@@ -136,7 +132,8 @@ export type CreateRecreationalBookingData = Omit<
 >;
 
 // Update facility data type
-export type UpdateRecreationalFacilityData = Partial<CreateRecreationalFacilityData>;
+export type UpdateRecreationalFacilityData =
+  Partial<CreateRecreationalFacilityData>;
 
 // Update booking data type
 export type UpdateRecreationalBookingData = Partial<
@@ -149,25 +146,27 @@ export const recreationalApi = {
   // Basic facility CRUD
   getFacilities: (): Promise<RecreationalFacility[]> =>
     apiRequest("/recreational/facilities"),
-  
+
   getFacilityById: (id: number): Promise<RecreationalFacility> =>
     apiRequest(`/recreational/facilities/${id}`),
-  
-  createFacility: (data: CreateRecreationalFacilityData): Promise<RecreationalFacility> =>
+
+  createFacility: (
+    data: CreateRecreationalFacilityData,
+  ): Promise<RecreationalFacility> =>
     apiRequest("/recreational/facilities", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  
+
   updateFacility: (
     id: number,
-    data: UpdateRecreationalFacilityData
+    data: UpdateRecreationalFacilityData,
   ): Promise<RecreationalFacility> =>
     apiRequest(`/recreational/facilities/${id}`, {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
-  
+
   deleteFacility: (id: number): Promise<void> =>
     apiRequest(`/recreational/facilities/${id}`, {
       method: "DELETE",
@@ -177,19 +176,21 @@ export const recreationalApi = {
   // Basic booking CRUD
   getBookings: (): Promise<RecreationalBooking[]> =>
     apiRequest("/recreational/bookings"),
-  
+
   getBookingById: (id: number): Promise<RecreationalBooking> =>
     apiRequest(`/recreational/bookings/${id}`),
-  
-  createBooking: (data: CreateRecreationalBookingData): Promise<RecreationalBooking> =>
+
+  createBooking: (
+    data: CreateRecreationalBookingData,
+  ): Promise<RecreationalBooking> =>
     apiRequest("/recreational/bookings", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  
+
   updateBooking: (
     id: number,
-    data: UpdateRecreationalBookingData
+    data: UpdateRecreationalBookingData,
   ): Promise<RecreationalBooking> =>
     apiRequest(`/recreational/bookings/${id}`, {
       method: "PATCH",
@@ -202,12 +203,12 @@ export const recreationalApi = {
       method: "PATCH",
       body: JSON.stringify({ reason }),
     }),
-  
+
   checkInBooking: (id: number): Promise<RecreationalBooking> =>
     apiRequest(`/recreational/bookings/${id}/checkin`, {
       method: "PATCH",
     }),
-  
+
   checkOutBooking: (id: number): Promise<RecreationalBooking> =>
     apiRequest(`/recreational/bookings/${id}/checkout`, {
       method: "PATCH",
@@ -217,42 +218,50 @@ export const recreationalApi = {
   // Check facility availability
   getFacilityAvailability: (
     facilityId: number,
-    date: string
+    date: string,
   ): Promise<FacilityAvailability> =>
-    apiRequest(`/recreational/facilities/${facilityId}/availability?date=${date}`),
-  
+    apiRequest(
+      `/recreational/facilities/${facilityId}/availability?date=${date}`,
+    ),
+
   // Check overall availability
   getOverallAvailability: (date: string): Promise<FacilityAvailability[]> =>
     apiRequest(`/recreational/availability?date=${date}`),
-  
+
   // Get booking statistics
   getStatistics: (
     startDate?: string,
-    endDate?: string
+    endDate?: string,
   ): Promise<BookingStatistics> => {
     const params = new URLSearchParams();
     if (startDate) params.append("startDate", startDate);
     if (endDate) params.append("endDate", endDate);
     const queryString = params.toString();
-    return apiRequest(`/recreational/statistics${queryString ? `?${queryString}` : ""}`);
+    return apiRequest(
+      `/recreational/statistics${queryString ? `?${queryString}` : ""}`,
+    );
   },
 
   // ========== HELPER METHODS ==========
   // Get available facilities by type
   getFacilitiesByType: (type: FacilityType): Promise<RecreationalFacility[]> =>
     apiRequest("/recreational/facilities").then((facilities) =>
-      (facilities as RecreationalFacility[]).filter(f => f.type === type)
+      (facilities as RecreationalFacility[]).filter((f) => f.type === type),
     ),
-  
+
   // Get upcoming bookings for a facility
   getFacilityBookings: (facilityId: number): Promise<RecreationalBooking[]> =>
     apiRequest("/recreational/bookings").then((bookings) =>
-      (bookings as RecreationalBooking[]).filter(b => b.facilityId === facilityId)
+      (bookings as RecreationalBooking[]).filter(
+        (b) => b.facilityId === facilityId,
+      ),
     ),
-  
+
   // Get bookings by status
-  getBookingsByStatus: (status: BookingStatus): Promise<RecreationalBooking[]> =>
+  getBookingsByStatus: (
+    status: BookingStatus,
+  ): Promise<RecreationalBooking[]> =>
     apiRequest("/recreational/bookings").then((bookings) =>
-      (bookings as RecreationalBooking[]).filter(b => b.status === status)
+      (bookings as RecreationalBooking[]).filter((b) => b.status === status),
     ),
 };

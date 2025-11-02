@@ -51,8 +51,6 @@ export function Reservations({
 
   // La lógica de la nueva reserva se maneja dentro del componente NewReservationDialog
 
-
-
   // Quick status updates
   const handleUpdateStatus = async (
     id: number,
@@ -61,8 +59,12 @@ export function Reservations({
     try {
       setLoading(true);
       const updatedReservation = await reservationsApi.update(id, { status });
-      setReservations((prev) => prev.map((r) => (r.id === id ? updatedReservation : r)));
-      toast("Estado actualizado", { description: `Reserva #${id} → ${status}` });
+      setReservations((prev) =>
+        prev.map((r) => (r.id === id ? updatedReservation : r)),
+      );
+      toast("Estado actualizado", {
+        description: `Reserva #${id} → ${status}`,
+      });
     } catch (error) {
       console.error("Error updating status:", error);
       toast("Error", { description: "No se pudo actualizar el estado" });
@@ -102,13 +104,19 @@ export function Reservations({
         guests: parseInt(formData.guests.toString()),
         discountAmount: formData.discountAmount || null,
         discountPercent: formData.discountPercent || null,
-        guestId: formData.guestId || null
+        guestId: formData.guestId || null,
       };
 
       await reservationsApi.createSelf(
         reservationData as unknown as Omit<
           Reservation,
-          "id" | "createdAt" | "updatedAt" | "user" | "room" | "totalAmount" | "status"
+          | "id"
+          | "createdAt"
+          | "updatedAt"
+          | "user"
+          | "room"
+          | "totalAmount"
+          | "status"
         >,
       );
 

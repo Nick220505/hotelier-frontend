@@ -34,7 +34,10 @@ import { toast } from "sonner";
 
 // Edit Event Schema
 const editEventSchema = z.object({
-  title: z.string().min(1, "El nombre del evento es requerido").min(3, "El nombre debe tener al menos 3 caracteres"),
+  title: z
+    .string()
+    .min(1, "El nombre del evento es requerido")
+    .min(3, "El nombre debe tener al menos 3 caracteres"),
   client: z.string().min(1, "El nombre del cliente es requerido"),
   date: z.string().min(1, "La fecha es requerida"),
   time: z.string().min(1, "El horario es requerido"),
@@ -92,7 +95,6 @@ export function EditEventDialog({
     "Sala de Conferencias Alpha",
   ],
 }: EditEventDialogProps) {
-
   const form = useForm<EditEventFormData>({
     resolver: zodResolver(editEventSchema),
     defaultValues: {
@@ -126,7 +128,11 @@ export function EditEventDialog({
         venue: event.venue,
         capacity: event.capacity.toString(),
         budget: event.budget.toString(),
-        status: event.status as "pending" | "confirmed" | "cancelled" | "completed",
+        status: event.status as
+          | "pending"
+          | "confirmed"
+          | "cancelled"
+          | "completed",
         services: {
           catering: event.services.catering,
           audiovisual: event.services.audiovisual,
@@ -141,8 +147,8 @@ export function EditEventDialog({
     if (!event) return;
 
     try {
-      console.log('EditDialog: Form data received:', data);
-      
+      console.log("EditDialog: Form data received:", data);
+
       const updateData = {
         title: data.title,
         client: data.client,
@@ -154,9 +160,9 @@ export function EditEventDialog({
         status: data.status,
         services: data.services,
       };
-      
-      console.log('EditDialog: Sending update data:', updateData);
-      
+
+      console.log("EditDialog: Sending update data:", updateData);
+
       await onEventUpdate(event.id, updateData);
       toast.success("Evento actualizado exitosamente");
       onOpenChange(false);
@@ -177,7 +183,7 @@ export function EditEventDialog({
             Modifique la información del evento
           </DialogDescription>
         </DialogHeader>
-        
+
         <Form {...form}>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
@@ -201,7 +207,10 @@ export function EditEventDialog({
                   <FormItem>
                     <FormLabel>Nombre del Cliente</FormLabel>
                     <FormControl>
-                      <Input placeholder="Nombre completo del cliente" {...field} />
+                      <Input
+                        placeholder="Nombre completo del cliente"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -243,8 +252,8 @@ export function EditEventDialog({
                   <FormItem>
                     <FormLabel>Capacidad de Personas</FormLabel>
                     <FormControl>
-                      <Input 
-                        type="number" 
+                      <Input
+                        type="number"
                         placeholder="Número de personas"
                         {...field}
                         value={field.value || ""}
@@ -313,8 +322,8 @@ export function EditEventDialog({
                 <FormItem>
                   <FormLabel>Presupuesto Base</FormLabel>
                   <FormControl>
-                    <Input 
-                      type="number" 
+                    <Input
+                      type="number"
                       placeholder="Presupuesto en pesos"
                       {...field}
                       value={field.value || ""}
@@ -342,7 +351,9 @@ export function EditEventDialog({
                         />
                       </FormControl>
                       <div className="flex-1 min-w-0">
-                        <FormLabel className="text-sm font-medium">Catering</FormLabel>
+                        <FormLabel className="text-sm font-medium">
+                          Catering
+                        </FormLabel>
                         <div className="text-xs text-muted-foreground">
                           +30% del presupuesto
                         </div>
@@ -364,7 +375,9 @@ export function EditEventDialog({
                         />
                       </FormControl>
                       <div className="flex-1 min-w-0">
-                        <FormLabel className="text-sm font-medium">Audiovisual</FormLabel>
+                        <FormLabel className="text-sm font-medium">
+                          Audiovisual
+                        </FormLabel>
                         <div className="text-xs text-muted-foreground">
                           +15% del presupuesto
                         </div>
@@ -386,7 +399,9 @@ export function EditEventDialog({
                         />
                       </FormControl>
                       <div className="flex-1 min-w-0">
-                        <FormLabel className="text-sm font-medium">Decoración</FormLabel>
+                        <FormLabel className="text-sm font-medium">
+                          Decoración
+                        </FormLabel>
                         <div className="text-xs text-muted-foreground">
                           +10% del presupuesto
                         </div>
@@ -408,7 +423,9 @@ export function EditEventDialog({
                         />
                       </FormControl>
                       <div className="flex-1 min-w-0">
-                        <FormLabel className="text-sm font-medium">Alojamiento</FormLabel>
+                        <FormLabel className="text-sm font-medium">
+                          Alojamiento
+                        </FormLabel>
                         <div className="text-xs text-muted-foreground">
                           +25% del presupuesto
                         </div>
@@ -420,7 +437,11 @@ export function EditEventDialog({
             </div>
 
             <DialogFooter>
-              <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => onOpenChange(false)}
+              >
                 Cancelar
               </Button>
               <Button type="submit">Guardar Cambios</Button>

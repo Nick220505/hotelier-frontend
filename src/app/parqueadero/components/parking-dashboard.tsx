@@ -5,7 +5,12 @@ import { useAuthContext } from "@/contexts/auth-context";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Car, MapPin, Users } from "lucide-react";
-import { parkingApi, Vehicle, ParkingSpace, ParkingIncident } from "@/lib/api/parking";
+import {
+  parkingApi,
+  Vehicle,
+  ParkingSpace,
+  ParkingIncident,
+} from "@/lib/api/parking";
 import { toast } from "sonner";
 import VehicleManagement from "./vehicle-management";
 import SpaceManagement from "./space-management";
@@ -90,16 +95,14 @@ export default function ParkingDashboard({
     try {
       // Actualizar en el backend
       const updatedSpace = await parkingApi.updateParkingSpace(spaceId, {
-        status: "mantenimiento"
+        status: "mantenimiento",
       });
-      
+
       // Actualizar el estado local
       setSpaces(
-        spaces.map((space) =>
-          space.id === spaceId ? updatedSpace : space,
-        ),
+        spaces.map((space) => (space.id === spaceId ? updatedSpace : space)),
       );
-      
+
       toast.success("Espacio marcado en mantenimiento");
     } catch (error) {
       console.error("Error updating space status:", error);
@@ -111,16 +114,14 @@ export default function ParkingDashboard({
     try {
       // Actualizar en el backend
       const updatedSpace = await parkingApi.updateParkingSpace(spaceId, {
-        status: "disponible"
+        status: "disponible",
       });
-      
+
       // Actualizar el estado local
       setSpaces(
-        spaces.map((space) =>
-          space.id === spaceId ? updatedSpace : space,
-        ),
+        spaces.map((space) => (space.id === spaceId ? updatedSpace : space)),
       );
-      
+
       toast.success("Espacio habilitado correctamente");
     } catch (error) {
       console.error("Error updating space status:", error);
@@ -178,7 +179,7 @@ export default function ParkingDashboard({
           </p>
         </div>
         <div className="flex space-x-2">
-          {!hasRole('cliente') && (
+          {!hasRole("cliente") && (
             <IncidentReportDialog
               vehicles={vehicles}
               spaces={spaces}

@@ -63,7 +63,7 @@ export function RoomServiceDialog({
   const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [notes, setNotes] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   // Backend data state
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [rooms, setRooms] = useState<OccupiedRoom[]>([]);
@@ -73,8 +73,8 @@ export function RoomServiceDialog({
   const fetchData = useCallback(async () => {
     try {
       setDataLoading(true);
-      console.log('Room Service Dialog - Starting data fetch...');
-      
+      console.log("Room Service Dialog - Starting data fetch...");
+
       // Fetch each API separately to debug individually
       let menuItemsRes: MenuItem[] = [];
       let roomsRes: OccupiedRoom[] = [];
@@ -82,79 +82,88 @@ export function RoomServiceDialog({
 
       try {
         menuItemsRes = await restaurantApi.getMenuItems();
-        console.log('Room Service Dialog - Menu items fetched:', menuItemsRes);
+        console.log("Room Service Dialog - Menu items fetched:", menuItemsRes);
       } catch (error) {
-        console.error('Room Service Dialog - Menu items fetch failed:', error);
+        console.error("Room Service Dialog - Menu items fetch failed:", error);
         menuItemsRes = [];
       }
 
       try {
         // Get all current reservations
         const currentReservations = await reservationsApi.getAll();
-        
+
         // Map to our simple format and deduplicate by room number
         const roomsMap = new Map<string, OccupiedRoom>();
-        
+
         currentReservations
-          .filter(res => res.status === 'CHECKED_IN')
-          .forEach(res => {
+          .filter((res) => res.status === "CHECKED_IN")
+          .forEach((res) => {
             // Only keep the first reservation for each room number
             if (!roomsMap.has(res.room.number)) {
               roomsMap.set(res.room.number, {
                 id: res.id,
                 number: res.room.number,
-                guestName: res.guestName || 'Huésped sin nombre'
+                guestName: res.guestName || "Huésped sin nombre",
               });
             }
           });
-        
+
         roomsRes = Array.from(roomsMap.values());
 
-        console.log('Room Service Dialog - Current reservations fetched:', roomsRes);
+        console.log(
+          "Room Service Dialog - Current reservations fetched:",
+          roomsRes,
+        );
       } catch (error) {
-        console.error('Room Service Dialog - Reservations fetch failed:', error);
+        console.error(
+          "Room Service Dialog - Reservations fetch failed:",
+          error,
+        );
         roomsRes = [];
       }
 
       try {
         employeesRes = await employeesApi.getAll();
-        console.log('Room Service Dialog - Employees fetched:', employeesRes);
+        console.log("Room Service Dialog - Employees fetched:", employeesRes);
       } catch (error) {
-        console.error('Room Service Dialog - Employees fetch failed:', error);
+        console.error("Room Service Dialog - Employees fetch failed:", error);
         employeesRes = [];
       }
 
-      console.log('Room Service Dialog - Final data:', {
+      console.log("Room Service Dialog - Final data:", {
         menuItems: menuItemsRes.length,
         rooms: roomsRes.length,
         employees: employeesRes.length,
         menuItemsData: menuItemsRes,
         roomsData: roomsRes,
-        employeesData: employeesRes
+        employeesData: employeesRes,
       });
 
       setMenuItems(menuItemsRes);
       setRooms(roomsRes);
-      
+
       // Filter employees to only show restaurant staff (waiters, etc.)
-      const restaurantEmployees = employeesRes.filter((emp) => 
-        emp.department === 'RESTAURANT' && emp.status === 'ACTIVE'
+      const restaurantEmployees = employeesRes.filter(
+        (emp) => emp.department === "RESTAURANT" && emp.status === "ACTIVE",
       );
-      
-      console.log('Room Service Dialog - Restaurant employees after filter:', restaurantEmployees);
+
+      console.log(
+        "Room Service Dialog - Restaurant employees after filter:",
+        restaurantEmployees,
+      );
       setEmployees(restaurantEmployees);
-      
+
       // Force re-render by updating state
       setTimeout(() => {
-        console.log('Room Service Dialog - State after update:', {
+        console.log("Room Service Dialog - State after update:", {
           menuItemsState: menuItems.length,
           roomsState: rooms.length,
-          employeesState: employees.length
+          employeesState: employees.length,
         });
       }, 100);
     } catch (error) {
-      console.error('Room Service Dialog - Error fetching data:', error);
-      toast.error('Error cargando datos del formulario');
+      console.error("Room Service Dialog - Error fetching data:", error);
+      toast.error("Error cargando datos del formulario");
     } finally {
       setDataLoading(false);
     }
@@ -173,11 +182,15 @@ export function RoomServiceDialog({
       return;
     }
 
-    const menuItem = menuItems.find((item: MenuItem) => item.id === selectedItem);
+    const menuItem = menuItems.find(
+      (item: MenuItem) => item.id === selectedItem,
+    );
     if (!menuItem) return;
 
-    const existingItemIndex = orderItems.findIndex(item => item.id === selectedItem);
-    
+    const existingItemIndex = orderItems.findIndex(
+      (item) => item.id === selectedItem,
+    );
+
     if (existingItemIndex !== -1) {
       // Update existing item quantity
       const updatedItems = [...orderItems];
@@ -200,12 +213,15 @@ export function RoomServiceDialog({
   };
 
   const handleRemoveItem = (itemId: string) => {
-    setOrderItems(orderItems.filter(item => item.id !== itemId));
+    setOrderItems(orderItems.filter((item) => item.id !== itemId));
     toast.success("Item removido del pedido");
   };
 
   const calculateTotal = () => {
-    return orderItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+    return orderItems.reduce(
+      (total, item) => total + item.price * item.quantity,
+      0,
+    );
   };
 
   const handleSubmit = async () => {
@@ -224,17 +240,18 @@ export function RoomServiceDialog({
 
     setLoading(true);
     try {
-      console.log('Room Service Dialog - Starting order creation...');
-      
+      console.log("Room Service Dialog - Starting order creation...");
+
       // Prepare order data for backend
       const orderData = {
         room,
-        guest: rooms.find(r => r.number === room)?.guestName || `Huésped ${room}`,
-        items: orderItems.map(item => ({
+        guest:
+          rooms.find((r) => r.number === room)?.guestName || `Huésped ${room}`,
+        items: orderItems.map((item) => ({
           id: item.id,
           name: item.name,
           price: item.price.toString(),
-          quantity: item.quantity
+          quantity: item.quantity,
         })),
         total: calculateTotal(),
         estimatedTime: "30 min",
@@ -242,22 +259,23 @@ export function RoomServiceDialog({
         specialInstructions: notes,
       };
 
-      console.log('Room Service Dialog - Order data:', orderData);
+      console.log("Room Service Dialog - Order data:", orderData);
 
       // Call backend API to create the order
-      const createdOrder = await restaurantApi.createRoomServiceOrder(orderData);
-      console.log('Room Service Dialog - Order created:', createdOrder);
+      const createdOrder =
+        await restaurantApi.createRoomServiceOrder(orderData);
+      console.log("Room Service Dialog - Order created:", createdOrder);
 
       // Create local order data for callback with required fields
       const localOrder: RoomServiceOrder = {
         id: createdOrder.id,
         room: createdOrder.room,
         guest: createdOrder.guest,
-        items: orderItems.map(item => ({
+        items: orderItems.map((item) => ({
           id: item.id,
           name: item.name,
           price: item.price.toString(),
-          quantity: item.quantity
+          quantity: item.quantity,
         })),
         total: createdOrder.total,
         orderTime: createdOrder.orderTime,
@@ -268,17 +286,17 @@ export function RoomServiceDialog({
 
       // Call the callback with the created order
       onCreateOrder?.(localOrder);
-      
+
       // Reset form
       setRoom("");
       setWaiter("");
       setOrderItems([]);
       setNotes("");
       onOpenChange(false);
-      
+
       toast.success("Pedido creado exitosamente");
     } catch (error) {
-      console.error('Room Service Dialog - Error creating order:', error);
+      console.error("Room Service Dialog - Error creating order:", error);
       toast.error("Error al crear el pedido");
     } finally {
       setLoading(false);
@@ -286,22 +304,22 @@ export function RoomServiceDialog({
   };
 
   const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat('es-CO', {
-      style: 'currency',
-      currency: 'COP',
+    return new Intl.NumberFormat("es-CO", {
+      style: "currency",
+      currency: "COP",
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
     }).format(amount);
   };
 
   // Debug logs before render
-  console.log('Room Service Dialog - Rendering with state:', {
+  console.log("Room Service Dialog - Rendering with state:", {
     menuItemsCount: menuItems.length,
     roomsCount: rooms.length,
     employeesCount: employees.length,
     menuItemsData: menuItems,
     roomsData: rooms,
-    employeesData: employees
+    employeesData: employees,
   });
 
   return (
@@ -357,19 +375,21 @@ export function RoomServiceDialog({
                   </SelectTrigger>
                   <SelectContent>
                     {menuItems.map((item: MenuItem) => (
-                    <SelectItem key={item.id} value={item.id}>
-                      {item.name} - ${item.price}
-                    </SelectItem>
-                  ))}
+                      <SelectItem key={item.id} value={item.id}>
+                        {item.name} - ${item.price}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
-                <Input 
-                  type="number" 
-                  placeholder="Cantidad" 
-                  className="w-24" 
+                <Input
+                  type="number"
+                  placeholder="Cantidad"
+                  className="w-24"
                   min={1}
                   value={quantity}
-                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  onChange={(e) =>
+                    setQuantity(Math.max(1, parseInt(e.target.value) || 1))
+                  }
                 />
                 <Button variant="outline" onClick={handleAddItem}>
                   Agregar
@@ -383,11 +403,15 @@ export function RoomServiceDialog({
                 ) : (
                   <div className="space-y-2">
                     {orderItems.map((item) => (
-                      <div key={item.id} className="flex justify-between items-center bg-muted p-2 rounded">
+                      <div
+                        key={item.id}
+                        className="flex justify-between items-center bg-muted p-2 rounded"
+                      >
                         <div className="flex-1">
                           <span className="font-medium">{item.name}</span>
                           <span className="text-sm text-muted-foreground ml-2">
-                            x{item.quantity} - {formatCurrency(item.price * item.quantity)}
+                            x{item.quantity} -{" "}
+                            {formatCurrency(item.price * item.quantity)}
                           </span>
                         </div>
                         <Button
@@ -415,7 +439,6 @@ export function RoomServiceDialog({
               onChange={(e) => setNotes(e.target.value)}
             />
           </div>
-
 
           <div className="flex justify-between items-center pt-4 border-t">
             <div className="text-lg font-semibold">

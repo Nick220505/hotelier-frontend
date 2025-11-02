@@ -15,12 +15,12 @@ interface EmptyStateProps {
   className?: string;
 }
 
-export function EmptyState({ 
-  icon: Icon, 
-  title, 
-  description, 
-  action, 
-  className 
+export function EmptyState({
+  icon: Icon,
+  title,
+  description,
+  action,
+  className,
 }: EmptyStateProps) {
   return (
     <Card className={className}>
@@ -30,11 +30,7 @@ export function EmptyState({
         </div>
         <h3 className="text-lg font-semibold mb-2">{title}</h3>
         <p className="text-muted-foreground mb-6 max-w-sm">{description}</p>
-        {action && (
-          <Button onClick={action.onClick}>
-            {action.label}
-          </Button>
-        )}
+        {action && <Button onClick={action.onClick}>{action.label}</Button>}
       </CardContent>
     </Card>
   );

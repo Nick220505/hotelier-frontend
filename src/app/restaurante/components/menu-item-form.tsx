@@ -14,20 +14,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { 
-  menuItemSchema, 
-  MenuItemFormData, 
-  stringToArray, 
-  arrayToString 
+import {
+  menuItemSchema,
+  MenuItemFormData,
+  stringToArray,
+  arrayToString,
 } from "@/lib/schemas/restaurant";
 import { MenuItem } from "@/lib/api/restaurant";
 
 const categories = [
   "Appetizers",
-  "Main Courses", 
+  "Main Courses",
   "Desserts",
   "Beverages",
-  "Specials"
+  "Specials",
 ];
 
 interface MenuItemFormProps {
@@ -37,7 +37,12 @@ interface MenuItemFormProps {
   loading: boolean;
 }
 
-export function MenuItemForm({ item, onSubmit, onCancel, loading }: MenuItemFormProps) {
+export function MenuItemForm({
+  item,
+  onSubmit,
+  onCancel,
+  loading,
+}: MenuItemFormProps) {
   const isEditing = !!item;
 
   const form = useForm<MenuItemFormData>({
@@ -54,7 +59,12 @@ export function MenuItemForm({ item, onSubmit, onCancel, loading }: MenuItemForm
     },
   });
 
-  const { register, handleSubmit, control, formState: { errors } } = form;
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = form;
 
   const handleFormSubmit = (data: MenuItemFormData) => {
     onSubmit(data);
@@ -137,7 +147,9 @@ export function MenuItemForm({ item, onSubmit, onCancel, loading }: MenuItemForm
           {...register("preparationTime")}
         />
         {errors.preparationTime && (
-          <p className="text-sm text-red-600">{errors.preparationTime.message}</p>
+          <p className="text-sm text-red-600">
+            {errors.preparationTime.message}
+          </p>
         )}
       </div>
 
@@ -191,10 +203,7 @@ export function MenuItemForm({ item, onSubmit, onCancel, loading }: MenuItemForm
           name="available"
           control={control}
           render={({ field }) => (
-            <Switch
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
+            <Switch checked={field.value} onCheckedChange={field.onChange} />
           )}
         />
       </div>
@@ -214,8 +223,8 @@ export function MenuItemForm({ item, onSubmit, onCancel, loading }: MenuItemForm
               ? "Actualizando..."
               : "Creando..."
             : isEditing
-            ? "Actualizar"
-            : "Crear"}
+              ? "Actualizar"
+              : "Crear"}
         </Button>
       </div>
     </form>

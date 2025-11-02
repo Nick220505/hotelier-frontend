@@ -13,7 +13,9 @@ interface AttendanceSummaryCardsProps {
   summary: AttendanceSummary;
 }
 
-export function AttendanceSummaryCards({ summary }: AttendanceSummaryCardsProps) {
+export function AttendanceSummaryCards({
+  summary,
+}: AttendanceSummaryCardsProps) {
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
       <Card>
@@ -32,7 +34,9 @@ export function AttendanceSummaryCards({ summary }: AttendanceSummaryCardsProps)
           <UserCheck className="h-4 w-4 text-green-600" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-green-600">{summary.presentToday}</div>
+          <div className="text-2xl font-bold text-green-600">
+            {summary.presentToday}
+          </div>
         </CardContent>
       </Card>
 
@@ -42,7 +46,9 @@ export function AttendanceSummaryCards({ summary }: AttendanceSummaryCardsProps)
           <UserCheck className="h-4 w-4 text-red-600" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-red-600">{summary.absentToday}</div>
+          <div className="text-2xl font-bold text-red-600">
+            {summary.absentToday}
+          </div>
         </CardContent>
       </Card>
 
@@ -52,7 +58,9 @@ export function AttendanceSummaryCards({ summary }: AttendanceSummaryCardsProps)
           <Clock className="h-4 w-4 text-yellow-600" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-yellow-600">{summary.lateToday}</div>
+          <div className="text-2xl font-bold text-yellow-600">
+            {summary.lateToday}
+          </div>
         </CardContent>
       </Card>
 
@@ -62,7 +70,9 @@ export function AttendanceSummaryCards({ summary }: AttendanceSummaryCardsProps)
           <TrendingUp className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">{summary.averageHours.toFixed(1)}h</div>
+          <div className="text-2xl font-bold">
+            {summary.averageHours.toFixed(1)}h
+          </div>
         </CardContent>
       </Card>
     </div>

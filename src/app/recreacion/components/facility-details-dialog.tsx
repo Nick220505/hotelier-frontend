@@ -13,7 +13,11 @@ import {
 } from "@/components/ui/dialog";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { type RecreationalFacility, type FacilityType, type FacilityStatus } from "@/lib/api/recreational";
+import {
+  type RecreationalFacility,
+  type FacilityType,
+  type FacilityStatus,
+} from "@/lib/api/recreational";
 
 interface FacilityDetailsDialogProps {
   facility: RecreationalFacility | null;
@@ -52,23 +56,43 @@ export function FacilityDetailsDialog({
 
     switch (status) {
       case "AVAILABLE":
-        return <Badge variant="default" className="bg-green-500">Disponible</Badge>;
+        return (
+          <Badge variant="default" className="bg-green-500">
+            Disponible
+          </Badge>
+        );
       case "OCCUPIED":
-        return <Badge variant="secondary" className="bg-blue-500">Ocupada</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-blue-500">
+            Ocupada
+          </Badge>
+        );
       case "MAINTENANCE":
-        return <Badge variant="secondary" className="bg-yellow-500">Mantenimiento</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-yellow-500">
+            Mantenimiento
+          </Badge>
+        );
       case "RESERVED":
-        return <Badge variant="secondary" className="bg-purple-500">Reservada</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-purple-500">
+            Reservada
+          </Badge>
+        );
       case "CLEANING":
-        return <Badge variant="secondary" className="bg-orange-500">Limpieza</Badge>;
+        return (
+          <Badge variant="secondary" className="bg-orange-500">
+            Limpieza
+          </Badge>
+        );
       default:
         return <Badge variant="outline">{status}</Badge>;
     }
   };
 
   const getDayNames = (days: number[]) => {
-    const dayNames = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
-    return days.map(day => dayNames[day]).join(', ');
+    const dayNames = ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"];
+    return days.map((day) => dayNames[day]).join(", ");
   };
 
   return (
@@ -86,7 +110,9 @@ export function FacilityDetailsDialog({
             <div className="text-right">
               {getStatusBadge(facility.status, facility.isAvailable)}
               <div className="mt-1">
-                <Badge variant="outline">{getFacilityTypeLabel(facility.type)}</Badge>
+                <Badge variant="outline">
+                  {getFacilityTypeLabel(facility.type)}
+                </Badge>
               </div>
             </div>
           </div>
@@ -118,12 +144,16 @@ export function FacilityDetailsDialog({
               <CardContent className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-sm">Capacidad máxima:</span>
-                  <span className="text-sm font-medium">{facility.capacity} personas</span>
+                  <span className="text-sm font-medium">
+                    {facility.capacity} personas
+                  </span>
                 </div>
                 {facility.area && (
                   <div className="flex justify-between">
                     <span className="text-sm">Área:</span>
-                    <span className="text-sm font-medium">{facility.area} m²</span>
+                    <span className="text-sm font-medium">
+                      {facility.area} m²
+                    </span>
                   </div>
                 )}
               </CardContent>
@@ -139,15 +169,21 @@ export function FacilityDetailsDialog({
               <CardContent className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-sm">Mín. reserva:</span>
-                  <span className="text-sm font-medium">{facility.minimumBookingHours}h</span>
+                  <span className="text-sm font-medium">
+                    {facility.minimumBookingHours}h
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm">Máx. reserva:</span>
-                  <span className="text-sm font-medium">{facility.maximumBookingHours}h</span>
+                  <span className="text-sm font-medium">
+                    {facility.maximumBookingHours}h
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-sm">Anticipación:</span>
-                  <span className="text-sm font-medium">{facility.advanceBookingHours}h</span>
+                  <span className="text-sm font-medium">
+                    {facility.advanceBookingHours}h
+                  </span>
                 </div>
               </CardContent>
             </Card>
@@ -170,14 +206,15 @@ export function FacilityDetailsDialog({
                       {facility.openingTime} - {facility.closingTime}
                     </span>
                   </div>
-                  {facility.availableDays && facility.availableDays.length > 0 && (
-                    <div className="flex justify-between">
-                      <span className="text-sm">Días disponibles:</span>
-                      <span className="text-sm font-medium">
-                        {getDayNames(facility.availableDays)}
-                      </span>
-                    </div>
-                  )}
+                  {facility.availableDays &&
+                    facility.availableDays.length > 0 && (
+                      <div className="flex justify-between">
+                        <span className="text-sm">Días disponibles:</span>
+                        <span className="text-sm font-medium">
+                          {getDayNames(facility.availableDays)}
+                        </span>
+                      </div>
+                    )}
                 </div>
               </div>
             </CardContent>

@@ -170,8 +170,8 @@ function transformCleaningAssignment(
 ): CleaningAssignment {
   return {
     id: backendAssignment.id.toString(),
-    employeeName: backendAssignment.employee?.name || 'Sin asignar',
-    roomNumber: backendAssignment.room?.number || 'N/A',
+    employeeName: backendAssignment.employee?.name || "Sin asignar",
+    roomNumber: backendAssignment.room?.number || "N/A",
     assignedDate: backendAssignment.assignedDate.split("T")[0],
     startedAt: backendAssignment.startedAt
       ? backendAssignment.startedAt.split("T")[0]
@@ -451,21 +451,21 @@ export const housekeepingApi = {
   }): Promise<MaintenanceReport> => {
     // Map frontend types to backend enums
     const typeMap: Record<string, string> = {
-      "Plomería": "PLUMBING",
-      "Electricidad": "ELECTRICAL",
+      Plomería: "PLUMBING",
+      Electricidad: "ELECTRICAL",
       "Aire Acondicionado": "HVAC",
-      "Mobiliario": "FURNITURE",
-      "Electrodomésticos": "APPLIANCES",
-      "Estructural": "STRUCTURAL",
-      "Estético": "COSMETIC",
-      "General": "GENERAL",
+      Mobiliario: "FURNITURE",
+      Electrodomésticos: "APPLIANCES",
+      Estructural: "STRUCTURAL",
+      Estético: "COSMETIC",
+      General: "GENERAL",
     };
 
     const priorityMap: Record<string, string> = {
-      "baja": "LOW",
-      "media": "NORMAL", 
-      "alta": "HIGH",
-      "crítica": "URGENT",
+      baja: "LOW",
+      media: "NORMAL",
+      alta: "HIGH",
+      crítica: "URGENT",
     };
 
     const backendData = {
@@ -476,13 +476,10 @@ export const housekeepingApi = {
       reportedBy: incidentData.reportedBy || "Housekeeping Staff",
     };
 
-    const backendReport = (await apiRequest(
-      "/housekeeping/incident-reports",
-      {
-        method: "POST",
-        body: JSON.stringify(backendData),
-      },
-    )) as BackendMaintenanceReport;
+    const backendReport = (await apiRequest("/housekeeping/incident-reports", {
+      method: "POST",
+      body: JSON.stringify(backendData),
+    })) as BackendMaintenanceReport;
 
     return transformMaintenanceReport(backendReport);
   },

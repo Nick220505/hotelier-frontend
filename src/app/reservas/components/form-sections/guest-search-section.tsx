@@ -3,7 +3,13 @@
 import { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { guestsApi, type Guest } from "@/lib/api/guests";
 import type { UseFormReturn } from "react-hook-form";
 
@@ -24,13 +30,16 @@ interface GuestSearchSectionProps {
   enabled?: boolean;
 }
 
-export function GuestSearchSection({ form, enabled = true }: GuestSearchSectionProps) {
+export function GuestSearchSection({
+  form,
+  enabled = true,
+}: GuestSearchSectionProps) {
   const [guestSearch, setGuestSearch] = useState<string>("");
   const [guestOptions, setGuestOptions] = useState<Guest[]>([]);
 
   useEffect(() => {
     if (!enabled) return;
-    
+
     let active = true;
     (async () => {
       try {
@@ -59,8 +68,8 @@ export function GuestSearchSection({ form, enabled = true }: GuestSearchSectionP
       </div>
       <div className="space-y-2">
         <Label htmlFor="guestId">Seleccionar Huésped (opcional)</Label>
-        <Select 
-          value={form.watch("guestId") || ""} 
+        <Select
+          value={form.watch("guestId") || ""}
           onValueChange={(value) => form.setValue("guestId", value)}
         >
           <SelectTrigger>

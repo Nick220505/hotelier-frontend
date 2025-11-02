@@ -7,7 +7,10 @@ interface ParkingSearchProps {
   onSearchChange: (value: string) => void;
 }
 
-export function ParkingSearch({ searchTerm, onSearchChange }: ParkingSearchProps) {
+export function ParkingSearch({
+  searchTerm,
+  onSearchChange,
+}: ParkingSearchProps) {
   return (
     <div className="flex items-center gap-4">
       <div className="flex-1">

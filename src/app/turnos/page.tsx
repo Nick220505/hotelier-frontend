@@ -4,35 +4,43 @@ import { shiftsApi } from "@/lib/api/shifts";
 import { employeesApi } from "@/lib/api/employees";
 import { ShiftsManagement } from "./components/shifts-management";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export default async function ShiftsPage() {
   // Fetch data server-side
   const [shifts, employees] = await Promise.all([
     shiftsApi.getAll().catch(() => []),
-    employeesApi.getAll().catch(() => [])
+    employeesApi.getAll().catch(() => []),
   ]);
 
   // Calculate shift counts for summary cards
-  const today = new Date().toISOString().split('T')[0];
-  const todayShifts = shifts.filter(shift => shift.date === today);
-  const scheduledShifts = shifts.filter(shift => shift.status === 'SCHEDULED');
-  const completedShifts = shifts.filter(shift => shift.status === 'COMPLETED');
-  const cancelledShifts = shifts.filter(shift => shift.status === 'CANCELLED');
+  const today = new Date().toISOString().split("T")[0];
+  const todayShifts = shifts.filter((shift) => shift.date === today);
+  const scheduledShifts = shifts.filter(
+    (shift) => shift.status === "SCHEDULED",
+  );
+  const completedShifts = shifts.filter(
+    (shift) => shift.status === "COMPLETED",
+  );
+  const cancelledShifts = shifts.filter(
+    (shift) => shift.status === "CANCELLED",
+  );
 
   const shiftCounts = {
     total: shifts.length,
     today: todayShifts.length,
     scheduled: scheduledShifts.length,
     completed: completedShifts.length,
-    cancelled: cancelledShifts.length
+    cancelled: cancelledShifts.length,
   };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Gestión de Turnos</h1>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Gestión de Turnos
+          </h1>
           <p className="text-gray-600 mt-1">
             Administra los turnos y horarios del personal
           </p>
@@ -98,8 +106,8 @@ export default async function ShiftsPage() {
       </div>
 
       {/* Shifts Management Component */}
-      <ShiftsManagement 
-        initialShifts={shifts} 
+      <ShiftsManagement
+        initialShifts={shifts}
         employees={employees}
         shiftCounts={shiftCounts}
       />

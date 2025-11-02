@@ -80,6 +80,8 @@ export function Reservations({
     checkOutDate: string;
     roomId: number;
     discountAmount?: number;
+    discountPercent?: number;
+    guestId?: number | null;
     channel: string;
   }) => {
     try {
@@ -92,9 +94,15 @@ export function Reservations({
         return;
       }
 
+      // Preparar los datos asegurando que los campos numéricos sean válidos
       const reservationData = {
         ...formData,
         channel: "DIRECT" as const,
+        roomId: parseInt(formData.roomId.toString()),
+        guests: parseInt(formData.guests.toString()),
+        discountAmount: formData.discountAmount || null,
+        discountPercent: formData.discountPercent || null,
+        guestId: formData.guestId || null
       };
 
       await reservationsApi.createSelf(

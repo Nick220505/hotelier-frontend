@@ -46,13 +46,10 @@ const reservationFormSchema = z.object({
       if (!val || val.trim() === "") return true;
       return /^(\+\d{1,3}[- ]?)?\d{10}$/.test(val);
     }, "Ingresa un teléfono válido"),
-  guests: z
-    .string({ message: "El número de huéspedes es obligatorio" })
-    .min(1, "Selecciona el número de huéspedes")
-    .refine((val) => {
-      const num = parseInt(val);
-      return !isNaN(num) && num >= 1 && num <= 10;
-    }, "Debe ser un número entre 1 y 10"),
+  guests: z.coerce
+    .number({ required_error: "El número de huéspedes es obligatorio" })
+    .min(1, "Debe ser al menos 1 huésped")
+    .max(10, "No puede exceder 10 huéspedes"),
   checkInDate: z
     .string({ message: "La fecha de entrada es obligatoria" })
     .min(1, "La fecha de entrada es obligatoria")
@@ -65,30 +62,21 @@ const reservationFormSchema = z.object({
   checkOutDate: z
     .string({ message: "La fecha de salida es obligatoria" })
     .min(1, "La fecha de salida es obligatoria"),
-  roomId: z
-    .string({ message: "La habitación es obligatoria" })
-    .min(1, "Selecciona una habitación")
-    .refine((val) => {
-      const num = parseInt(val);
-      return !isNaN(num) && num > 0;
-    }, "Selecciona una habitación válida"),
-  discountPercent: z
-    .string()
-    .optional()
-    .refine((val) => {
-      if (!val || val.trim() === "") return true;
-      const num = parseFloat(val);
-      return !isNaN(num) && num >= 0 && num <= 100;
-    }, "El descuento debe estar entre 0 y 100%"),
-  discountAmount: z
-    .string()
-    .optional()
-    .refine((val) => {
-      if (!val || val.trim() === "") return true;
-      const num = parseFloat(val);
-      return !isNaN(num) && num >= 0;
-    }, "El descuento debe ser mayor o igual a 0"),
-  guestId: z.string().optional(),
+  roomId: z.coerce
+    .number({ required_error: "La habitación es obligatoria" })
+    .min(1, "Selecciona una habitación"),
+  discountPercent: z.coerce
+    .number()
+    .min(0, "El descuento debe ser mayor o igual a 0")
+    .max(100, "El descuento no puede ser mayor a 100%")
+    .nullable()
+    .optional(),
+  discountAmount: z.coerce
+    .number()
+    .min(0, "El descuento debe ser mayor o igual a 0")
+    .nullable()
+    .optional(),
+  guestId: z.coerce.number().nullable().optional(),
 }).refine((data) => {
   const checkIn = new Date(data.checkInDate);
   const checkOut = new Date(data.checkOutDate);
@@ -154,8 +142,8 @@ function GuestSearchSection({
       <div className="space-y-2">
         <Label htmlFor="guestId">Seleccionar Huésped (opcional)</Label>
         <Select 
-          value={form.watch("guestId") || ""} 
-          onValueChange={(value) => form.setValue("guestId", value)}
+          value={form.watch("guestId")?.toString() || ""} 
+          onValueChange={(value) => form.setValue("guestId", value ? parseInt(value) : null)}
         >
           <SelectTrigger>
             <SelectValue placeholder="Sin asignar" />

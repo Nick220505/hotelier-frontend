@@ -86,7 +86,7 @@ export default function ParkingDashboard({
     onVehicleAdd({
       ...newVehicleData,
       room: newVehicleData.room || "",
-      notes: newVehicleData.notes || ""
+      notes: newVehicleData.notes || "",
     });
   };
 

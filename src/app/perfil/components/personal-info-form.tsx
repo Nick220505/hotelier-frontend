@@ -93,7 +93,7 @@ export function PersonalInfoForm({
 
   // Sync form values to parent whenever they change
   const formValues = useWatch({ control: form.control });
-  
+
   useEffect(() => {
     if (onChange && formValues) {
       onChange(formValues as PersonalInfoFormData);
@@ -105,7 +105,7 @@ export function PersonalInfoForm({
   };
 
   const nameValue = useWatch({ control: form.control, name: "name" });
-  
+
   const getInitials = () => {
     const name = nameValue || initialData?.name || "";
     return name

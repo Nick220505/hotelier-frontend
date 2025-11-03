@@ -68,7 +68,7 @@ export default function BillingDashboard({
       );
       // Refresh invoice locally
       setInvoices((prev) =>
-        prev.map((inv) => (inv.id === invoiceId ? updated as Invoice : inv)),
+        prev.map((inv) => (inv.id === invoiceId ? (updated as Invoice) : inv)),
       );
 
       // Append a local payment record for visualization (backend payments may be mocked)
@@ -311,8 +311,7 @@ export default function BillingDashboard({
                                 <span>
                                   $
                                   {(
-                                    (item.quantity || 1) *
-                                    (item.price || 0)
+                                    (item.quantity || 1) * (item.price || 0)
                                   ).toLocaleString()}
                                 </span>
                               </div>

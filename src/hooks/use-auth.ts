@@ -1,6 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, startTransition } from "react";
+import {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  startTransition,
+} from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authApi } from "@/lib/api/auth";
@@ -37,7 +43,7 @@ export function useAuth() {
     isAuthenticated: false,
     isLoading: true,
   });
-  const isHydrated = typeof window !== 'undefined';
+  const isHydrated = typeof window !== "undefined";
   const router = useRouter();
   const hasInitialized = useRef(false);
 

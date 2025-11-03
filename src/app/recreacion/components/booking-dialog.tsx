@@ -275,7 +275,10 @@ export function BookingDialog({
       let result: RecreationalBooking;
 
       if (booking) {
-        result = await recreationalApi.updateBooking(Number(booking.id), bookingData);
+        result = await recreationalApi.updateBooking(
+          Number(booking.id),
+          bookingData,
+        );
         toast.success("Reserva actualizada correctamente");
       } else {
         result = await recreationalApi.createBooking(bookingData);

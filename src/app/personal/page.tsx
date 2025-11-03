@@ -34,11 +34,12 @@ export default function PersonalPage() {
 
         setStaff(staffData);
         // Transform attendance data to match AttendanceRecord type
-        const transformedAttendance = attendanceData.map(att => ({
+        const transformedAttendance = attendanceData.map((att) => ({
           ...att,
-          hoursWorked: typeof att.hoursWorked === 'string' 
-            ? parseFloat(att.hoursWorked) 
-            : att.hoursWorked
+          hoursWorked:
+            typeof att.hoursWorked === "string"
+              ? parseFloat(att.hoursWorked)
+              : att.hoursWorked,
         }));
         setAttendance(transformedAttendance);
       } catch (error) {

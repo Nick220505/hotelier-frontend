@@ -213,9 +213,17 @@ export default function StaffManagement({
             </CardHeader>
             <CardContent>
               <ShiftManagement
-                shifts={shifts as unknown as Parameters<typeof ShiftManagement>[0]['shifts']}
+                shifts={
+                  shifts as unknown as Parameters<
+                    typeof ShiftManagement
+                  >[0]["shifts"]
+                }
                 employees={employees}
-                onShiftsChange={setShifts as unknown as Parameters<typeof ShiftManagement>[0]['onShiftsChange']}
+                onShiftsChange={
+                  setShifts as unknown as Parameters<
+                    typeof ShiftManagement
+                  >[0]["onShiftsChange"]
+                }
               />
             </CardContent>
           </Card>

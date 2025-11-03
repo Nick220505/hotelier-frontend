@@ -158,7 +158,9 @@ export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
               cx="50%"
               cy="50%"
               labelLine={false}
-              label={renderCustomLabel as unknown as typeof Pie.prototype.props.label}
+              label={
+                renderCustomLabel as unknown as typeof Pie.prototype.props.label
+              }
               outerRadius={120}
               fill="#8884d8"
               dataKey="value"

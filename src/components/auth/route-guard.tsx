@@ -29,7 +29,7 @@ export function RouteGuard({ children }: RouteGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
   const hasCheckedRef = useRef(false);
-  const isHydrated = typeof window !== 'undefined';
+  const isHydrated = typeof window !== "undefined";
 
   // Check if current path is an auth page
   const isAuthPage = pathname === "/login" || pathname === "/register";

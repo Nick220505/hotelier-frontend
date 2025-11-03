@@ -27,7 +27,10 @@ export const calculateSummary = (
     absentToday: records.filter((r) => r.status === "ABSENT").length,
     lateToday: records.filter((r) => r.status === "LATE").length,
     averageHours:
-      records.reduce((acc, r) => acc + (typeof r.hoursWorked === "number" ? r.hoursWorked : 0), 0) /
-      Math.max(records.length, 1),
+      records.reduce(
+        (acc, r) =>
+          acc + (typeof r.hoursWorked === "number" ? r.hoursWorked : 0),
+        0,
+      ) / Math.max(records.length, 1),
   };
 };

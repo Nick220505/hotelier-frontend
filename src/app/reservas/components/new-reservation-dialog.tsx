@@ -51,7 +51,8 @@ const reservationFormSchema = z
         if (!val || val.trim() === "") return true;
         return /^(\+\d{1,3}[- ]?)?\d{10}$/.test(val);
       }, "Ingresa un teléfono válido"),
-    guests: z.number()
+    guests: z
+      .number()
       .min(1, "Debe ser al menos 1 huésped")
       .max(10, "No puede exceder 10 huéspedes"),
     checkInDate: z
@@ -66,14 +67,15 @@ const reservationFormSchema = z
     checkOutDate: z
       .string({ message: "La fecha de salida es obligatoria" })
       .min(1, "La fecha de salida es obligatoria"),
-    roomId: z.number()
-      .min(1, "Selecciona una habitación"),
-    discountPercent: z.number()
+    roomId: z.number().min(1, "Selecciona una habitación"),
+    discountPercent: z
+      .number()
       .min(0, "El descuento debe ser mayor o igual a 0")
       .max(100, "El descuento no puede ser mayor a 100%")
       .nullable()
       .optional(),
-    discountAmount: z.number()
+    discountAmount: z
+      .number()
       .min(0, "El descuento debe ser mayor o igual a 0")
       .nullable()
       .optional(),
@@ -555,7 +557,9 @@ export function NewReservationDialog({
               <Label htmlFor="guests">Número de Huéspedes</Label>
               <Select
                 value={formValues.guests?.toString() || "1"}
-                onValueChange={(value) => form.setValue("guests", Number(value))}
+                onValueChange={(value) =>
+                  form.setValue("guests", Number(value))
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar cantidad" />
@@ -593,7 +597,9 @@ export function NewReservationDialog({
               )}
               <Select
                 value={formValues.roomId?.toString() || ""}
-                onValueChange={(value) => form.setValue("roomId", Number(value))}
+                onValueChange={(value) =>
+                  form.setValue("roomId", Number(value))
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar habitación" />

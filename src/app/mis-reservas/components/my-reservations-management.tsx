@@ -65,7 +65,8 @@ export function MyReservationsManagement() {
         ]);
         setMyReservations(mine);
         setRooms(allRooms);
-        if (cfg && 'currency' in cfg && cfg.currency) setCurrencyCode(cfg.currency);
+        if (cfg && "currency" in cfg && cfg.currency)
+          setCurrencyCode(cfg.currency);
       } catch (e) {
         console.error("Error loading my reservations:", e);
       } finally {

@@ -158,19 +158,20 @@ export function NewOrderDialog({
                         value={controllerField.value}
                         onValueChange={controllerField.onChange}
                       >
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Seleccionar producto" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {menuItems
-                        .filter((menuItem) => menuItem.available)
-                        .map((menuItem) => (
-                          <SelectItem key={menuItem.id} value={menuItem.id}>
-                            {menuItem.name} - ${menuItem.price.toLocaleString()}
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
+                        <SelectTrigger className="flex-1">
+                          <SelectValue placeholder="Seleccionar producto" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {menuItems
+                            .filter((menuItem) => menuItem.available)
+                            .map((menuItem) => (
+                              <SelectItem key={menuItem.id} value={menuItem.id}>
+                                {menuItem.name} - $
+                                {menuItem.price.toLocaleString()}
+                              </SelectItem>
+                            ))}
+                        </SelectContent>
+                      </Select>
                     )}
                   />
                   <Input

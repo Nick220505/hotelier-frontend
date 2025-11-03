@@ -77,8 +77,7 @@ const CustomTooltip = ({
             </span>
           </p>
           <p className="text-sm text-green-600">
-            ✓ Completadas:{" "}
-            <span className="font-medium">{data.completed}</span>
+            ✓ Completadas: <span className="font-medium">{data.completed}</span>
           </p>
           <p className="text-sm text-orange-600">
             ⏳ Pendientes: <span className="font-medium">{data.pending}</span>

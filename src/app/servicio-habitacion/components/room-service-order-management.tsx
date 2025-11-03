@@ -6,7 +6,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Coffee, Plus } from "lucide-react";
 
-import { RoomServiceOrder, MenuItem } from "@/lib/api/restaurant";
+import { RoomServiceOrder, RoomServiceOrderItem, MenuItem } from "@/lib/api/restaurant";
 import { OrderStatusCards } from "./order-status-cards";
 import { OrderFilters } from "./order-filters";
 import { OrderCard } from "./order-card";
@@ -61,7 +61,7 @@ export function RoomServiceOrderManagement({
   const handleCreateOrder = (orderData: {
     roomNumber: string;
     guestName: string;
-    specialInstructions: string;
+    specialInstructions?: string;
     selectedItems: Array<{
       menuItemId: string;
       quantity: number;
@@ -77,11 +77,16 @@ export function RoomServiceOrderManagement({
       return;
     }
 
-    const orderItems: string[] = orderData.selectedItems.map((selectedItem) => {
+    const orderItems: RoomServiceOrderItem[] = orderData.selectedItems.map((selectedItem) => {
       const menuItem = menuItems.find(
         (item) => item.id === selectedItem.menuItemId,
       );
-      return `${menuItem?.name || ""} (x${selectedItem.quantity})`;
+      return {
+        id: menuItem?.id || "",
+        name: menuItem?.name || "",
+        price: menuItem?.price?.toString() || "0",
+        quantity: selectedItem.quantity,
+      };
     });
 
     const total = orderData.selectedItems.reduce((sum, selectedItem) => {

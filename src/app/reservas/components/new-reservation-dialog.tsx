@@ -66,21 +66,18 @@ const reservationFormSchema = z
     checkOutDate: z
       .string({ message: "La fecha de salida es obligatoria" })
       .min(1, "La fecha de salida es obligatoria"),
-    roomId: z.coerce
-      .number({ required_error: "La habitación es obligatoria" })
+    roomId: z.number()
       .min(1, "Selecciona una habitación"),
-    discountPercent: z.coerce
-      .number()
+    discountPercent: z.number()
       .min(0, "El descuento debe ser mayor o igual a 0")
       .max(100, "El descuento no puede ser mayor a 100%")
       .nullable()
       .optional(),
-    discountAmount: z.coerce
-      .number()
+    discountAmount: z.number()
       .min(0, "El descuento debe ser mayor o igual a 0")
       .nullable()
       .optional(),
-    guestId: z.coerce.number().nullable().optional(),
+    guestId: z.number().nullable().optional(),
   })
   .refine(
     (data) => {
@@ -344,13 +341,13 @@ export function NewReservationDialog({
       guestName: "",
       guestEmail: "",
       guestPhone: "",
-      guests: "1",
+      guests: 1,
       checkInDate: "",
       checkOutDate: "",
-      roomId: "",
-      discountPercent: "",
-      discountAmount: "",
-      guestId: "",
+      roomId: 0,
+      discountPercent: null,
+      discountAmount: null,
+      guestId: null,
     },
   });
 
@@ -373,7 +370,7 @@ export function NewReservationDialog({
 
   // Get guest count from form
   const totalGuests = useMemo(() => {
-    const guestCount = parseInt(formValues.guests) || 1;
+    const guestCount = formValues.guests || 1;
     return guestCount;
   }, [formValues.guests]);
 
@@ -401,9 +398,9 @@ export function NewReservationDialog({
           // Reset selected room if it is no longer available
           if (
             formValues.roomId &&
-            !list.some((r) => r.id.toString() === formValues.roomId)
+            !list.some((r) => Number(r.id) === formValues.roomId)
           ) {
-            form.setValue("roomId", "");
+            form.setValue("roomId", 0);
           }
         }
       } catch (e) {
@@ -427,7 +424,7 @@ export function NewReservationDialog({
   // Calculate totals with dependencies tracked for React
   const selectedRoom = useMemo(() => {
     const roomList = availableRooms ?? rooms;
-    return roomList.find((r) => r.id.toString() === formValues.roomId);
+    return roomList.find((r) => Number(r.id) === formValues.roomId);
   }, [availableRooms, rooms, formValues.roomId]);
 
   const nights = useMemo(() => {
@@ -557,8 +554,8 @@ export function NewReservationDialog({
             <div className="space-y-2">
               <Label htmlFor="guests">Número de Huéspedes</Label>
               <Select
-                value={formValues.guests}
-                onValueChange={(value) => form.setValue("guests", value)}
+                value={formValues.guests?.toString() || "1"}
+                onValueChange={(value) => form.setValue("guests", Number(value))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar cantidad" />
@@ -595,8 +592,8 @@ export function NewReservationDialog({
                 </div>
               )}
               <Select
-                value={formValues.roomId}
-                onValueChange={(value) => form.setValue("roomId", value)}
+                value={formValues.roomId?.toString() || ""}
+                onValueChange={(value) => form.setValue("roomId", Number(value))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Seleccionar habitación" />

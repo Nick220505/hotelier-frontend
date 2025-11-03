@@ -237,7 +237,7 @@ export function ReservationsTable({
                               variant="outline"
                               size="sm"
                               onClick={() =>
-                                onUpdateStatus(reservation.id, "CONFIRMED")
+                                onUpdateStatus(Number(reservation.id), "CONFIRMED")
                               }
                             >
                               Confirmar
@@ -246,7 +246,7 @@ export function ReservationsTable({
                               variant="outline"
                               size="sm"
                               onClick={() =>
-                                onUpdateStatus(reservation.id, "CANCELLED")
+                                onUpdateStatus(Number(reservation.id), "CANCELLED")
                               }
                             >
                               Cancelar
@@ -259,7 +259,7 @@ export function ReservationsTable({
                               variant="outline"
                               size="sm"
                               onClick={() =>
-                                onUpdateStatus(reservation.id, "CHECKED_IN")
+                                onUpdateStatus(Number(reservation.id), "CHECKED_IN")
                               }
                             >
                               Check-in
@@ -268,7 +268,7 @@ export function ReservationsTable({
                               variant="outline"
                               size="sm"
                               onClick={() =>
-                                onUpdateStatus(reservation.id, "CANCELLED")
+                                onUpdateStatus(Number(reservation.id), "CANCELLED")
                               }
                             >
                               Cancelar
@@ -281,21 +281,21 @@ export function ReservationsTable({
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => onViewReservation(reservation.id)}
+                        onClick={() => onViewReservation(Number(reservation.id))}
                       >
                         <Eye className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => onEditReservation(reservation.id)}
+                        onClick={() => onEditReservation(Number(reservation.id))}
                       >
                         <Edit className="h-4 w-4" />
                       </Button>
                       <Button
                         variant="ghost"
                         size="icon"
-                        onClick={() => onDeleteReservation(reservation.id)}
+                        onClick={() => onDeleteReservation(Number(reservation.id))}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

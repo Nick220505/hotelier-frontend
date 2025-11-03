@@ -81,10 +81,10 @@ export function Reservations({
     checkInDate: string;
     checkOutDate: string;
     roomId: number;
-    discountAmount?: number;
-    discountPercent?: number;
+    discountAmount?: number | null;
+    discountPercent?: number | null;
     guestId?: number | null;
-    channel: string;
+    channel?: string;
   }) => {
     try {
       setLoading(true);

@@ -85,7 +85,8 @@ export function OrderDetailsDialog({
                   key={index}
                   className="flex justify-between p-2 bg-muted rounded"
                 >
-                  <span>{item}</span>
+                  <span>{item.name} x {item.quantity}</span>
+                  <span>${item.price}</span>
                 </div>
               ))}
             </div>

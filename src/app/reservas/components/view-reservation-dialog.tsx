@@ -350,7 +350,7 @@ export function ViewReservationDialog({
             reservation.status !== "CHECKED_OUT" &&
             onCheckout && (
               <Button
-                onClick={() => onCheckout(reservation.id)}
+                onClick={() => onCheckout(Number(reservation.id))}
                 disabled={isProcessing}
                 className="w-full sm:w-auto"
               >

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -50,9 +50,11 @@ export function AuditFilters({
 
   // Update local state when query changes externally
   useEffect(() => {
-    setStartDate(query.startDate ? new Date(query.startDate) : undefined);
-    setEndDate(query.endDate ? new Date(query.endDate) : undefined);
-    setSearchTerm(query.search || "");
+    startTransition(() => {
+      setStartDate(query.startDate ? new Date(query.startDate) : undefined);
+      setEndDate(query.endDate ? new Date(query.endDate) : undefined);
+      setSearchTerm(query.search || "");
+    });
   }, [query]);
 
   const handleSearch = () => {

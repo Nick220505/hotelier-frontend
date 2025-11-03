@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -36,7 +36,9 @@ export function AssignPermissionsDialog({
     if (role) {
       const currentPermissions =
         role.permissions?.map((rp) => rp.permissionId) || [];
-      setSelectedPermissions(currentPermissions);
+      startTransition(() => {
+        setSelectedPermissions(currentPermissions);
+      });
     }
   }, [role]);
 

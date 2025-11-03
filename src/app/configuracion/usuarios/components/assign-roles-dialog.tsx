@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, startTransition } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
@@ -39,10 +39,14 @@ export function AssignRolesDialog({
     if (open && userRoles && userRoles.length > 0) {
       const currentRoles = userRoles.map((role) => role.id);
       console.log("Setting selected roles from user roles:", currentRoles);
-      setSelectedRoles(currentRoles);
+      startTransition(() => {
+        setSelectedRoles(currentRoles);
+      });
     } else if (open && (!userRoles || userRoles.length === 0)) {
       console.log("No user roles found, clearing selection");
-      setSelectedRoles([]);
+      startTransition(() => {
+        setSelectedRoles([]);
+      });
     }
   }, [open, userRoles]);
 

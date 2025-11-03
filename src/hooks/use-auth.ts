@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, startTransition } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authApi } from "@/lib/api/auth";
@@ -100,7 +100,9 @@ export function useAuth() {
   useEffect(() => {
     if (isHydrated && !hasInitialized.current) {
       hasInitialized.current = true;
-      void checkAuthStatus();
+      startTransition(() => {
+        void checkAuthStatus();
+      });
     }
   }, [isHydrated, checkAuthStatus]);
 

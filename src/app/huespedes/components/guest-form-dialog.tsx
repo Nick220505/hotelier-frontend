@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { guestsApi, type Guest } from "@/lib/api/guests";
@@ -193,7 +193,7 @@ export function GuestFormDialog({
           <div className="flex items-center gap-2 pt-2">
             <Checkbox
               id="vip"
-              checked={form.watch("vip")}
+              checked={useWatch({ control: form.control, name: "vip" })}
               onCheckedChange={(v) => form.setValue("vip", !!v)}
             />
             <Label htmlFor="vip">VIP</Label>

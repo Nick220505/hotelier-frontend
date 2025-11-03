@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -174,7 +174,7 @@ export function VenueFormDialog({
           <div className="flex items-center space-x-2">
             <Checkbox
               id="available"
-              checked={form.watch("available")}
+              checked={useWatch({ control: form.control, name: "available" })}
               onCheckedChange={(checked) =>
                 form.setValue("available", checked as boolean)
               }

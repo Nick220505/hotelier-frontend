@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState, startTransition } from "react";
 
 interface HotelierLogoProps {
   className?: string;
@@ -34,7 +34,9 @@ export function HotelierLogo({
   const [mounted, setMounted] = useState(false);
 
   useLayoutEffect(() => {
-    setMounted(true);
+    startTransition(() => {
+      setMounted(true);
+    });
   }, []);
 
   const getLogoSrc = () => {

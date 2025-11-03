@@ -47,15 +47,13 @@ const facilitySchema = z.object({
   type: z.string().min(1, "El tipo es requerido"),
   location: z.string().min(1, "La ubicación es requerida"),
   description: z.string().optional(),
-  capacity: z.coerce.number().min(1, "La capacidad debe ser al menos 1"),
-  area: z.coerce.number().optional(),
+  capacity: z.number().min(1, "La capacidad debe ser al menos 1"),
+  area: z.number().optional(),
   openingTime: z.string().min(1, "La hora de apertura es requerida"),
   closingTime: z.string().min(1, "La hora de cierre es requerida"),
-  minimumBookingHours: z.coerce.number().min(1, "Mínimo 1 hora"),
-  maximumBookingHours: z.coerce
-    .number()
-    .min(1, "Máximo debe ser al menos 1 hora"),
-  advanceBookingHours: z.coerce.number().min(0, "Debe ser un número positivo"),
+  minimumBookingHours: z.number().min(1, "Mínimo 1 hora"),
+  maximumBookingHours: z.number().min(1, "Máximo debe ser al menos 1 hora"),
+  advanceBookingHours: z.number().min(0, "Debe ser un número positivo"),
   isAvailable: z.boolean(),
   amenities: z.array(z.string()).optional(),
   rules: z.array(z.string()).optional(),
@@ -144,7 +142,6 @@ export function FacilityDialog({
         description: facility.description || "",
         capacity: facility.capacity,
         area: facility.area || 0,
-        hourlyRate: facility.hourlyRate,
         openingTime: facility.openingTime,
         closingTime: facility.closingTime,
         minimumBookingHours: facility.minimumBookingHours,
@@ -214,7 +211,7 @@ export function FacilityDialog({
 
       if (facility) {
         result = await recreationalApi.updateFacility(
-          facility.id,
+          Number(facility.id),
           facilityData,
         );
         toast.success("Instalación actualizada correctamente");

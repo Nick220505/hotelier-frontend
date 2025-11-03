@@ -38,7 +38,7 @@ const guestSchema = z.object({
     .or(z.literal("")),
   address: z.string().optional(),
   nationality: z.string().optional(),
-  vip: z.boolean().optional().default(false),
+  vip: z.boolean(),
 });
 
 type GuestFormData = z.infer<typeof guestSchema>;
@@ -57,7 +57,7 @@ export function GuestFormDialog({
   onGuestSaved,
 }: GuestFormDialogProps) {
   const form = useForm<GuestFormData>({
-    resolver: zodResolver(guestSchema) as any,
+    resolver: zodResolver(guestSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -66,7 +66,7 @@ export function GuestFormDialog({
       address: "",
       nationality: "",
       vip: false,
-    } as Partial<GuestFormData>,
+    },
   });
 
   useEffect(() => {

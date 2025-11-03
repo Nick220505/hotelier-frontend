@@ -166,10 +166,22 @@ export function ShiftsTab() {
       };
 
       if (editingShift) {
-        await shiftsApi.update(editingShift.id, data as any);
+        const payload = {
+          ...data,
+          type: data.type as Shift["type"],
+          status: data.status as Shift["status"],
+          department: data.department as Shift["department"],
+        };
+        await shiftsApi.update(editingShift.id, payload);
         toast.success("Turno actualizado exitosamente");
       } else {
-        await shiftsApi.create(data as any);
+        const payload = {
+          ...data,
+          type: data.type as Shift["type"],
+          status: data.status as Shift["status"],
+          department: data.department as Shift["department"],
+        };
+        await shiftsApi.create(payload);
         toast.success("Turno creado exitosamente");
       }
       setDialogOpen(false);

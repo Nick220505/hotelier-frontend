@@ -155,10 +155,20 @@ export function EmployeesTab() {
   const handleSaveEmployee = async () => {
     try {
       if (editingEmployee) {
-        await employeesApi.update(Number(editingEmployee.id), formData as any);
+        const payload = {
+          ...formData,
+          department: formData.department as Employee["department"],
+          status: formData.status as Employee["status"],
+        };
+        await employeesApi.update(Number(editingEmployee.id), payload);
         toast.success("Empleado actualizado exitosamente");
       } else {
-        await employeesApi.create(formData as any);
+        const payload = {
+          ...formData,
+          department: formData.department as Employee["department"],
+          status: formData.status as Employee["status"],
+        };
+        await employeesApi.create(payload);
         toast.success("Empleado creado exitosamente");
       }
       setDialogOpen(false);

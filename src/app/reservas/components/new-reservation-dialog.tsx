@@ -51,8 +51,7 @@ const reservationFormSchema = z
         if (!val || val.trim() === "") return true;
         return /^(\+\d{1,3}[- ]?)?\d{10}$/.test(val);
       }, "Ingresa un teléfono válido"),
-    guests: z.coerce
-      .number({ required_error: "El número de huéspedes es obligatorio" })
+    guests: z.number()
       .min(1, "Debe ser al menos 1 huésped")
       .max(10, "No puede exceder 10 huéspedes"),
     checkInDate: z

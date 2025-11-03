@@ -200,10 +200,18 @@ export function AttendanceTab() {
       };
 
       if (editingAttendance) {
-        await attendanceApi.update(editingAttendance.id, data as any);
+        const payload = {
+          ...data,
+          status: data.status as Attendance["status"],
+        };
+        await attendanceApi.update(editingAttendance.id, payload);
         toast.success("Asistencia actualizada exitosamente");
       } else {
-        await attendanceApi.create(data as any);
+        const payload = {
+          ...data,
+          status: data.status as Attendance["status"],
+        };
+        await attendanceApi.create(payload);
         toast.success("Asistencia registrada exitosamente");
       }
       setDialogOpen(false);

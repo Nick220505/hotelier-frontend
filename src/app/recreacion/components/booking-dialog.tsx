@@ -49,15 +49,15 @@ const bookingSchema = z.object({
   guestEmail: z.string().email("Email inválido"),
   guestPhone: z.string().optional(),
   roomNumber: z.string().optional(),
-  facilityId: z.coerce.number().min(1, "Selecciona una instalación"),
+  facilityId: z.number().min(1, "Selecciona una instalación"),
   bookingDate: z.string().min(1, "La fecha es requerida"),
   startTime: z.string().min(1, "La hora de inicio es requerida"),
   endTime: z.string().min(1, "La hora de fin es requerida"),
-  participants: z.coerce.number().min(1, "Debe haber al menos 1 participante"),
+  participants: z.number().min(1, "Debe haber al menos 1 participante"),
   priority: z.string(),
   specialRequests: z.string().optional(),
-  discountPercent: z.coerce.number().min(0).max(100).optional(),
-  discountAmount: z.coerce.number().min(0).optional(),
+  discountPercent: z.number().min(0).max(100).optional(),
+  discountAmount: z.number().min(0).optional(),
 });
 
 type BookingFormValues = z.infer<typeof bookingSchema>;
@@ -125,7 +125,7 @@ export function BookingDialog({
     try {
       setLoadingAvailability(true);
       const availabilityData = await recreationalApi.getFacilityAvailability(
-        selectedFacility.id,
+        Number(selectedFacility.id),
         bookingDate,
       );
       setAvailability(availabilityData);
@@ -275,7 +275,7 @@ export function BookingDialog({
       let result: RecreationalBooking;
 
       if (booking) {
-        result = await recreationalApi.updateBooking(booking.id, bookingData);
+        result = await recreationalApi.updateBooking(Number(booking.id), bookingData);
         toast.success("Reserva actualizada correctamente");
       } else {
         result = await recreationalApi.createBooking(bookingData);

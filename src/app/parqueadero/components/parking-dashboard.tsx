@@ -83,7 +83,11 @@ export default function ParkingDashboard({
     notes?: string;
   }) => {
     // Llamar la función del padre que maneja la persistencia
-    onVehicleAdd(newVehicleData as any);
+    onVehicleAdd({
+      ...newVehicleData,
+      room: newVehicleData.room || "",
+      notes: newVehicleData.notes || ""
+    });
   };
 
   const handleVehicleExit = (vehicleId: string) => {

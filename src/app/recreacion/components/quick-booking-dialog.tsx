@@ -43,13 +43,13 @@ const quickBookingSchema = z.object({
   guestEmail: z.string().email("Email inválido"),
   guestPhone: z.string().optional(),
   roomNumber: z.string().optional(),
-  facilityId: z.coerce.number().min(1, "Selecciona una instalación"),
+  facilityId: z.number().min(1, "Selecciona una instalación"),
   bookingDate: z
     .string()
     .regex(/^\d{4}-\d{2}-\d{2}$/, "La fecha debe estar en formato YYYY-MM-DD")
     .min(1, "La fecha es requerida"),
   startTime: z.string().min(1, "La hora de inicio es requerida"),
-  participants: z.coerce.number().min(1, "Debe haber al menos 1 participante"),
+  participants: z.number().min(1, "Debe haber al menos 1 participante"),
 });
 
 type QuickBookingFormValues = z.infer<typeof quickBookingSchema>;

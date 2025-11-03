@@ -65,7 +65,7 @@ export function MyReservationsManagement() {
         ]);
         setMyReservations(mine);
         setRooms(allRooms);
-        if (cfg?.currency) setCurrencyCode(cfg.currency);
+        if (cfg && 'currency' in cfg && cfg.currency) setCurrencyCode(cfg.currency);
       } catch (e) {
         console.error("Error loading my reservations:", e);
       } finally {
@@ -87,8 +87,10 @@ export function MyReservationsManagement() {
     checkInDate: string;
     checkOutDate: string;
     guests: number;
-    channel: string;
-    discountAmount?: number;
+    channel?: string;
+    discountAmount?: number | null;
+    discountPercent?: number | null;
+    guestId?: number | null;
     specialRequests?: string;
   }) => {
     try {

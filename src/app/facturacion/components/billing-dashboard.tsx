@@ -13,11 +13,11 @@ import { Invoice } from "@/lib/types";
 
 interface Payment {
   id: string;
-  invoiceId: string;
+  invoiceId: string | number;
   date: string;
   amount: number;
   method: string;
-  reference: string;
+  reference?: string;
   status: string;
 }
 
@@ -25,9 +25,9 @@ interface FinancialReport {
   period: string;
   revenue: number;
   invoices: number;
-  paid: number;
+  paid?: number;
   pending: number;
-  paymentPercentage: number;
+  paymentPercentage?: number;
 }
 
 interface BillingDashboardProps {
@@ -74,7 +74,7 @@ export default function BillingDashboard({
       // Append a local payment record for visualization (backend payments may be mocked)
       const newPayment = {
         id: `P${String(payments.length + 1).padStart(3, "0")}`,
-        invoiceId: invoiceId,
+        invoiceId: String(invoiceId),
         date: new Date().toISOString().split("T")[0],
         amount: updated.total,
         method: paymentMethod,
@@ -87,7 +87,7 @@ export default function BillingDashboard({
     }
   };
 
-  const handleViewInvoice = (invoiceId: string) => {
+  const handleViewInvoice = (invoiceId: string | number) => {
     const invoice = invoices.find((f) => f.id === invoiceId);
     if (invoice) {
       alert(
@@ -98,9 +98,9 @@ export default function BillingDashboard({
     }
   };
 
-  const handleDownloadInvoice = async (invoiceId: string) => {
+  const handleDownloadInvoice = async (invoiceId: string | number) => {
     try {
-      await billingApi.downloadInvoice(invoiceId);
+      await billingApi.downloadInvoice(String(invoiceId));
     } catch (error) {
       console.error("Error downloading invoice:", error);
       // Aquí podrías mostrar una notificación de error al usuario
@@ -208,7 +208,6 @@ export default function BillingDashboard({
           <InvoiceManagement
             invoices={invoices}
             onProcessPayment={handleProcessPayment}
-            onViewInvoice={handleViewInvoice}
             onDownloadInvoice={handleDownloadInvoice}
             onInvoiceAdd={handleInvoiceAdd}
           />
@@ -306,14 +305,14 @@ export default function BillingDashboard({
                         <div className="border-t pt-3">
                           <h5 className="font-medium mb-2">Detalles:</h5>
                           <div className="space-y-1 text-sm">
-                            {invoice.concepts?.map((concept, index) => (
+                            {invoice.items?.map((item, index) => (
                               <div key={index} className="flex justify-between">
-                                <span>{concept.description}</span>
+                                <span>{item.description}</span>
                                 <span>
                                   $
                                   {(
-                                    (concept.quantity || 1) *
-                                    (concept.unitPrice || 0)
+                                    (item.quantity || 1) *
+                                    (item.price || 0)
                                   ).toLocaleString()}
                                 </span>
                               </div>

@@ -155,10 +155,10 @@ export function EmployeesTab() {
   const handleSaveEmployee = async () => {
     try {
       if (editingEmployee) {
-        await employeesApi.update(editingEmployee.id, formData);
+        await employeesApi.update(Number(editingEmployee.id), formData as any);
         toast.success("Empleado actualizado exitosamente");
       } else {
-        await employeesApi.create(formData);
+        await employeesApi.create(formData as any);
         toast.success("Empleado creado exitosamente");
       }
       setDialogOpen(false);
@@ -173,7 +173,7 @@ export function EmployeesTab() {
     if (!deletingEmployee) return;
 
     try {
-      await employeesApi.delete(deletingEmployee.id);
+      await employeesApi.delete(Number(deletingEmployee.id));
       toast.success("Empleado eliminado exitosamente");
       setDeleteDialogOpen(false);
       setDeletingEmployee(null);

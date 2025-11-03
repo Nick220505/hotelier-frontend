@@ -18,7 +18,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Truck } from "lucide-react";
-import { InventoryItem } from "@/lib/types";
+import { InventoryItem } from "@/lib/api/inventory";
 import {
   inventoryCategoryTranslations,
   inventoryStatusTranslations,

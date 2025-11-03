@@ -166,10 +166,10 @@ export function ShiftsTab() {
       };
 
       if (editingShift) {
-        await shiftsApi.update(editingShift.id, data);
+        await shiftsApi.update(editingShift.id, data as any);
         toast.success("Turno actualizado exitosamente");
       } else {
-        await shiftsApi.create(data);
+        await shiftsApi.create(data as any);
         toast.success("Turno creado exitosamente");
       }
       setDialogOpen(false);

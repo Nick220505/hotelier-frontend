@@ -19,11 +19,11 @@ import {
 
 interface Payment {
   id: string;
-  invoiceId: string;
+  invoiceId: string | number;
   date: string;
   amount: number;
   method: string;
-  reference: string;
+  reference?: string;
   status: string;
 }
 

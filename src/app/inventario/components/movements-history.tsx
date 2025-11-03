@@ -16,7 +16,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { InventoryMovement } from "@/lib/types";
+import { InventoryMovement } from "@/lib/api/inventory";
 
 interface MovementsHistoryProps {
   movements: InventoryMovement[];

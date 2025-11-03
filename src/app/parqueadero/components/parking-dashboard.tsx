@@ -77,13 +77,13 @@ export default function ParkingDashboard({
     color: string;
     type: string;
     owner: string;
-    room: string;
+    room?: string;
     guestType: string;
     assignedSpace: string;
-    notes: string;
+    notes?: string;
   }) => {
     // Llamar la función del padre que maneja la persistencia
-    onVehicleAdd(newVehicleData);
+    onVehicleAdd(newVehicleData as any);
   };
 
   const handleVehicleExit = (vehicleId: string) => {

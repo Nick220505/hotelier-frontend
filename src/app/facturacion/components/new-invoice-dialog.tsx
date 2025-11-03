@@ -183,7 +183,7 @@ export function NewInvoiceDialog({
 
       // Send to backend
       const createdInvoice = await billingApi.createInvoice(invoiceData);
-      onInvoiceAdd(createdInvoice);
+      onInvoiceAdd(createdInvoice as Invoice);
 
       // Show success toast
       toast("Factura creada", {

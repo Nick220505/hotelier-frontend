@@ -1,40 +1,9 @@
 import { apiRequest, getAPIBaseURL } from "./base";
 import { authCookies } from "../auth-cookies";
+import { Invoice, InvoiceItem, PaymentMethod } from "../types";
 
-// Billing types
-export interface Invoice {
-  id: string;
-  number: string;
-  guest: string;
-  room: string;
-  issueDate: string;
-  dueDate: string;
-  subtotal: number;
-  taxes: number;
-  total: number;
-  status: "pagada" | "pendiente" | "vencida" | "cancelada";
-  paymentMethod?: string;
-  items: InvoiceItem[];
-  createdAt: string;
-  updatedAt: string;
-}
+export type { Invoice, InvoiceItem, PaymentMethod };
 
-export interface InvoiceItem {
-  description: string;
-  quantity: number;
-  price: number;
-  total: number;
-}
-
-export type PaymentMethod =
-  | "CASH"
-  | "CREDIT_CARD"
-  | "DEBIT_CARD"
-  | "BANK_TRANSFER"
-  | "CHECK"
-  | "MOBILE_PAYMENT"
-  | "CRYPTOCURRENCY"
-  | "GIFT_CARD";
 export type PaymentStatus =
   | "completado"
   | "pendiente"
@@ -195,8 +164,6 @@ function transformPaymentMethod(method?: string): PaymentMethod | undefined {
     "DEBIT_CARD",
     "BANK_TRANSFER",
     "CHECK",
-    "MOBILE_PAYMENT",
-    "CRYPTOCURRENCY",
     "GIFT_CARD",
   ];
 

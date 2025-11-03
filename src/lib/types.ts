@@ -37,6 +37,13 @@ export interface InvoiceConcept {
   total?: number;
 }
 
+export interface InvoiceItem {
+  description: string;
+  quantity: number;
+  price: number;
+  total?: number;
+}
+
 export type PaymentMethod =
   | "CASH"
   | "CREDIT_CARD"

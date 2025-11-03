@@ -21,9 +21,9 @@ interface FinancialReport {
   period: string;
   revenue: number;
   invoices: number;
-  paid: number;
+  paid?: number;
   pending: number;
-  paymentPercentage: number;
+  paymentPercentage?: number;
 }
 
 interface FinancialReportsProps {

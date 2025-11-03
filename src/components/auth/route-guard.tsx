@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
 import { authCookies } from "@/lib/auth-cookies";
@@ -29,7 +29,12 @@ export function RouteGuard({ children }: RouteGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
   const hasCheckedRef = useRef(false);
-  const isHydrated = typeof window !== "undefined";
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Set hydration state on mount (client-side only)
+  useEffect(() => {
+    setIsHydrated(true);
+  }, []);
 
   // Check if current path is an auth page
   const isAuthPage = pathname === "/login" || pathname === "/register";
@@ -109,9 +114,9 @@ export function RouteGuard({ children }: RouteGuardProps) {
     isAuthPage,
   ]);
 
-  // Don't render anything until hydrated
+  // Show loading spinner during hydration to prevent mismatch
   if (!isHydrated) {
-    return null;
+    return <AuthLoadingSpinner />;
   }
 
   // Show loading spinner while checking authentication

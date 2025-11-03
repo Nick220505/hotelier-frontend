@@ -87,17 +87,6 @@ export default function BillingDashboard({
     }
   };
 
-  const handleViewInvoice = (invoiceId: string | number) => {
-    const invoice = invoices.find((f) => f.id === invoiceId);
-    if (invoice) {
-      alert(
-        `Factura ${invoice.number}\nHuésped: ${
-          invoice.guest
-        }\nTotal: $${invoice.total.toLocaleString()}`,
-      );
-    }
-  };
-
   const handleDownloadInvoice = async (invoiceId: string | number) => {
     try {
       await billingApi.downloadInvoice(String(invoiceId));

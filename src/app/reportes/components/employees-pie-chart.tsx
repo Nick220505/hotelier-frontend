@@ -47,6 +47,77 @@ const DEPARTMENT_NAMES: Record<string, string> = {
   VALET: "Valet",
 };
 
+const renderCustomLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+}: {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  percent: number;
+}) => {
+  if (percent < 0.05) return null;
+
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+      className="text-xs font-semibold"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+const CustomTooltip = ({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: Array<{
+    payload: {
+      name: string;
+      value: number;
+      activeCount: number;
+      inactiveCount: number;
+    };
+  }>;
+}) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    const activePercentage = ((data.activeCount / data.value) * 100).toFixed(0);
+    return (
+      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+        <p className="font-semibold text-sm mb-1">{data.name}</p>
+        <p className="text-sm text-gray-600">
+          Total: <span className="font-medium">{data.value} empleados</span>
+        </p>
+        <p className="text-sm text-green-600">
+          ✓ {data.activeCount} activos ({activePercentage}%)
+        </p>
+        {data.inactiveCount > 0 && (
+          <p className="text-sm text-gray-500">○ {data.inactiveCount} inactivos</p>
+        )}
+      </div>
+    );
+  }
+  return null;
+};
+
 export function EmployeesPieChart({ departmentStats }: EmployeesPieChartProps) {
   const chartData = departmentStats
     .filter((dept) => dept.totalCount > 0)
@@ -75,76 +146,6 @@ export function EmployeesPieChart({ departmentStats }: EmployeesPieChartProps) {
       </Card>
     );
   }
-
-  const renderCustomLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-  }: {
-    cx: number;
-    cy: number;
-    midAngle: number;
-    innerRadius: number;
-    outerRadius: number;
-    percent: number;
-  }) => {
-    if (percent < 0.05) return null; // Don't show label if less than 5%
-
-    const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-        className="text-xs font-semibold"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
-
-  const CustomTooltip = ({
-    active,
-    payload,
-  }: {
-    active?: boolean;
-    payload?: Array<{
-      payload: { name: string; value: number; activeCount: number };
-    }>;
-  }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      const activePercentage = ((data.activeCount / data.value) * 100).toFixed(
-        0,
-      );
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-semibold text-sm mb-1">{data.name}</p>
-          <p className="text-sm text-gray-600">
-            Total: <span className="font-medium">{data.value} empleados</span>
-          </p>
-          <p className="text-sm text-green-600">
-            ✓ {data.activeCount} activos ({activePercentage}%)
-          </p>
-          {data.inactiveCount > 0 && (
-            <p className="text-sm text-gray-500">
-              ○ {data.inactiveCount} inactivos
-            </p>
-          )}
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <Card>

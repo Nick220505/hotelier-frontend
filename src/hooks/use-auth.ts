@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { authApi } from "@/lib/api/auth";
@@ -37,13 +37,9 @@ export function useAuth() {
     isAuthenticated: false,
     isLoading: true,
   });
-  const [isHydrated, setIsHydrated] = useState(false);
+  const isHydrated = typeof window !== 'undefined';
   const router = useRouter();
-
-  // Handle client-side hydration
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+  const hasInitialized = useRef(false);
 
   const checkAuthStatus = useCallback(async () => {
     // Don't check if not hydrated yet
@@ -100,10 +96,11 @@ export function useAuth() {
     }
   }, [isHydrated]);
 
-  // Check authentication status on mount and when route changes
+  // Check authentication status on mount
   useEffect(() => {
-    if (isHydrated) {
-      checkAuthStatus();
+    if (isHydrated && !hasInitialized.current) {
+      hasInitialized.current = true;
+      void checkAuthStatus();
     }
   }, [isHydrated, checkAuthStatus]);
 
@@ -144,7 +141,7 @@ export function useAuth() {
   useEffect(() => {
     const handleStorageChange = () => {
       if (isHydrated) {
-        checkAuthStatus();
+        void checkAuthStatus();
       }
     };
 

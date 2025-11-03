@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
 import { authCookies } from "@/lib/auth-cookies";
@@ -29,12 +29,7 @@ export function RouteGuard({ children }: RouteGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
   const hasCheckedRef = useRef(false);
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  // Handle client-side hydration
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+  const isHydrated = typeof window !== 'undefined';
 
   // Check if current path is an auth page
   const isAuthPage = pathname === "/login" || pathname === "/register";

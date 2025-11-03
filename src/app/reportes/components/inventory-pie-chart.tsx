@@ -46,6 +46,74 @@ const CATEGORY_NAMES: Record<string, string> = {
   OTHER: "Otros",
 };
 
+const renderCustomLabel = ({
+  cx,
+  cy,
+  midAngle,
+  innerRadius,
+  outerRadius,
+  percent,
+}: {
+  cx: number;
+  cy: number;
+  midAngle: number;
+  innerRadius: number;
+  outerRadius: number;
+  percent: number;
+}) => {
+  if (percent < 0.05) return null; // Don't show label if less than 5%
+
+  const RADIAN = Math.PI / 180;
+  const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+  const x = cx + radius * Math.cos(-midAngle * RADIAN);
+  const y = cy + radius * Math.sin(-midAngle * RADIAN);
+
+  return (
+    <text
+      x={x}
+      y={y}
+      fill="white"
+      textAnchor={x > cx ? "start" : "end"}
+      dominantBaseline="central"
+      className="text-xs font-semibold"
+    >
+      {`${(percent * 100).toFixed(0)}%`}
+    </text>
+  );
+};
+
+const CustomTooltip = ({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: Array<{
+    payload: { name: string; value: number; count: number; lowStock: number };
+  }>;
+}) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+        <p className="font-semibold text-sm mb-1">{data.name}</p>
+        <p className="text-sm text-gray-600">
+          Valor:{" "}
+          <span className="font-medium">${data.value.toLocaleString()}</span>
+        </p>
+        <p className="text-sm text-gray-600">
+          Productos: <span className="font-medium">{data.count}</span>
+        </p>
+        {data.lowStock > 0 && (
+          <p className="text-sm text-orange-600">
+            ⚠️ {data.lowStock} con bajo stock
+          </p>
+        )}
+      </div>
+    );
+  }
+  return null;
+};
+
 export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
   const chartData = Object.entries(categoryStats).map(([category, stats]) => ({
     name: CATEGORY_NAMES[category] || category.replace(/_/g, " "),
@@ -72,74 +140,6 @@ export function InventoryPieChart({ categoryStats }: InventoryPieChartProps) {
       </Card>
     );
   }
-
-  const renderCustomLabel = ({
-    cx,
-    cy,
-    midAngle,
-    innerRadius,
-    outerRadius,
-    percent,
-  }: {
-    cx: number;
-    cy: number;
-    midAngle: number;
-    innerRadius: number;
-    outerRadius: number;
-    percent: number;
-  }) => {
-    if (percent < 0.05) return null; // Don't show label if less than 5%
-
-    const RADIAN = Math.PI / 180;
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-    const x = cx + radius * Math.cos(-midAngle * RADIAN);
-    const y = cy + radius * Math.sin(-midAngle * RADIAN);
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? "start" : "end"}
-        dominantBaseline="central"
-        className="text-xs font-semibold"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    );
-  };
-
-  const CustomTooltip = ({
-    active,
-    payload,
-  }: {
-    active?: boolean;
-    payload?: Array<{
-      payload: { name: string; value: number; count: number; lowStock: number };
-    }>;
-  }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-semibold text-sm mb-1">{data.name}</p>
-          <p className="text-sm text-gray-600">
-            Valor:{" "}
-            <span className="font-medium">${data.value.toLocaleString()}</span>
-          </p>
-          <p className="text-sm text-gray-600">
-            Productos: <span className="font-medium">{data.count}</span>
-          </p>
-          {data.lowStock > 0 && (
-            <p className="text-sm text-orange-600">
-              ⚠️ {data.lowStock} con bajo stock
-            </p>
-          )}
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <Card>

@@ -11,6 +11,95 @@ import { Badge } from "@/components/ui/badge";
 import { RoomStatusDemo } from "@/components/examples/room-status-components";
 import { tokens } from "@/lib/design-tokens";
 
+const ColorSwatch = ({ color, name }: { color: string; name: string }) => (
+  <div className="flex flex-col items-center space-y-2">
+    <div
+      className="w-16 h-16 rounded-lg border shadow-sm"
+      style={{ backgroundColor: color }}
+    />
+    <div className="text-center">
+      <p className="text-sm font-medium text-foreground">{name}</p>
+      <p className="text-xs text-muted-foreground font-mono">{color}</p>
+    </div>
+  </div>
+);
+
+const TypographyExample = () => (
+  <div className="space-y-4">
+    <h1 className="text-4xl font-bold text-foreground">
+      Heading 1 - Welcome to Hotelier
+    </h1>
+    <h2 className="text-3xl font-semibold text-foreground">
+      Heading 2 - Dashboard Overview
+    </h2>
+    <h3 className="text-2xl font-semibold text-foreground">
+      Heading 3 - Room Management
+    </h3>
+    <h4 className="text-xl font-medium text-foreground">
+      Heading 4 - Recent Bookings
+    </h4>
+    <p className="text-lg text-foreground">
+      Large text - Important information for hotel staff
+    </p>
+    <p className="text-base text-foreground">
+      Body text - Regular content and descriptions
+    </p>
+    <p className="text-sm text-muted-foreground">
+      Small text - Supporting information and labels
+    </p>
+    <p className="text-xs text-muted-foreground">
+      Extra small - Fine print and metadata
+    </p>
+  </div>
+);
+
+const ButtonShowcase = () => (
+  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+    <div className="space-y-2">
+      <h4 className="text-sm font-medium text-foreground">Primary</h4>
+      <Button variant="default">Book Room</Button>
+      <Button variant="default" size="sm">
+        Check In
+      </Button>
+    </div>
+    <div className="space-y-2">
+      <h4 className="text-sm font-medium text-foreground">Secondary</h4>
+      <Button variant="secondary">View Details</Button>
+      <Button variant="secondary" size="sm">
+        Edit
+      </Button>
+    </div>
+    <div className="space-y-2">
+      <h4 className="text-sm font-medium text-foreground">Outline</h4>
+      <Button variant="outline">Cancel</Button>
+      <Button variant="outline" size="sm">
+        More
+      </Button>
+    </div>
+    <div className="space-y-2">
+      <h4 className="text-sm font-medium text-foreground">Destructive</h4>
+      <Button variant="destructive">Delete</Button>
+      <Button variant="destructive" size="sm">
+        Remove
+      </Button>
+    </div>
+  </div>
+);
+
+const BadgeShowcase = () => (
+  <div className="flex flex-wrap gap-2">
+    <Badge className="bg-room-available text-white">Available</Badge>
+    <Badge className="bg-room-occupied text-white">Occupied</Badge>
+    <Badge className="bg-room-maintenance text-white">Maintenance</Badge>
+    <Badge className="bg-room-cleaning text-white">Cleaning</Badge>
+    <Badge className="bg-destructive text-destructive-foreground">
+      Out of Order
+    </Badge>
+    <Badge variant="secondary">Pending</Badge>
+    <Badge variant="outline">Confirmed</Badge>
+  </div>
+);
+
 export default function StyleGuidePage() {
   const colorPalettes = [
     {
@@ -35,95 +124,6 @@ export default function StyleGuidePage() {
       colors: tokens.colors.semantic,
     },
   ];
-
-  const ColorSwatch = ({ color, name }: { color: string; name: string }) => (
-    <div className="flex flex-col items-center space-y-2">
-      <div
-        className="w-16 h-16 rounded-lg border shadow-sm"
-        style={{ backgroundColor: color }}
-      />
-      <div className="text-center">
-        <p className="text-sm font-medium text-foreground">{name}</p>
-        <p className="text-xs text-muted-foreground font-mono">{color}</p>
-      </div>
-    </div>
-  );
-
-  const TypographyExample = () => (
-    <div className="space-y-4">
-      <h1 className="text-4xl font-bold text-foreground">
-        Heading 1 - Welcome to Hotelier
-      </h1>
-      <h2 className="text-3xl font-semibold text-foreground">
-        Heading 2 - Dashboard Overview
-      </h2>
-      <h3 className="text-2xl font-semibold text-foreground">
-        Heading 3 - Room Management
-      </h3>
-      <h4 className="text-xl font-medium text-foreground">
-        Heading 4 - Recent Bookings
-      </h4>
-      <p className="text-lg text-foreground">
-        Large text - Important information for hotel staff
-      </p>
-      <p className="text-base text-foreground">
-        Body text - Regular content and descriptions
-      </p>
-      <p className="text-sm text-muted-foreground">
-        Small text - Supporting information and labels
-      </p>
-      <p className="text-xs text-muted-foreground">
-        Extra small - Fine print and metadata
-      </p>
-    </div>
-  );
-
-  const ButtonShowcase = () => (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div className="space-y-2">
-        <h4 className="text-sm font-medium text-foreground">Primary</h4>
-        <Button variant="default">Book Room</Button>
-        <Button variant="default" size="sm">
-          Check In
-        </Button>
-      </div>
-      <div className="space-y-2">
-        <h4 className="text-sm font-medium text-foreground">Secondary</h4>
-        <Button variant="secondary">View Details</Button>
-        <Button variant="secondary" size="sm">
-          Edit
-        </Button>
-      </div>
-      <div className="space-y-2">
-        <h4 className="text-sm font-medium text-foreground">Outline</h4>
-        <Button variant="outline">Cancel</Button>
-        <Button variant="outline" size="sm">
-          More
-        </Button>
-      </div>
-      <div className="space-y-2">
-        <h4 className="text-sm font-medium text-foreground">Destructive</h4>
-        <Button variant="destructive">Delete</Button>
-        <Button variant="destructive" size="sm">
-          Remove
-        </Button>
-      </div>
-    </div>
-  );
-
-  const BadgeShowcase = () => (
-    <div className="flex flex-wrap gap-2">
-      <Badge className="bg-room-available text-white">Available</Badge>
-      <Badge className="bg-room-occupied text-white">Occupied</Badge>
-      <Badge className="bg-room-maintenance text-white">Maintenance</Badge>
-      <Badge className="bg-room-cleaning text-white">Cleaning</Badge>
-      <Badge className="bg-destructive text-destructive-foreground">
-        Out of Order
-      </Badge>
-      <Badge variant="secondary">Pending</Badge>
-      <Badge variant="outline">Confirmed</Badge>
-    </div>
-  );
 
   return (
     <div className="container mx-auto p-6 space-y-12">

@@ -36,6 +36,33 @@ const CATEGORY_NAMES: Record<string, string> = {
   OTHER: "Otros",
 };
 
+const CustomTooltip = ({
+  active,
+  payload,
+  label,
+}: {
+  active?: boolean;
+  payload?: Array<{ value: number; name: string; color: string }>;
+  label?: string;
+}) => {
+  if (active && payload && payload.length) {
+    const total = payload.reduce((sum: number, item) => sum + item.value, 0);
+    return (
+      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+        <p className="font-semibold text-sm mb-2">{label}</p>
+        <p className="text-xs text-gray-600 mb-2">Total: {total} productos</p>
+        {payload.map((item, index: number) => (
+          <p key={index} className="text-sm" style={{ color: item.color }}>
+            {item.name}: <span className="font-medium">{item.value}</span> (
+            {((item.value / total) * 100).toFixed(0)}%)
+          </p>
+        ))}
+      </div>
+    );
+  }
+  return null;
+};
+
 export function InventoryStockLevelsChart({
   categoryStats,
 }: InventoryStockLevelsChartProps) {
@@ -74,33 +101,6 @@ export function InventoryStockLevelsChart({
       </Card>
     );
   }
-
-  const CustomTooltip = ({
-    active,
-    payload,
-    label,
-  }: {
-    active?: boolean;
-    payload?: Array<{ value: number; name: string; color: string }>;
-    label?: string;
-  }) => {
-    if (active && payload && payload.length) {
-      const total = payload.reduce((sum: number, item) => sum + item.value, 0);
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-semibold text-sm mb-2">{label}</p>
-          <p className="text-xs text-gray-600 mb-2">Total: {total} productos</p>
-          {payload.map((item, index: number) => (
-            <p key={index} className="text-sm" style={{ color: item.color }}>
-              {item.name}: <span className="font-medium">{item.value}</span> (
-              {((item.value / total) * 100).toFixed(0)}%)
-            </p>
-          ))}
-        </div>
-      );
-    }
-    return null;
-  };
 
   return (
     <Card>

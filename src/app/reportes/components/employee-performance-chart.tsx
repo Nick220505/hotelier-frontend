@@ -34,6 +34,69 @@ const DEPARTMENT_NAMES: Record<string, string> = {
   VALET: "Valet",
 };
 
+const getBarColor = (rate: number) => {
+  if (rate >= 80) return "#10b981"; // green
+  if (rate >= 60) return "#f59e0b"; // amber
+  return "#ef4444"; // red
+};
+
+const CustomTooltip = ({
+  active,
+  payload,
+}: {
+  active?: boolean;
+  payload?: Array<{
+    payload: {
+      name: string;
+      position: string;
+      department: string;
+      completionRate: number;
+      completed: number;
+      pending: number;
+      assigned: number;
+      efficiency: string;
+    };
+  }>;
+}) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+    return (
+      <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
+        <p className="font-semibold text-sm mb-1">{data.name}</p>
+        <p className="text-xs text-gray-500 mb-2">
+          {data.position} - {data.department}
+        </p>
+        <div className="space-y-1">
+          <p className="text-sm text-gray-600">
+            Tasa de completitud:{" "}
+            <span
+              className="font-bold"
+              style={{ color: getBarColor(data.completionRate) }}
+            >
+              {data.completionRate}%
+            </span>
+          </p>
+          <p className="text-sm text-green-600">
+            ✓ Completadas:{" "}
+            <span className="font-medium">{data.completed}</span>
+          </p>
+          <p className="text-sm text-orange-600">
+            ⏳ Pendientes: <span className="font-medium">{data.pending}</span>
+          </p>
+          <p className="text-sm text-gray-600">
+            Total asignadas:{" "}
+            <span className="font-medium">{data.assigned}</span>
+          </p>
+        </div>
+        <p className="text-xs text-gray-500 mt-2 pt-2 border-t">
+          Rendimiento: <span className="font-medium">{data.efficiency}</span>
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
+
 export function EmployeePerformanceChart({
   employees,
 }: EmployeePerformanceChartProps) {
@@ -84,65 +147,6 @@ export function EmployeePerformanceChart({
       </Card>
     );
   }
-
-  const getBarColor = (rate: number) => {
-    if (rate >= 80) return "#10b981"; // green
-    if (rate >= 60) return "#f59e0b"; // amber
-    return "#ef4444"; // red
-  };
-
-  const CustomTooltip = ({
-    active,
-    payload,
-  }: {
-    active?: boolean;
-    payload?: Array<{
-      payload: {
-        name: string;
-        completionRate: number;
-        avgRating: number;
-        tasksCompleted: number;
-      };
-    }>;
-  }) => {
-    if (active && payload && payload.length) {
-      const data = payload[0].payload;
-      return (
-        <div className="bg-white p-3 border border-gray-200 rounded-lg shadow-lg">
-          <p className="font-semibold text-sm mb-1">{data.name}</p>
-          <p className="text-xs text-gray-500 mb-2">
-            {data.position} - {data.department}
-          </p>
-          <div className="space-y-1">
-            <p className="text-sm text-gray-600">
-              Tasa de completitud:{" "}
-              <span
-                className="font-bold"
-                style={{ color: getBarColor(data.completionRate) }}
-              >
-                {data.completionRate}%
-              </span>
-            </p>
-            <p className="text-sm text-green-600">
-              ✓ Completadas:{" "}
-              <span className="font-medium">{data.completed}</span>
-            </p>
-            <p className="text-sm text-orange-600">
-              ⏳ Pendientes: <span className="font-medium">{data.pending}</span>
-            </p>
-            <p className="text-sm text-gray-600">
-              Total asignadas:{" "}
-              <span className="font-medium">{data.assigned}</span>
-            </p>
-          </div>
-          <p className="text-xs text-gray-500 mt-2 pt-2 border-t">
-            Rendimiento: <span className="font-medium">{data.efficiency}</span>
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
 
   // Calculate average performance
   const avgPerformance =

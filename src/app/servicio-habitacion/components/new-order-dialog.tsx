@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm, useFieldArray } from "react-hook-form";
+import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -150,12 +150,14 @@ export function NewOrderDialog({
                   key={field.id}
                   className="flex gap-2 p-3 border rounded-lg"
                 >
-                  <Select
-                    value={form.watch(`selectedItems.${index}.menuItemId`)}
-                    onValueChange={(value) =>
-                      form.setValue(`selectedItems.${index}.menuItemId`, value)
-                    }
-                  >
+                  <Controller
+                    control={form.control}
+                    name={`selectedItems.${index}.menuItemId`}
+                    render={({ field: controllerField }) => (
+                      <Select
+                        value={controllerField.value}
+                        onValueChange={controllerField.onChange}
+                      >
                     <SelectTrigger className="flex-1">
                       <SelectValue placeholder="Seleccionar producto" />
                     </SelectTrigger>
@@ -169,6 +171,8 @@ export function NewOrderDialog({
                         ))}
                     </SelectContent>
                   </Select>
+                    )}
+                  />
                   <Input
                     type="number"
                     className="w-20"

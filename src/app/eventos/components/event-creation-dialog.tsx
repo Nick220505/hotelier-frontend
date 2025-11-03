@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -116,12 +116,12 @@ export function EventCreationDialog({
     },
   });
 
-  const watchedValues = form.watch();
+  const watchedValues = useWatch({ control: form.control }) || {};
 
   // Calculate total price based on venue base price and duration
   const calculateTotalPrice = (): number => {
     const selectedVenue = venues.find(
-      (v) => v.id === parseInt(watchedValues.venueId),
+      (v) => v.id === parseInt(watchedValues.venueId || "0"),
     );
     if (!selectedVenue || !watchedValues.startTime || !watchedValues.endTime)
       return 0;

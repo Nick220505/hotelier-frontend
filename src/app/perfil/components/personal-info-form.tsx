@@ -1,6 +1,6 @@
 "use client";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useEffect } from "react";
@@ -92,23 +92,22 @@ export function PersonalInfoForm({
   }, [initialData, form]);
 
   // Sync form values to parent whenever they change
+  const formValues = useWatch({ control: form.control });
+  
   useEffect(() => {
-    if (onChange) {
-      const subscription = form.watch(
-        (values: Partial<PersonalInfoFormData>) => {
-          onChange(values as PersonalInfoFormData);
-        },
-      );
-      return () => subscription.unsubscribe();
+    if (onChange && formValues) {
+      onChange(formValues as PersonalInfoFormData);
     }
-  }, [form, onChange]);
+  }, [formValues, onChange]);
 
   const onSubmit = async (data: PersonalInfoFormData) => {
     await onSave(data);
   };
 
+  const nameValue = useWatch({ control: form.control, name: "name" });
+  
   const getInitials = () => {
-    const name = form.watch("name") || initialData?.name || "";
+    const name = nameValue || initialData?.name || "";
     return name
       .split(" ")
       .map((n: string) => n[0])

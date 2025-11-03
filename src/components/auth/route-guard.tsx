@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useEffect, useRef, useCallback, useSyncExternalStore } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useAuthContext } from "@/contexts/auth-context";
 import { authCookies } from "@/lib/auth-cookies";
@@ -23,18 +23,22 @@ function AuthLoadingSpinner() {
   );
 }
 
+// Hook to track client-side hydration
+function useIsClient() {
+  return useSyncExternalStore(
+    () => () => {}, // subscribe (no-op since this never changes)
+    () => true, // getSnapshot (client-side)
+    () => false, // getServerSnapshot (server-side)
+  );
+}
+
 export function RouteGuard({ children }: RouteGuardProps) {
   const { isAuthenticated, isLoading, checkAuthStatus, user, hasRole } =
     useAuthContext();
   const router = useRouter();
   const pathname = usePathname();
   const hasCheckedRef = useRef(false);
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  // Set hydration state on mount (client-side only)
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+  const isHydrated = useIsClient();
 
   // Check if current path is an auth page
   const isAuthPage = pathname === "/login" || pathname === "/register";

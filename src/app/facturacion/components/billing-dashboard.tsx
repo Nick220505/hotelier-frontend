@@ -9,17 +9,7 @@ import InvoiceManagement from "./invoice-management";
 import PaymentManagement from "./payment-management";
 import FinancialReports from "./financial-reports";
 import { billingApi } from "@/lib/api/billing";
-
-interface Invoice {
-  id: string;
-  number: string;
-  guest: string;
-  room: string;
-  issueDate: string;
-  total: number;
-  status: "pagada" | "pendiente" | "vencida" | "cancelada";
-  paymentMethod?: string;
-}
+import { Invoice } from "@/lib/types";
 
 interface Payment {
   id: string;
@@ -66,19 +56,19 @@ export default function BillingDashboard({
     : invoices;
 
   const handleProcessPayment = async (
-    invoiceId: string,
+    invoiceId: string | number,
     paymentMethod: string,
     reference: string,
   ) => {
     try {
       // Update invoice status in backend
       const updated = await billingApi.markInvoiceAsPaid(
-        invoiceId,
+        String(invoiceId),
         paymentMethod,
       );
       // Refresh invoice locally
       setInvoices((prev) =>
-        prev.map((inv) => (inv.id === invoiceId ? updated : inv)),
+        prev.map((inv) => (inv.id === invoiceId ? updated as Invoice : inv)),
       );
 
       // Append a local payment record for visualization (backend payments may be mocked)

@@ -13,37 +13,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon, Clock, MapPin, Users } from "lucide-react";
-
-interface EventBooking {
-  id: number;
-  title: string;
-  eventDate: string;
-  startTime: string;
-  endTime: string;
-  attendees: number;
-  totalCost: number;
-  status: "PLANNED" | "CONFIRMED" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED";
-  clientName: string;
-  clientEmail: string;
-  clientPhone: string;
-  notes: string;
-  venueId: number;
-  venue: {
-    id: number;
-    name: string;
-    capacity: number;
-    area: number;
-    services: string[];
-    hourlyRate: number;
-    available: boolean;
-    location: string;
-    description: string;
-    createdAt: string;
-    updatedAt: string;
-  };
-  createdAt: string;
-  updatedAt: string;
-}
+import { EventBooking } from "@/lib/api/events";
 
 interface EventsCalendarProps {
   events: EventBooking[];

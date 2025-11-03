@@ -365,7 +365,7 @@ export function EventCreationDialog({
                       <span>
                         $
                         {venues.find(
-                          (v) => v.id === parseInt(watchedValues.venueId),
+                          (v) => v.id === parseInt(watchedValues.venueId || "0"),
                         )?.basePrice || 0}
                         /hora
                       </span>

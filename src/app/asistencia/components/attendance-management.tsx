@@ -237,7 +237,10 @@ export function AttendanceManagement() {
                         <td className="p-4">{record.checkIn || "-"}</td>
                         <td className="p-4">{record.checkOut || "-"}</td>
                         <td className="p-4">
-                          {record.hoursWorked?.toFixed(2) || "-"} hrs
+                          {typeof record.hoursWorked === "number"
+                            ? record.hoursWorked.toFixed(2)
+                            : "-"}{" "}
+                          hrs
                         </td>
                         <td className="p-4">
                           <Badge className={getStatusColor(record.status)}>

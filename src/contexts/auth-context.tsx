@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, ReactNode } from "react";
 import { useAuth } from "@/hooks/use-auth";
+import { User } from "@/lib/api/auth";
 
 // Define the shape of the auth context
 interface AuthContextType {

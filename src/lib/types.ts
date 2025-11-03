@@ -68,3 +68,28 @@ export interface Invoice {
   updatedAt?: string;
   reservationId?: number;
 }
+
+// Dashboard types
+export interface DashboardStats {
+  totalRevenue: number;
+  occupancyRate: number;
+  activeReservations: number;
+  pendingCheckouts: number;
+  [key: string]: number;
+}
+
+export interface DashboardActivity {
+  id: string | number;
+  type: string;
+  description: string;
+  timestamp: string;
+  user?: string;
+}
+
+export interface DashboardRevenue {
+  total: number;
+  daily: number;
+  weekly: number;
+  monthly: number;
+  byCategory?: Record<string, number>;
+}

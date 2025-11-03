@@ -227,11 +227,14 @@ export type PriorityColor = keyof typeof tokens.colors.priority;
 // Utility functions for accessing tokens
 export const getColor = (path: string) => {
   const keys = path.split(".");
-  let value: Record<string, unknown> = tokens.colors;
+  let value: unknown = tokens.colors;
 
   for (const key of keys) {
-    value = value[key];
-    if (value === undefined) break;
+    if (value && typeof value === "object" && key in value) {
+      value = (value as Record<string, unknown>)[key];
+    } else {
+      return undefined;
+    }
   }
 
   return value;

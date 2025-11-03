@@ -107,6 +107,7 @@ export const StatusIndicatorClasses = {
   occupied: "status-occupied",
   maintenance: "status-maintenance",
   cleaning: "status-cleaning",
+  outOfOrder: "status-out-of-order",
 } as const;
 
 /**

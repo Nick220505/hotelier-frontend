@@ -122,11 +122,11 @@ export function CurrencyConverter({
   useEffect(() => {
     const convertCurrency = async () => {
       if (fromCurrency === toCurrency) {
-        const sameResult = {
-          originalAmount: amount,
-          originalCurrency: fromCurrency,
+        const sameResult: ConversionResult = {
+          amount: amount,
+          fromCurrency: fromCurrency,
           convertedAmount: amount,
-          convertedCurrency: toCurrency,
+          toCurrency: toCurrency,
           rate: 1,
         };
         setResult(sameResult);
@@ -174,8 +174,8 @@ export function CurrencyConverter({
     <div className="text-sm text-gray-600">
       {new Intl.NumberFormat("en-US", {
         style: "currency",
-        currency: result.convertedCurrency,
-        minimumFractionDigits: result.convertedCurrency === "COP" ? 0 : 2,
+        currency: result.toCurrency,
+        minimumFractionDigits: result.toCurrency === "COP" ? 0 : 2,
       }).format(result.convertedAmount)}
       <span className="text-xs ml-1">(Rate: {result.rate})</span>
     </div>

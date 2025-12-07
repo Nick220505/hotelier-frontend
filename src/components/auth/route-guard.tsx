@@ -16,7 +16,7 @@ function AuthLoadingSpinner() {
       <div className="flex flex-col items-center space-y-4">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
         <p className="text-sm text-muted-foreground">
-          Verificando autenticación...
+          Verifying authentication...
         </p>
       </div>
     </div>
@@ -26,7 +26,7 @@ function AuthLoadingSpinner() {
 // Hook to track client-side hydration
 function useIsClient() {
   return useSyncExternalStore(
-    () => () => {}, // subscribe (no-op since this never changes)
+    () => () => { }, // subscribe (no-op since this never changes)
     () => true, // getSnapshot (client-side)
     () => false, // getServerSnapshot (server-side)
   );
@@ -54,20 +54,20 @@ export function RouteGuard({ children }: RouteGuardProps) {
       return;
     }
 
-    // If user is a client and tries to access dashboard, redirect to mis-reservas
-    if (hasRole("cliente") && pathname === "/") {
-      router.replace("/mis-reservas");
+    // If user is a client and tries to access dashboard, redirect to my-reservations
+    if (hasRole("client") && pathname === "/") {
+      router.replace("/my-reservations");
       return;
     }
 
-    // If user is a client and on login page after authentication, redirect to mis-reservas
-    if (hasRole("cliente") && isAuthPage) {
-      router.replace("/mis-reservas");
+    // If user is a client and on login page after authentication, redirect to my-reservations
+    if (hasRole("client") && isAuthPage) {
+      router.replace("/my-reservations");
       return;
     }
 
     // If authenticated user (non-client) tries to access auth pages, redirect to dashboard
-    if (isAuthPage && !hasRole("cliente")) {
+    if (isAuthPage && !hasRole("client")) {
       router.replace("/");
       return;
     }

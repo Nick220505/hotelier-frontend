@@ -213,10 +213,10 @@ export async function apiRequest<T>(
     }
     return response.json();
   } catch (error: unknown) {
-    // Solo logueamos errores que no son esperados
+    // Only log errors that are not expected
     if (
       !(error instanceof Error) ||
-      (!error.message?.includes("no está disponible") &&
+      (!error.message?.includes("not available") &&
         !error.message?.includes("validation failed"))
     ) {
       console.error(`API request failed for ${endpoint}:`, error);

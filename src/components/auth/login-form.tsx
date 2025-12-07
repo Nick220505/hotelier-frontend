@@ -22,9 +22,9 @@ import { toast } from "sonner";
 
 const loginSchema = z.object({
   email: z
-    .string({ message: "Este campo es obligatorio" })
-    .email("Ingresa un email válido"),
-  password: z.string({ message: "Este campo es obligatorio" }),
+    .string({ message: "This field is required" })
+    .email("Enter a valid email"),
+  password: z.string({ message: "This field is required" }),
 });
 
 type LoginFormData = z.infer<typeof loginSchema>;
@@ -45,10 +45,10 @@ export function LoginForm() {
     try {
       await login(data.email, data.password);
       router.push("/dashboard");
-      toast.success("Sesión iniciada correctamente");
+      toast.success("Successfully signed in");
     } catch (err: unknown) {
       const errorMessage =
-        err instanceof Error ? err.message : "Error al iniciar sesión";
+        err instanceof Error ? err.message : "Error signing in";
       toast.error(errorMessage);
       form.setError("root", { message: errorMessage });
     }
@@ -58,10 +58,10 @@ export function LoginForm() {
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">
-          Iniciar Sesión
+          Sign In
         </CardTitle>
         <CardDescription className="text-center">
-          Ingresa tus credenciales para acceder al sistema
+          Enter your credentials to access the system
         </CardDescription>
       </CardHeader>
       <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -74,11 +74,11 @@ export function LoginForm() {
             </Alert>
           )}
           <div className="space-y-2">
-            <Label htmlFor="email">Correo Electrónico</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
               id="email"
               type="email"
-              placeholder="correo@ejemplo.com"
+              placeholder="email@example.com"
               {...form.register("email")}
               disabled={form.formState.isSubmitting}
               className={form.formState.errors.email ? "border-red-500" : ""}
@@ -90,7 +90,7 @@ export function LoginForm() {
             )}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="password">Contraseña</Label>
+            <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
@@ -116,13 +116,13 @@ export function LoginForm() {
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}
             {form.formState.isSubmitting
-              ? "Iniciando sesión..."
-              : "Iniciar Sesión"}
+              ? "Signing in..."
+              : "Sign In"}
           </Button>
           <div className="text-sm text-center text-muted-foreground">
-            ¿No tienes una cuenta?{" "}
+            Don&apos;t have an account?{" "}
             <a href="/register" className="text-primary hover:underline">
-              Regístrate
+              Register
             </a>
           </div>
         </CardFooter>

@@ -115,7 +115,7 @@ export default function StyleGuidePage() {
     },
     {
       name: "Booking Status",
-      description: "Colors for booking and reservation states",
+      description: "Colors for booking and reservationtion states",
       colors: tokens.colors.booking,
     },
     {

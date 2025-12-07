@@ -22,15 +22,15 @@ import {
 
 const navigation = [
   { name: "Dashboard", href: "/", icon: Home },
-  { name: "Reservas", href: "/reservas", icon: CalendarDays },
-  { name: "Facturación", href: "/facturacion", icon: DollarSign },
-  { name: "Limpieza", href: "/limpieza", icon: Bed },
-  { name: "Restaurante", href: "/restaurante", icon: Utensils },
-  { name: "Inventario", href: "/inventario", icon: Package },
-  { name: "Personal", href: "/personal", icon: UserCheck },
-  { name: "Eventos", href: "/eventos", icon: Calendar },
-  { name: "Parqueadero", href: "/parqueadero", icon: Car },
-  { name: "Reportes", href: "/reportes", icon: BarChart3 },
+  { name: "Reservations", href: "/reservations", icon: CalendarDays },
+  { name: "Billing", href: "/billing", icon: DollarSign },
+  { name: "Housekeeping", href: "/housekeeping", icon: Bed },
+  { name: "Restaurant", href: "/restaurant", icon: Utensils },
+  { name: "Inventory", href: "/inventory", icon: Package },
+  { name: "Staff", href: "/staff", icon: UserCheck },
+  { name: "Events", href: "/events", icon: Calendar },
+  { name: "Parking", href: "/parking", icon: Car },
+  { name: "Reports", href: "/reports", icon: BarChart3 },
 ];
 
 export function Sidebar() {
@@ -45,7 +45,7 @@ export function Sidebar() {
           </div>
           <div>
             <h1 className="text-xl font-bold text-foreground">HotelCraft</h1>
-            <p className="text-sm text-muted-foreground">Suite Integral</p>
+            <p className="text-sm text-muted-foreground">Integrated Suite</p>
           </div>
         </div>
       </div>
@@ -79,20 +79,20 @@ export function Sidebar() {
 
         <div className="px-3 py-2">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
-            Sistema
+            System
           </p>
           <div className="mt-2 space-y-1">
             <Button
               variant="ghost"
               className="w-full justify-start h-8 px-3 text-xs text-muted-foreground hover:text-foreground"
             >
-              Configuración
+              Settings
             </Button>
             <Button
               variant="ghost"
               className="w-full justify-start h-8 px-3 text-xs text-muted-foreground hover:text-foreground"
             >
-              Ayuda
+              Help
             </Button>
           </div>
         </div>

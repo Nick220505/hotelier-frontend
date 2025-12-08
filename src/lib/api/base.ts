@@ -33,8 +33,6 @@ export const getAPIBaseURL = () => {
 };
 
 // Don't cache the URL - evaluate it each time
-// const API_BASE_URL = getAPIBaseURL();
-
 export interface RequestOptions extends RequestInit {
   body?: string;
   responseType?: "json" | "blob" | "text";

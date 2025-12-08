@@ -62,31 +62,6 @@ export default function MaintenancePage() {
     );
   }
 
-  // const handleRefresh = async () => {
-  //   const fetchData = async () => {
-  //     try {
-  //       setLoading(true);
-  //
-  //       // Fetch both general maintenance requests and housekeeping incident reports
-  //       const [generalRequests, incidentReports] = await Promise.all([
-  //         maintenanceApi.getAll(),
-  //         housekeepingApi.getMaintenanceReports()
-  //       ]);
-  //
-  //       setRequests(generalRequests);
-  //       setHousekeepingReports(incidentReports);
-  //       setError(null);
-  //     } catch (error) {
-  //       console.error("Error fetching maintenance data:", error);
-  //       setError("Error loading maintenance data");
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   await fetchData();
-  // };
-
   return (
     <MaintenanceDashboard
       initialRequests={requests}

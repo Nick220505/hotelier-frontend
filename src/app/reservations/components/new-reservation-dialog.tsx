@@ -28,7 +28,6 @@ import {
 } from "@/components/ui/popover";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { type Room } from "@/lib/api/rooms";
 import { useEffect, useState, useMemo } from "react";

@@ -46,8 +46,6 @@ export function RestockDialog({
     try {
       await restaurantApi.updateBeverageStock(item.id, data.newStock);
 
-      // const addedStock = data.newStock - item.stock;
-
       toast("Inventory updated", {
         description: `Updated ${item.name} stock to ${data.newStock} units`,
       });

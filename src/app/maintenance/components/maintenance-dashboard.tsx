@@ -8,8 +8,6 @@ import {
   GeneralMaintenanceRequest,
   maintenanceApi,
   MaintenanceStats,
-  // type CreateMaintenanceRequestDto,
-  // type UpdateMaintenanceRequestDto,
 } from "@/lib/api/maintenance";
 import { MaintenanceReport } from "@/lib/api/housekeeping";
 import MaintenanceTable from "./maintenance-table";
@@ -65,37 +63,6 @@ export default function MaintenanceDashboard({
   useEffect(() => {
     setReports(housekeepingReports);
   }, [housekeepingReports]);
-
-  // const handleCreateRequest = async (data: CreateMaintenanceRequestDto) => {
-  //   try {
-  //     await maintenanceApi.create(data);
-  //     await fetchRequests();
-  //     setIsCreateDialogOpen(false);
-  //   } catch (error) {
-  //     console.error("Error creating maintenance request:", error);
-  //   }
-  // };
-
-  // const handleUpdateRequest = async (id: number, data: UpdateMaintenanceRequestDto) => {
-  //   try {
-  //     await maintenanceApi.update(id, data);
-  //     await fetchRequests();
-  //     setIsEditDialogOpen(false);
-  //     setSelectedRequest(null);
-  //   } catch (error) {
-  //     console.error("Error updating maintenance request:", error);
-  //   }
-  // };
-
-  // const handleDialogSubmit = (data: CreateMaintenanceRequestDto | UpdateMaintenanceRequestDto) => {
-  //   if (selectedRequest) {
-  //     // This is an update
-  //     handleUpdateRequest(selectedRequest.id, data as UpdateMaintenanceRequestDto);
-  //   } else {
-  //     // This is a create
-  //     handleCreateRequest(data as CreateMaintenanceRequestDto);
-  //   }
-  // };
 
   const handleDeleteRequest = async (id: number) => {
     try {

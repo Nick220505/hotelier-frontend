@@ -168,10 +168,6 @@ export function AttendanceManagement() {
             Staff attendance management and tracking
           </p>
         </div>
-        {/* <Button onClick={() => setManualEntryDialogOpen(true)}>
-          <Plus className="mr-2 h-4 w-4" />
-          Registration Manual
-        </Button> */}
       </div>
 
       {/* Summary Cards */}

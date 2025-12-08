@@ -10,14 +10,12 @@ import {
   type CleaningAssignment,
 } from "@/lib/api/housekeeping";
 import { employeesApi, type Employee } from "@/lib/api/employees";
-// import { roomsApi, type Room } from "@/lib/api/rooms";
 
 export default function HousekeepingPage() {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [cleaningAssignments, setCleaningAssignments] = useState<
     CleaningAssignment[]
   >([]);
-  // const [rooms, setRooms] = useState<Room[]>([]);
   const [loading, setLoading] = useState(true);
 
   const handleReportIncident = async (incident: {
@@ -40,12 +38,10 @@ export default function HousekeepingPage() {
         const [employeesData, assignmentsData] = await Promise.all([
           employeesApi.getHousekeeping(),
           housekeepingApi.getTodaysCleaningAssignments(),
-          // roomsApi.getAll(),
         ]);
 
         setEmployees(employeesData);
         setCleaningAssignments(assignmentsData);
-        // setRooms(roomsData);
       } catch (error) {
         console.error("Error fetching cleaning data:", error);
         // Set empty arrays on error to prevent crashes

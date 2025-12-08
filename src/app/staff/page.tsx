@@ -124,7 +124,7 @@ export default function StaffPage() {
             <div className="text-2xl font-bold text-blue-600">
               {presentToday}
             </div>
-            <p className="text-xs text-muted-foreground">Today's attendance</p>
+            <p className="text-xs text-muted-foreground">Today&apos;s attendance</p>
           </CardContent>
         </Card>
 

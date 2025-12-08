@@ -127,7 +127,7 @@ export function LoginForm() {
         </Link>
         <div className="border-t pt-3">
           <p className="text-sm text-muted-foreground">
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Link
               href="/register"
               className="text-primary underline-offset-4 hover:underline font-medium"

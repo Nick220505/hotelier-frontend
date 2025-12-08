@@ -65,7 +65,7 @@ export function HotelConfig({
           Hotel Information
         </CardTitle>
         <CardDescription>
-          Configure your hotel's basic information
+          Configure your hotel&apos;s basic information
         </CardDescription>
       </CardHeader>
       <CardContent>

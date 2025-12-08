@@ -67,7 +67,7 @@ export default async function ShiftsPage() {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{shiftCounts.today}</div>
-            <p className="text-xs text-muted-foreground">Today's shifts</p>
+            <p className="text-xs text-muted-foreground">Today&apos;s shifts</p>
           </CardContent>
         </Card>
 
